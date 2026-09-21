@@ -42,8 +42,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+
 # Register API v1 Routers
 app.include_router(health_router, prefix=settings.API_V1_STR)
+
+# Mount Frontend UI at /app for browser access
+frontend_dir = Path(__file__).resolve().parent.parent.parent / "frontend"
+if frontend_dir.exists():
+    app.mount("/app", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    from fastapi import Response
+    return Response(status_code=204)
 
 
 @app.get("/", tags=["Root"])
@@ -52,6 +66,8 @@ def root():
         "project": settings.PROJECT_NAME,
         "version": settings.VERSION,
         "status": "online",
+        "frontend_ui": "/app",
         "documentation": f"{settings.API_V1_STR}/docs",
         "health_check": f"{settings.API_V1_STR}/health"
     }
+
