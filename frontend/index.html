@@ -11,16 +11,25 @@
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/style.css">
   
-  <!-- Favicon / SVG Icon -->
+  <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
 </head>
 <body>
 
-  <!-- Sticky Modern Header -->
+  <!-- Splash Screen (Auto-fades out on load) -->
+  <div id="splash-screen" class="splash-screen">
+    <div class="splash-logo">📚</div>
+    <div class="splash-title">BookLoop</div>
+    <div class="splash-subtitle">Giving Books a Second Chance</div>
+  </div>
+
+  <!-- Sticky Modern Top Navigation -->
   <header class="app-header">
     <div class="app-container">
       <div class="nav-container">
-        <div class="brand-group">
+        
+        <!-- Brand Identity -->
+        <a href="#/home" class="brand-group" title="BookLoop Home">
           <div class="brand-logo-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
@@ -31,285 +40,517 @@
             <span class="brand-title">BookLoop</span>
             <span class="brand-tagline">Giving Books a Second Chance</span>
           </div>
-        </div>
+        </a>
 
+        <!-- Desktop Navigation Links -->
+        <nav class="desktop-nav" aria-label="Main Navigation">
+          <a href="#/home" class="nav-link active" data-nav-route="home">Home</a>
+          <a href="#/discover" class="nav-link" data-nav-route="discover">Discover</a>
+          <a href="#/communities" class="nav-link" data-nav-route="communities">Communities</a>
+          <a href="#/profile" class="nav-link" data-nav-route="profile">My Library</a>
+        </nav>
+
+        <!-- Navigation Actions -->
         <div class="nav-actions">
-          <div id="nav-status-pill" class="system-status-pill">
-            <span id="nav-status-pulse" class="pulse-indicator pulse-amber"></span>
-            <span id="nav-status-text">Checking Backend...</span>
-          </div>
-          
-          <a href="http://127.0.0.1:8000/api/v1/docs" target="_blank" class="btn btn-outline btn-sm" title="Open Interactive API Docs">
-            <span>Swagger Docs</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-          </a>
-
-          <button id="theme-toggle-btn" class="btn btn-outline btn-icon" aria-label="Toggle Dark/Light Mode">
+          <!-- Theme Toggle -->
+          <button id="theme-toggle-btn" class="btn btn-outline btn-icon" aria-label="Toggle Dark/Light Mode" title="Switch Theme">
             🌙
           </button>
+
+          <!-- Auth Actions -->
+          <button id="open-login-btn" class="btn btn-ghost btn-sm">Log In</button>
+          <button id="open-signup-btn" class="btn btn-primary btn-sm">
+            <span>+ List a Book</span>
+          </button>
+
+          <!-- User Profile Avatar Pill -->
+          <a href="#/profile" class="user-avatar-pill" title="View Profile" style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 9999px; background: var(--bg-surface-subtle); border: 1px solid var(--border-subtle); font-size: 0.8125rem; font-weight: 600;">
+            <span>👨‍🎓</span>
+            <span class="desktop-only" style="font-size: 0.75rem;">Amanpreet</span>
+          </a>
         </div>
+
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="app-container">
-    
-    <!-- Hero / Intro Banner -->
-    <section class="hero-section">
-      <div class="hero-badge">
-        <span class="badge badge-emerald">Phase 0: Foundation Complete</span>
-        <span class="badge badge-indigo">B.Tech Final-Year Project</span>
+  <!-- Main Views Container -->
+  <main class="app-container" style="min-height: 75vh;">
+
+    <!-- ====================================================================
+         VIEW: HOME
+         ==================================================================== -->
+    <section id="view-home" class="app-view view-active">
+      
+      <!-- Hero Banner -->
+      <div class="hero-section">
+        <div class="hero-pill-badge">
+          <span>🌱</span>
+          <span>Community Student Book-Sharing Platform</span>
+        </div>
+        <h1 class="hero-title">
+          Giving Books a <span>Second Chance</span>
+        </h1>
+        <p class="hero-desc">
+          Buy, sell, exchange, donate, and lend textbooks directly with students from your campus. Save money, save paper, and give books a second life.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="hero-search-wrapper">
+          <form id="hero-search-form" class="hero-search-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-muted); margin-right: 8px;">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="hero-search-input" class="search-input-field" placeholder="Search by title, author, course code (e.g., CS302), or ISBN..." autocomplete="off">
+            <button type="submit" class="btn btn-primary btn-sm">Search Books</button>
+          </form>
+        </div>
+
+        <!-- Quick Listing Type Filter Pills -->
+        <div class="hero-filter-pills">
+          <button class="filter-pill active" data-type-filter="all">All Books</button>
+          <button class="filter-pill" data-type-filter="sell">💰 Buy & Sell</button>
+          <button class="filter-pill" data-type-filter="exchange">⇄ Student Exchange</button>
+          <button class="filter-pill" data-type-filter="donate">🎁 Free Donation</button>
+          <button class="filter-pill" data-type-filter="lend">⏱ Semester Lending</button>
+        </div>
       </div>
-      <h1 class="hero-title">Giving Books a Second Chance</h1>
-      <p class="hero-subtitle">
-        BookLoop is an independent student book-sharing platform designed for buying, selling, exchanging, donating, and lending textbooks.
-      </p>
+
+      <!-- Campus Impact Micro-Banner -->
+      <div class="impact-banner">
+        <div class="impact-item">
+          <span class="impact-num">1,280+</span>
+          <span class="impact-label">Books Recirculated</span>
+        </div>
+        <div class="impact-item">
+          <span class="impact-num">₹4.8L+</span>
+          <span class="impact-label">Student Savings</span>
+        </div>
+        <div class="impact-item">
+          <span class="impact-num">18</span>
+          <span class="impact-label">Campus Circles</span>
+        </div>
+        <div class="impact-item">
+          <span class="impact-num">100%</span>
+          <span class="impact-label">Peer-to-Peer Trust</span>
+        </div>
+      </div>
+
+      <!-- Disciplines / Category Carousel -->
+      <div class="category-scroll-container" id="category-chips-bar">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Recent Listings Section -->
+      <section style="margin-bottom: var(--space-12);">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2>Recent Campus Listings</h2>
+            <p>Fresh textbooks listed by nearby students</p>
+          </div>
+          <a href="#/discover" class="btn btn-outline btn-sm">View All in Discover →</a>
+        </div>
+
+        <!-- Book Cards Grid -->
+        <div id="home-books-grid" class="book-grid">
+          <!-- Injected via JS -->
+        </div>
+      </section>
+
+      <!-- How BookLoop Works (Lifecycle) -->
+      <section class="lifecycle-section">
+        <div class="section-header" style="text-align: center; justify-content: center; flex-direction: column;">
+          <h2>How BookLoop Works</h2>
+          <p>Every book has a lifecycle — giving it a second life in 4 simple steps</p>
+        </div>
+
+        <div class="step-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3 class="step-title">List in 60 Seconds</h3>
+            <p class="step-desc">Enter textbook title, condition, and choose whether to sell, swap, donate, or lend for the semester.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3 class="step-title">Discover Nearby</h3>
+            <p class="step-desc">Students in your college or adjacent campuses find your listing through search and distance filters.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3 class="step-title">Safe Campus Handoff</h3>
+            <p class="step-desc">Chat directly, agree on terms, and meet at designated campus meeting points (Library, Canteen, Student Center).</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <h3 class="step-title">Build Trust & Impact</h3>
+            <p class="step-desc">Rate your interaction to grow community trust score while tracking your environmental paper-saving impact.</p>
+          </div>
+        </div>
+      </section>
+
     </section>
 
-    <!-- Phase 0 Live Health Dashboard Grid -->
-    <div class="dashboard-grid">
-      
-      <!-- Card 1: FastAPI Backend Monitor -->
-      <div class="card card-glass card-interactive">
-        <div class="card-header">
-          <div class="card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
-              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-              <line x1="6" y1="6" x2="6.01" y2="6"></line>
-              <line x1="6" y1="18" x2="6.01" y2="18"></line>
-            </svg>
-            FastAPI Backend Service
-          </div>
-          <span id="server-status-val" class="badge badge-amber">Checking...</span>
+    <!-- ====================================================================
+         VIEW: DISCOVER
+         ==================================================================== -->
+    <section id="view-discover" class="app-view">
+      <div class="section-header" style="margin-top: var(--space-6);">
+        <div class="section-title-wrap">
+          <h2>Discover Textbooks</h2>
+          <p>Explore and filter books available across all student communities</p>
         </div>
-
-        <div class="monitor-row">
-          <span class="monitor-label">Target Endpoint</span>
-          <span class="monitor-val">GET /api/v1/health</span>
-        </div>
-        <div class="monitor-row">
-          <span class="monitor-label">Roundtrip Latency</span>
-          <span id="server-latency-val" class="monitor-val">—</span>
-        </div>
-        <div class="monitor-row">
-          <span class="monitor-label">API Version</span>
-          <span id="server-version-val" class="monitor-val">—</span>
-        </div>
-        <div class="monitor-row">
-          <span class="monitor-label">Environment</span>
-          <span id="server-env-val" class="monitor-val">—</span>
-        </div>
-
-        <div style="display: flex; gap: var(--space-3); margin-top: var(--space-5);">
-          <button id="ping-btn" class="btn btn-primary btn-sm">
-            <span>⚡ Ping Backend Now</span>
-          </button>
-          <button id="test-root-btn" class="btn btn-outline btn-sm">
-            <span>Root Status</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Card 2: PostgreSQL Engine Status -->
-      <div class="card card-glass card-interactive">
-        <div class="card-header">
-          <div class="card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-green);">
-              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-            </svg>
-            PostgreSQL Database (SQLAlchemy)
-          </div>
-          <span id="db-status-pill" class="badge badge-amber">Validating...</span>
-        </div>
-
-        <div class="monitor-row">
-          <span class="monitor-label">Database Engine</span>
-          <span id="db-target-engine" class="monitor-val">PostgreSQL</span>
-        </div>
-        <div class="monitor-row">
-          <span class="monitor-label">Connection URL (.env)</span>
-          <span id="db-target-url" class="monitor-val" style="font-size: 0.75rem;">postgresql://...</span>
-        </div>
-        <div class="monitor-row">
-          <span class="monitor-label">Connection Status</span>
-          <span id="db-status-msg" class="monitor-val" style="font-size: 0.8125rem;">Checking connection...</span>
-        </div>
-
-        <div id="db-error-block" style="display: none; margin-top: var(--space-4); padding: var(--space-3); background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm); font-size: 0.8125rem;">
-          <div style="font-weight: 700; color: var(--color-danger); margin-bottom: var(--space-1);">Connection Diagnostic:</div>
-          <div id="db-error-text" style="color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.75rem;"></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Diagnostic JSON Section -->
-    <div class="card" style="margin-bottom: var(--space-10);">
-      <div class="card-header">
-        <div class="card-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="16 18 22 12 16 6"></polyline>
-            <polyline points="8 6 2 12 8 18"></polyline>
-          </svg>
-          Backend Response Payload (Live Data)
-        </div>
-        <div style="display: flex; align-items: center; gap: var(--space-3);">
-          <span id="last-checked-text" style="font-size: 0.75rem; color: var(--text-muted);">Last ping: —</span>
-          <button id="copy-diag-btn" class="btn btn-outline btn-sm">Copy JSON</button>
-        </div>
-      </div>
-      <pre id="json-diag-box" class="code-box">Connecting to backend service...</pre>
-    </div>
-
-    <!-- Phase Roadmap Matrix (Modular Architecture) -->
-    <section class="roadmap-section">
-      <div class="section-header">
-        <div>
-          <h2 class="section-title">Phased Development Matrix</h2>
-          <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-1);">
-            BookLoop features are built in strict modular phases as specified in the project prompt.
-          </p>
-        </div>
-        <span class="badge badge-emerald">Phase 0 Active</span>
-      </div>
-
-      <div class="phase-grid">
         
-        <div class="phase-card active-phase">
-          <div class="phase-top">
-            <span class="phase-num">Phase 0</span>
-            <span class="badge badge-emerald">Active</span>
-          </div>
-          <div class="phase-name">Foundation & API</div>
-          <div class="phase-desc">FastAPI setup, PostgreSQL SQLAlchemy configuration, CORS, and modern HTML5/CSS3/ES6 design system.</div>
+        <!-- Skeleton Toggle for Testing Loading Animations -->
+        <button id="toggle-skeleton-btn" class="btn btn-outline btn-sm" title="Preview Shimmer Loading Skeletons">
+          <span>✨ Toggle Loading State</span>
+        </button>
+      </div>
+
+      <!-- Discover Filter Bar -->
+      <div class="discover-filter-bar">
+        <div class="filter-left">
+          <input type="text" id="discover-search-input" class="form-input" style="width: 240px; padding: 0.45rem 0.75rem;" placeholder="Search books...">
+          
+          <select id="filter-type-select" class="form-select" style="width: auto; padding: 0.45rem 0.75rem;">
+            <option value="all">All Listing Types</option>
+            <option value="sell">For Sale</option>
+            <option value="exchange">Exchange</option>
+            <option value="donate">Free Donation</option>
+            <option value="lend">Semester Lending</option>
+          </select>
+
+          <select id="filter-category-select" class="form-select" style="width: auto; padding: 0.45rem 0.75rem;">
+            <option value="all">All Disciplines</option>
+            <option value="cse">Computer Science</option>
+            <option value="ece-ee">Electrical & Electronics</option>
+            <option value="mech-civil">Mechanical & Civil</option>
+            <option value="medical">Medical & Health</option>
+            <option value="commerce">Commerce & MBA</option>
+            <option value="exams">GATE & Exams</option>
+          </select>
+
+          <select id="filter-condition-select" class="form-select" style="width: auto; padding: 0.45rem 0.75rem;">
+            <option value="all">Any Condition</option>
+            <option value="like_new">Like New</option>
+            <option value="good">Good Condition</option>
+            <option value="worn">Worn / Usable</option>
+          </select>
         </div>
 
-        <div class="phase-card">
-          <div class="phase-top">
-            <span class="phase-num">Phase 1</span>
-            <span class="badge badge-outline">Queued</span>
+        <div class="filter-right">
+          <select id="sort-by-select" class="form-select" style="width: auto; padding: 0.45rem 0.75rem;">
+            <option value="nearest">Nearest First</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Highest Seller Trust</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Discover Books Grid -->
+      <div id="discover-books-grid" class="book-grid">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="discover-empty-state" class="empty-state" style="display: none;">
+        <div class="empty-icon">🔍</div>
+        <h3 class="empty-title">No matching books found</h3>
+        <p class="empty-desc">Try loosening your search terms or clearing specific category and condition filters.</p>
+        <button id="reset-filters-btn" class="btn btn-outline btn-sm">Reset All Filters</button>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW: COMMUNITIES
+         ==================================================================== -->
+    <section id="view-communities" class="app-view">
+      <div class="section-header" style="margin-top: var(--space-6);">
+        <div class="section-title-wrap">
+          <h2>Student Communities</h2>
+          <p>Join campus circles and subject groups to swap books directly with peers</p>
+        </div>
+        <button id="create-comm-btn" class="btn btn-primary btn-sm">+ Create Student Circle</button>
+      </div>
+
+      <div class="community-grid">
+        <div class="community-card">
+          <div class="comm-header">
+            <div class="comm-icon">💻</div>
+            <div>
+              <span class="badge badge-emerald" style="margin-bottom: 4px;">Most Active</span>
+              <h3 class="comm-title">B.Tech CSE Textbook Exchange</h3>
+              <p class="comm-tagline">Algorithms, OS, DBMS, Compiler, and AI textbook exchanges across semesters.</p>
+            </div>
           </div>
-          <div class="phase-name">Premium UI Foundation</div>
-          <div class="phase-desc">Splash, onboarding, auth UI, main navigation, home UI, reusable components, and theme states.</div>
+          <div class="comm-meta">
+            <span>👥 420 Students</span>
+            <span>📚 340 Books Swapped</span>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="alert('Community joined! You will now receive alerts for new CSE book listings.')">Join Community</button>
         </div>
 
-        <div class="phase-card">
-          <div class="phase-top">
-            <span class="phase-num">Phase 2</span>
-            <span class="badge badge-outline">Queued</span>
+        <div class="community-card">
+          <div class="comm-header">
+            <div class="comm-icon">📖</div>
+            <div>
+              <span class="badge badge-indigo" style="margin-bottom: 4px;">Literature & Novels</span>
+              <h3 class="comm-title">Ludhiana Student Readers Circle</h3>
+              <p class="comm-tagline">Non-fiction, self-growth, novels, and classics passed hand-to-hand.</p>
+            </div>
           </div>
-          <div class="phase-name">Authentication & Profile</div>
-          <div class="phase-desc">Registration, login, logout, session persistence, user profiles, student credentials, and stats.</div>
+          <div class="comm-meta">
+            <span>👥 285 Students</span>
+            <span>📚 195 Books Swapped</span>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="alert('Community joined!')">Join Community</button>
         </div>
 
-        <div class="phase-card">
-          <div class="phase-top">
-            <span class="phase-num">Phase 3</span>
-            <span class="badge badge-outline">Queued</span>
+        <div class="community-card">
+          <div class="comm-header">
+            <div class="comm-icon">🎯</div>
+            <div>
+              <span class="badge badge-amber" style="margin-bottom: 4px;">Exam Prep</span>
+              <h3 class="comm-title">GATE & Competitive Exam Aspirants</h3>
+              <p class="comm-tagline">Previous Year Question banks, Made Easy notes, and aptitude reference materials.</p>
+            </div>
           </div>
-          <div class="phase-name">Book System & Discovery</div>
-          <div class="phase-desc">Book database, categories, search, multi-faceted filtering, sorting, and book details.</div>
+          <div class="comm-meta">
+            <span>👥 512 Students</span>
+            <span>📚 480 Books Swapped</span>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="alert('Community joined!')">Join Community</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW: PROFILE / MY LIBRARY
+         ==================================================================== -->
+    <section id="view-profile" class="app-view">
+      <div class="section-header" style="margin-top: var(--space-6);">
+        <div class="section-title-wrap">
+          <h2>Student Profile & Library</h2>
+          <p>Manage your listed textbooks, saved wishlist, and personal green impact</p>
+        </div>
+      </div>
+
+      <!-- Student Profile Card -->
+      <div class="card" style="margin-bottom: var(--space-6);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
+          <div style="display: flex; align-items: center; gap: var(--space-4);">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 2.25rem;">
+              👨‍🎓
+            </div>
+            <div>
+              <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary);">Amanpreet Singh</h3>
+              <p style="font-size: 0.875rem; color: var(--text-secondary);">GNDEC Ludhiana &bull; 3rd Year B.Tech Computer Science</p>
+              <div style="display: flex; align-items: center; gap: var(--space-2); margin-top: 4px;">
+                <span class="badge badge-emerald">Trust Score: ⭐ 4.9 (14 Reviews)</span>
+                <span class="badge badge-indigo">Verified Student</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-outline btn-sm" onclick="alert('Edit Profile modal scheduled for Phase 2!')">Edit Profile</button>
+          </div>
         </div>
 
-        <div class="phase-card">
-          <div class="phase-top">
-            <span class="phase-num">Phase 4</span>
-            <span class="badge badge-outline">Queued</span>
+        <div class="impact-banner" style="margin-top: var(--space-6); margin-bottom: 0;">
+          <div class="impact-item">
+            <span class="impact-num">6</span>
+            <span class="impact-label">Books Listed</span>
           </div>
-          <div class="phase-name">Sell, Exchange & Lend</div>
-          <div class="phase-desc">Multi-step book listing flow, condition grading, photo uploads, terms, and lifecycle management.</div>
-        </div>
-
-        <div class="phase-card">
-          <div class="phase-top">
-            <span class="phase-num">Phase 5</span>
-            <span class="badge badge-outline">Queued</span>
+          <div class="impact-item">
+            <span class="impact-num">8</span>
+            <span class="impact-label">Books Given Life</span>
           </div>
-          <div class="phase-name">Wishlist & Requests</div>
-          <div class="phase-desc">Saved books, availability alerts, book exchange requests, and My Library lifecycle tracking.</div>
-        </div>
-
-        <div class="phase-card">
-          <div class="phase-top">
-            <span class="phase-num">Phase 6</span>
-            <span class="badge badge-outline">Queued</span>
+          <div class="impact-item">
+            <span class="impact-num">3</span>
+            <span class="impact-label">Saved Wishlist</span>
           </div>
-          <div class="phase-name">Chat & Notifications</div>
-          <div class="phase-desc">Modular student chat, book-linked conversations, unread badges, and notifications center.</div>
-        </div>
-
-        <div class="phase-card">
-          <div class="phase-top">
-            <span class="phase-num">Phase 7</span>
-            <span class="badge badge-outline">Queued</span>
+          <div class="impact-item">
+            <span class="impact-num">₹3,450</span>
+            <span class="impact-label">Personal Savings</span>
           </div>
-          <div class="phase-name">Student Communities</div>
-          <div class="phase-desc">Campus groups, shared book circles, community discussions, and feed interactions.</div>
         </div>
+      </div>
 
-        <div class="phase-card">
-          <div class="phase-top">
-            <span class="phase-num">Phase 8</span>
-            <span class="badge badge-outline">Queued</span>
-          </div>
-          <div class="phase-name">Maps & Safe Points</div>
-          <div class="phase-desc">Geographic discovery, distance calculation, book markers, and safe campus meeting points.</div>
+      <!-- Wishlist / My Books Section -->
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <h3 style="font-size: 1.125rem; font-weight: 700;">Saved Books (Wishlist)</h3>
         </div>
-
-        <div class="phase-card">
-          <div class="phase-top">
-            <span class="phase-num">Phase 9</span>
-            <span class="badge badge-outline">Queued</span>
-          </div>
-          <div class="phase-name">Trust, Reviews & Impact</div>
-          <div class="phase-desc">Student trust scores, peer reviews, reuse statistics, and personal sustainability impact.</div>
-        </div>
-
-        <div class="phase-card">
-          <div class="phase-top">
-            <span class="phase-num">Phase 10</span>
-            <span class="badge badge-outline">Queued</span>
-          </div>
-          <div class="phase-name">Admin Operations</div>
-          <div class="phase-desc">Content moderation, user management, reports handling, and platform analytics.</div>
-        </div>
-
-        <div class="phase-card">
-          <div class="phase-top">
-            <span class="phase-num">Phase 11–12</span>
-            <span class="badge badge-outline">Queued</span>
-          </div>
-          <div class="phase-name">Testing & Final Polish</div>
-          <div class="phase-desc">End-to-end testing, responsive polish, accessibility audits, and final project demo preparation.</div>
-        </div>
-
+      </div>
+      <div id="wishlist-books-grid" class="book-grid">
+        <!-- Injected via JS -->
       </div>
     </section>
 
   </main>
 
-  <!-- Clean Modern Footer -->
+  <!-- ====================================================================
+       MODAL: Student Login & Sign Up (<dialog>)
+       ==================================================================== -->
+  <dialog id="auth-modal" class="app-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="tabs-nav" style="width: 100%;">
+          <button id="auth-tab-login" class="tab-btn active" data-auth-tab="login">Student Login</button>
+          <button id="auth-tab-signup" class="tab-btn" data-auth-tab="signup">Create Account</button>
+        </div>
+        <button class="modal-close-btn" data-modal-close aria-label="Close Modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Login Form -->
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Student Email Address</label>
+            <input type="email" id="login-email" class="form-input" placeholder="student@college.edu" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" id="login-password" class="form-input" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-2);">Log In to BookLoop</button>
+        </form>
+
+        <!-- Sign-Up Form (Hidden initially) -->
+        <form id="signup-form" style="display: none;">
+          <div class="form-group">
+            <label class="form-label" for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" class="form-input" placeholder="e.g. Amanpreet Singh" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup-email">Student Email</label>
+            <input type="email" id="signup-email" class="form-input" placeholder="student@college.edu" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="signup-college">College / University</label>
+              <input type="text" id="signup-college" class="form-input" placeholder="e.g. GNDEC Ludhiana" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signup-course">Degree / Course</label>
+              <input type="text" id="signup-course" class="form-input" placeholder="e.g. B.Tech CSE" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup-password">Create Password</label>
+            <input type="password" id="signup-password" class="form-input" placeholder="At least 8 characters" required>
+          </div>
+          <button type="submit" class="btn btn-secondary" style="width: 100%; margin-top: var(--space-2);">Join BookLoop Community</button>
+        </form>
+      </div>
+
+      <div class="modal-footer" style="justify-content: center; font-size: 0.8125rem; color: var(--text-secondary);">
+        <span>🔒 Secure verification designed for verified students</span>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ====================================================================
+       MODAL: Book Details Preview (<dialog>)
+       ==================================================================== -->
+  <dialog id="book-detail-modal" class="app-modal" style="max-width: 620px;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span id="detail-category-badge" class="badge badge-indigo">Category</span>
+        <button class="modal-close-btn" data-modal-close aria-label="Close Details">&times;</button>
+      </div>
+
+      <div class="modal-body" id="book-detail-content">
+        <!-- Injected via JS when clicking a book -->
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ====================================================================
+       MODAL: Developer Diagnostics Drawer (<dialog>)
+       ==================================================================== -->
+  <dialog id="dev-drawer-modal" class="app-modal" style="max-width: 680px;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="card-title">
+          <span class="pulse-indicator pulse-green"></span>
+          System Foundation & Backend Monitor
+        </div>
+        <button class="modal-close-btn" data-modal-close aria-label="Close Developer Drawer">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: var(--space-4);">
+          This diagnostics monitor is maintained for technical evaluation of the FastAPI + PostgreSQL + SQLAlchemy foundation.
+        </p>
+        <div class="stat-grid" style="margin-bottom: var(--space-4);">
+          <div class="stat-tile">
+            <span class="stat-label">FastAPI Status</span>
+            <span id="dev-server-status" class="stat-value" style="font-size: 1rem;">Checking...</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">Latency</span>
+            <span id="dev-server-latency" class="stat-value" style="font-size: 1rem;">—</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">PostgreSQL</span>
+            <span id="dev-db-status" class="stat-value" style="font-size: 1rem;">—</span>
+          </div>
+        </div>
+        <div class="card-title" style="font-size: 0.875rem; margin-bottom: var(--space-2);">Live JSON Payload (/api/v1/health)</div>
+        <pre id="dev-json-box" class="code-box" style="max-height: 200px;">Connecting to backend...</pre>
+      </div>
+      <div class="modal-footer">
+        <button id="dev-ping-btn" class="btn btn-primary btn-sm">Ping Again</button>
+        <a href="http://127.0.0.1:8000/api/v1/docs" target="_blank" class="btn btn-outline btn-sm">Open Swagger Docs ↗</a>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ====================================================================
+       Floating Developer Status Indicator (Non-intrusive)
+       ==================================================================== -->
+  <div id="floating-dev-badge" class="floating-dev-badge" title="Click to view Backend & Database Diagnostics">
+    <span id="floating-status-pulse" class="pulse-indicator pulse-amber"></span>
+    <span id="floating-status-text">Backend: Connecting...</span>
+  </div>
+
+  <!-- ====================================================================
+       Mobile Bottom Navigation Bar
+       ==================================================================== -->
+  <nav class="mobile-bottom-nav">
+    <a href="#/home" class="mobile-nav-item active" data-nav-route="home">
+      <span>🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="#/discover" class="mobile-nav-item" data-nav-route="discover">
+      <span>🔍</span>
+      <span>Discover</span>
+    </a>
+    <a href="#/communities" class="mobile-nav-item" data-nav-route="communities">
+      <span>👥</span>
+      <span>Circles</span>
+    </a>
+    <a href="#/profile" class="mobile-nav-item" data-nav-route="profile">
+      <span>📚</span>
+      <span>Library</span>
+    </a>
+  </nav>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Footer -->
   <footer class="app-footer">
     <div class="app-container">
-      <p><strong>BookLoop</strong> — Giving Books a Second Chance &bull; B.Tech Final-Year Project</p>
-      <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-1);">
-        Phase 0: Foundation &bull; FastAPI + SQLAlchemy + PostgreSQL + Modern Component-Driven Web Architecture
+      <p><strong>BookLoop</strong> &mdash; Giving Books a Second Chance &bull; B.Tech Final-Year Project</p>
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-2);">
+        Phase 1: Premium UI Foundation &bull; Responsive Vanilla HTML5 + Modern CSS + ES6+ JavaScript
       </p>
     </div>
   </footer>
 
-  <!-- Toast Container -->
-  <div id="toast-container" class="toast-container"></div>
-
-  <!-- Main ES6 Modules -->
+  <!-- Main Application Script -->
   <script type="module" src="assets/js/app.js"></script>
 
 </body>
