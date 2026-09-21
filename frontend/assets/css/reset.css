@@ -1,4 +1,7 @@
-/* Modern CSS Reset & Baseline */
+/**
+ * BookLoop CSS Reset & Global Base Styles
+ * Modern normalized baseline for all browsers.
+ */
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -7,61 +10,59 @@
 }
 
 html {
-  font-family: var(--font-sans);
   font-size: 16px;
-  line-height: 1.5;
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  /* Force paint compositing for aurora blobs */
+  contain: layout style;
 }
 
 body {
-  min-height: 100vh;
-  background-color: var(--bg-app);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
   color: var(--text-primary);
-  display: flex;
-  flex-direction: column;
-  transition: background-color var(--transition-normal), color var(--transition-normal);
+  background-color: var(--bg-base);
+  min-height: 100dvh;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-img, picture, video, canvas, svg {
-  display: block;
-  max-width: 100%;
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.20); }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.20); }
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.35); }
+
+/* Typography reset */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
 }
 
-input, button, textarea, select {
-  font: inherit;
-  color: inherit;
+p { color: var(--text-secondary); line-height: var(--leading-relaxed); }
+a { text-decoration: none; color: inherit; }
+img, picture, video, canvas, svg { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; }
+button { cursor: pointer; border: none; background: none; }
+ul, ol { list-style: none; }
+
+/* Focus visible — accessible ring */
+:focus-visible {
+  outline: 2px solid var(--primary-400);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-button {
-  cursor: pointer;
-  background: none;
-  border: none;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Custom Scrollbars */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-surface-subtle);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border-medium);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+/* Selection */
+::selection {
+  background: rgba(99,102,241,0.35);
+  color: white;
 }
