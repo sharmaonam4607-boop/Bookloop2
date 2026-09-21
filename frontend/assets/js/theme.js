@@ -1,35 +1,43 @@
 /**
- * BookLoop Theme Manager
- * Dark / Light mode toggle with system preference detection and localStorage persistence.
+ * BookLoop Theme Management (Light / Dark Mode)
  */
-export class ThemeManager {
-  static STORAGE_KEY = 'bookloop_theme';
 
+const THEME_STORAGE_KEY = 'bookloop_theme';
+
+export class ThemeManager {
   constructor() {
-    this._theme = this._loadPreference();
-    this._apply(this._theme);
+    this.currentTheme = this.getInitialTheme();
+    this.applyTheme(this.currentTheme);
   }
 
-  /** Returns current theme ('dark' | 'light') */
-  get current() { return this._theme; }
+  getInitialTheme() {
+    const saved = localStorage.getItem(THEME_STORAGE_KEY);
+    if (saved === 'dark' || saved === 'light') {
+      return saved;
+    }
+    // Fall back to system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  }
+
+  applyTheme(theme) {
+    this.currentTheme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+    this.notifyThemeChange();
+  }
 
   toggle() {
-    this._theme = this._theme === 'dark' ? 'light' : 'dark';
-    this._apply(this._theme);
-    localStorage.setItem(ThemeManager.STORAGE_KEY, this._theme);
-    return this._theme;
+    const nextTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+    this.applyTheme(nextTheme);
+    return nextTheme;
   }
 
-  _apply(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    const metaTheme = document.querySelector('meta[name="theme-color"]');
-    if (metaTheme) metaTheme.content = theme === 'dark' ? '#070b18' : '#f4f6fb';
-  }
-
-  _loadPreference() {
-    const stored = localStorage.getItem(ThemeManager.STORAGE_KEY);
-    if (stored === 'dark' || stored === 'light') return stored;
-    // Respect system preference as default
-    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  notifyThemeChange() {
+    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: this.currentTheme } }));
   }
 }
+
+export const themeManager = new ThemeManager();

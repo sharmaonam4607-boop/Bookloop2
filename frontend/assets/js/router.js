@@ -1,52 +1,61 @@
 /**
- * BookLoop Client-Side Router
- * Hash-based navigation (#/home, #/discover, #/communities, #/profile)
+ * BookLoop Client-Side Hash Router
  */
-export class Router {
-  static ROUTES = ['home', 'discover', 'communities', 'profile'];
-  static DEFAULT = 'home';
 
-  constructor(onNavigate) {
-    this._onNavigate = onNavigate;
-    this._current = null;
-    window.addEventListener('hashchange', () => this._resolve());
-    window.addEventListener('load', () => this._resolve());
+export class SimpleRouter {
+  constructor() {
+    this.routes = {};
+    this.currentRoute = 'home';
+
+    window.addEventListener('hashchange', () => this.handleRouteChange());
+    window.addEventListener('load', () => this.handleRouteChange());
   }
 
-  /** Programmatically navigate to a route */
+  register(route, handler) {
+    this.routes[route] = handler;
+    return this;
+  }
+
   navigate(route) {
-    window.location.hash = `/${route}`;
+    window.location.hash = `#/${route.replace(/^#?\/?/, '')}`;
   }
 
-  /** Get current route name */
-  get current() { return this._current; }
+  handleRouteChange() {
+    const rawHash = window.location.hash || '#/home';
+    const cleanRoute = rawHash.replace(/^#\/?/, '').split('/')[0] || 'home';
+    this.currentRoute = cleanRoute;
 
-  _resolve() {
-    const hash = window.location.hash.replace('#/', '').split('?')[0].trim();
-    const route = Router.ROUTES.includes(hash) ? hash : Router.DEFAULT;
-
-    if (route === this._current) return;
-    const prev = this._current;
-    this._current = route;
-
-    // Deactivate old view
-    if (prev) {
-      document.getElementById(`view-${prev}`)?.classList.remove('view-active');
-      document.querySelector(`.nav-item[data-route="${prev}"]`)?.classList.remove('active');
+    // Execute registered handler or fallback to home
+    const handler = this.routes[cleanRoute] || this.routes['home'];
+    if (typeof handler === 'function') {
+      handler(cleanRoute);
     }
 
-    // Activate new view
-    const viewEl = document.getElementById(`view-${route}`);
-    if (viewEl) {
-      viewEl.classList.add('view-active');
+    // Switch active view container
+    document.querySelectorAll('.app-view').forEach(view => {
+      view.classList.remove('view-active');
+    });
+    const targetView = document.getElementById(`view-${cleanRoute}`);
+    if (targetView) {
+      targetView.classList.add('view-active');
     } else {
-      // Ensure correct hash if no view exists
-      window.location.hash = `/${Router.DEFAULT}`;
-      return;
+      const defaultView = document.getElementById('view-home');
+      if (defaultView) defaultView.classList.add('view-active');
     }
 
-    document.querySelector(`.nav-item[data-route="${route}"]`)?.classList.add('active');
+    // Update active nav links
+    document.querySelectorAll('[data-nav-route]').forEach(link => {
+      const routeAttr = link.getAttribute('data-nav-route');
+      if (routeAttr === cleanRoute) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
 
-    if (this._onNavigate) this._onNavigate(route, prev);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.dispatchEvent(new CustomEvent('routeChanged', { detail: { route: cleanRoute } }));
   }
 }
+
+export const router = new SimpleRouter();
