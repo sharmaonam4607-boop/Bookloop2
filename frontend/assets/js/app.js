@@ -355,6 +355,14 @@ class HealthPoller {
    ──────────────────────────────────────────────────────────────── */
 
 async function main() {
+  // Fade out initial splash screen
+  const splash = document.getElementById('splash-screen');
+  if (splash) {
+    setTimeout(() => {
+      splash.classList.add('fade-out');
+    }, 400);
+  }
+
   const theme = new ThemeManager();
   const toast = new ToastManager();  // Exposes window.toast globally
   const modal = new ModalController();
