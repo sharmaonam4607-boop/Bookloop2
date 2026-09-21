@@ -1,2 +1,3 @@
-"""SQLAlchemy models package for BookLoop."""
-# Models for Users, Books, Listings, Communities, etc., will be added in respective phases.
+from app.models.user import User, UserProfile
+
+__all__ = ["User", "UserProfile"]

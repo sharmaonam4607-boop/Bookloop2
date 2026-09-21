@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BookLoop — Giving Books a Second Chance</title>
+  <title>BookLoop — Giving Books a Second Life</title>
   
   <!-- Modern Stylesheets -->
   <link rel="stylesheet" href="assets/css/variables.css">
@@ -16,375 +16,205 @@
 </head>
 <body>
 
-  <!-- Splash Screen (Auto-fades out on load) -->
-  <div id="splash-screen" class="splash-screen">
-    <div class="splash-logo">📚</div>
-    <div class="splash-title">BookLoop</div>
-    <div class="splash-subtitle">Giving Books a Second Chance</div>
-  </div>
-
-  <!-- Sticky Modern Top Navigation -->
+  <!-- ====================================================================
+       Floating Glass Top Navigation Bar
+       ==================================================================== -->
   <header class="app-header">
-    <div class="app-container">
-      <div class="nav-container">
-        
-        <!-- Brand Identity -->
-        <a href="#/home" class="brand-group" title="BookLoop Home">
-          <div class="brand-logo-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-            </svg>
-          </div>
-          <div class="brand-info">
-            <span class="brand-title">BookLoop</span>
-            <span class="brand-tagline">Giving Books a Second Chance</span>
-          </div>
-        </a>
+    <div class="nav-glass-bar">
+      
+      <!-- Brand Logo & Identity -->
+      <a href="#/home" class="brand-group" title="BookLoop Home">
+        <div class="brand-logo-icon">📚</div>
+        <div class="brand-info">
+          <span class="brand-title">BookLoop</span>
+          <span class="brand-tagline">Giving Books a Second Life</span>
+        </div>
+      </a>
 
-        <!-- Desktop Navigation Links -->
-        <nav class="desktop-nav" aria-label="Main Navigation">
-          <a href="#/home" class="nav-link active" data-nav-route="home">Home</a>
-          <a href="#/discover" class="nav-link" data-nav-route="discover">Discover</a>
-          <a href="#/communities" class="nav-link" data-nav-route="communities">Communities</a>
-          <a href="#/profile" class="nav-link" data-nav-route="profile">My Library</a>
-        </nav>
+      <!-- Desktop Nav Links -->
+      <nav class="desktop-nav" aria-label="Main Navigation">
+        <a href="#/home" class="nav-link active" data-nav-route="home">Home</a>
+        <a href="#/discover" class="nav-link" data-nav-route="discover">Discover</a>
+        <a href="#/communities" class="nav-link" data-nav-route="communities">Communities</a>
+        <a href="#/profile" class="nav-link" data-nav-route="profile">My Library</a>
+      </nav>
 
-        <!-- Navigation Actions -->
-        <div class="nav-actions">
-          <!-- Theme Toggle -->
-          <button id="theme-toggle-btn" class="btn btn-outline btn-icon" aria-label="Toggle Dark/Light Mode" title="Switch Theme">
-            🌙
-          </button>
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle-btn" class="btn btn-outline btn-icon" aria-label="Toggle Theme" title="Toggle Light / Dark Mode">
+          🌙
+        </button>
 
-          <!-- Auth Actions -->
+        <!-- Auth Buttons Container (Swaps dynamically based on auth state) -->
+        <div id="nav-guest-actions" style="display: flex; align-items: center; gap: var(--space-2);">
           <button id="open-login-btn" class="btn btn-ghost btn-sm">Log In</button>
           <button id="open-signup-btn" class="btn btn-primary btn-sm">
             <span>+ List a Book</span>
           </button>
+        </div>
 
-          <!-- User Profile Avatar Pill -->
-          <a href="#/profile" class="user-avatar-pill" title="View Profile" style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 9999px; background: var(--bg-surface-subtle); border: 1px solid var(--border-subtle); font-size: 0.8125rem; font-weight: 600;">
-            <span>👨‍🎓</span>
-            <span class="desktop-only" style="font-size: 0.75rem;">Amanpreet</span>
+        <!-- Student Persona Pill (Revealed when logged in) -->
+        <div id="nav-user-actions" style="display: none; align-items: center; gap: var(--space-2);">
+          <a href="#/profile" class="user-avatar-pill" title="My Profile" style="display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-full); background: rgba(255,255,255,0.06); border: 1px solid var(--border-medium); font-size: 0.8125rem; font-weight: 600;">
+            <span id="nav-user-avatar">👨‍🎓</span>
+            <span id="nav-user-name" class="desktop-only" style="font-size: 0.78rem;">Student</span>
           </a>
+          <button id="nav-logout-btn" class="btn btn-ghost btn-sm" style="color: var(--text-tertiary);" title="Log Out">Log Out</button>
         </div>
 
       </div>
+
     </div>
   </header>
 
-  <!-- Main Views Container -->
-  <main class="app-container" style="min-height: 75vh;">
+  <!-- ====================================================================
+       Main Application Views Container
+       ==================================================================== -->
+  <main class="app-container app-loaded-reveal" style="min-height: 75vh;">
 
-    <!-- ====================================================================
+    <!-- ==================================================================
          VIEW: HOME
-         ==================================================================== -->
+         ================================================================== -->
     <section id="view-home" class="app-view view-active">
       
-      <!-- Hero Banner -->
-      <div class="hero-section">
-        <div class="hero-pill-badge">
-          <span>🌱</span>
-          <span>Community Student Book-Sharing Platform</span>
-        </div>
-        <h1 class="hero-title">
-          Giving Books a <span>Second Chance</span>
-        </h1>
-        <p class="hero-desc">
-          Buy, sell, exchange, donate, and lend textbooks directly with students from your campus. Save money, save paper, and give books a second life.
-        </p>
-
-        <!-- Search Bar -->
-        <div class="hero-search-wrapper">
-          <form id="hero-search-form" class="hero-search-box">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-muted); margin-right: 8px;">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" id="hero-search-input" class="search-input-field" placeholder="Search by title, author, course code (e.g., CS302), or ISBN..." autocomplete="off">
-            <button type="submit" class="btn btn-primary btn-sm">Search Books</button>
-          </form>
-        </div>
-
-        <!-- Quick Listing Type Filter Pills -->
-        <div class="hero-filter-pills">
-          <button class="filter-pill active" data-type-filter="all">All Books</button>
-          <button class="filter-pill" data-type-filter="sell">💰 Buy & Sell</button>
-          <button class="filter-pill" data-type-filter="exchange">⇄ Student Exchange</button>
-          <button class="filter-pill" data-type-filter="donate">🎁 Free Donation</button>
-          <button class="filter-pill" data-type-filter="lend">⏱ Semester Lending</button>
-        </div>
-      </div>
-
-      <!-- Campus Impact Micro-Banner -->
-      <div class="impact-banner">
-        <div class="impact-item">
-          <span class="impact-num">1,280+</span>
-          <span class="impact-label">Books Recirculated</span>
-        </div>
-        <div class="impact-item">
-          <span class="impact-num">₹4.8L+</span>
-          <span class="impact-label">Student Savings</span>
-        </div>
-        <div class="impact-item">
-          <span class="impact-num">18</span>
-          <span class="impact-label">Campus Circles</span>
-        </div>
-        <div class="impact-item">
-          <span class="impact-num">100%</span>
-          <span class="impact-label">Peer-to-Peer Trust</span>
-        </div>
-      </div>
-
-      <!-- Disciplines / Category Carousel -->
-      <div class="category-scroll-container" id="category-chips-bar">
-        <!-- Injected via JS -->
-      </div>
-
-      <!-- Recent Listings Section -->
-      <section style="margin-bottom: var(--space-12);">
-        <div class="section-header">
-          <div class="section-title-wrap">
-            <h2>Recent Campus Listings</h2>
-            <p>Fresh textbooks listed by nearby students</p>
+      <!-- Split Hero Showcase -->
+      <div class="hero-wrapper">
+        <div class="hero-left">
+          <div style="display: inline-flex; align-items: center; gap: var(--space-2); padding: 4px 12px; border-radius: var(--radius-full); background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); font-size: 0.78rem; font-weight: 600; color: var(--color-primary-light); margin-bottom: var(--space-4);">
+            🌱 Student Book Exchange & Sharing Platform
           </div>
-          <a href="#/discover" class="btn btn-outline btn-sm">View All in Discover →</a>
-        </div>
 
-        <!-- Book Cards Grid -->
-        <div id="home-books-grid" class="book-grid">
-          <!-- Injected via JS -->
-        </div>
-      </section>
+          <h1 class="hero-title">
+            Giving Textbooks a <br>
+            <span style="color: var(--color-secondary);">Second Life.</span>
+          </h1>
+          <p class="hero-subtitle">
+            Buy, sell, exchange, donate, and lend academic textbooks directly with verified students across your college campus.
+          </p>
 
-      <!-- How BookLoop Works (Lifecycle) -->
-      <section class="lifecycle-section">
-        <div class="section-header" style="text-align: center; justify-content: center; flex-direction: column;">
-          <h2>How BookLoop Works</h2>
-          <p>Every book has a lifecycle — giving it a second life in 4 simple steps</p>
-        </div>
-
-        <div class="step-grid">
-          <div class="step-card">
-            <div class="step-number">1</div>
-            <h3 class="step-title">List in 60 Seconds</h3>
-            <p class="step-desc">Enter textbook title, condition, and choose whether to sell, swap, donate, or lend for the semester.</p>
-          </div>
-          <div class="step-card">
-            <div class="step-number">2</div>
-            <h3 class="step-title">Discover Nearby</h3>
-            <p class="step-desc">Students in your college or adjacent campuses find your listing through search and distance filters.</p>
-          </div>
-          <div class="step-card">
-            <div class="step-number">3</div>
-            <h3 class="step-title">Safe Campus Handoff</h3>
-            <p class="step-desc">Chat directly, agree on terms, and meet at designated campus meeting points (Library, Canteen, Student Center).</p>
-          </div>
-          <div class="step-card">
-            <div class="step-number">4</div>
-            <h3 class="step-title">Build Trust & Impact</h3>
-            <p class="step-desc">Rate your interaction to grow community trust score while tracking your environmental paper-saving impact.</p>
+          <div style="display: flex; gap: var(--space-3); margin-top: var(--space-6); flex-wrap: wrap;">
+            <a href="#/discover" class="btn btn-primary btn-lg">Explore Available Books →</a>
+            <button class="btn btn-outline btn-lg" onclick="document.getElementById('open-signup-btn').click()">Sell / Share a Book</button>
           </div>
         </div>
-      </section>
 
-    </section>
-
-    <!-- ====================================================================
-         VIEW: DISCOVER
-         ==================================================================== -->
-    <section id="view-discover" class="app-view">
-      <div class="section-header" style="margin-top: var(--space-6);">
-        <div class="section-title-wrap">
-          <h2>Discover Textbooks</h2>
-          <p>Explore and filter books available across all student communities</p>
-        </div>
-        
-        <!-- Skeleton Toggle for Testing Loading Animations -->
-        <button id="toggle-skeleton-btn" class="btn btn-outline btn-sm" title="Preview Shimmer Loading Skeletons">
-          <span>✨ Toggle Loading State</span>
-        </button>
-      </div>
-
-      <!-- Discover Filter Bar -->
-      <div class="discover-filter-bar">
-        <div class="filter-left">
-          <input type="text" id="discover-search-input" class="form-input" style="width: 240px; padding: 0.45rem 0.75rem;" placeholder="Search books...">
-          
-          <select id="filter-type-select" class="form-select" style="width: auto; padding: 0.45rem 0.75rem;">
-            <option value="all">All Listing Types</option>
-            <option value="sell">For Sale</option>
-            <option value="exchange">Exchange</option>
-            <option value="donate">Free Donation</option>
-            <option value="lend">Semester Lending</option>
-          </select>
-
-          <select id="filter-category-select" class="form-select" style="width: auto; padding: 0.45rem 0.75rem;">
-            <option value="all">All Disciplines</option>
-            <option value="cse">Computer Science</option>
-            <option value="ece-ee">Electrical & Electronics</option>
-            <option value="mech-civil">Mechanical & Civil</option>
-            <option value="medical">Medical & Health</option>
-            <option value="commerce">Commerce & MBA</option>
-            <option value="exams">GATE & Exams</option>
-          </select>
-
-          <select id="filter-condition-select" class="form-select" style="width: auto; padding: 0.45rem 0.75rem;">
-            <option value="all">Any Condition</option>
-            <option value="like_new">Like New</option>
-            <option value="good">Good Condition</option>
-            <option value="worn">Worn / Usable</option>
-          </select>
-        </div>
-
-        <div class="filter-right">
-          <select id="sort-by-select" class="form-select" style="width: auto; padding: 0.45rem 0.75rem;">
-            <option value="nearest">Nearest First</option>
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
-            <option value="rating">Highest Seller Trust</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Discover Books Grid -->
-      <div id="discover-books-grid" class="book-grid">
-        <!-- Injected via JS -->
-      </div>
-
-      <!-- Empty State -->
-      <div id="discover-empty-state" class="empty-state" style="display: none;">
-        <div class="empty-icon">🔍</div>
-        <h3 class="empty-title">No matching books found</h3>
-        <p class="empty-desc">Try loosening your search terms or clearing specific category and condition filters.</p>
-        <button id="reset-filters-btn" class="btn btn-outline btn-sm">Reset All Filters</button>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         VIEW: COMMUNITIES
-         ==================================================================== -->
-    <section id="view-communities" class="app-view">
-      <div class="section-header" style="margin-top: var(--space-6);">
-        <div class="section-title-wrap">
-          <h2>Student Communities</h2>
-          <p>Join campus circles and subject groups to swap books directly with peers</p>
-        </div>
-        <button id="create-comm-btn" class="btn btn-primary btn-sm">+ Create Student Circle</button>
-      </div>
-
-      <div class="community-grid">
-        <div class="community-card">
-          <div class="comm-header">
-            <div class="comm-icon">💻</div>
-            <div>
-              <span class="badge badge-emerald" style="margin-bottom: 4px;">Most Active</span>
-              <h3 class="comm-title">B.Tech CSE Textbook Exchange</h3>
-              <p class="comm-tagline">Algorithms, OS, DBMS, Compiler, and AI textbook exchanges across semesters.</p>
+        <!-- Hero Card Graphic -->
+        <div class="hero-right">
+          <div class="card" style="padding: var(--space-6); background: var(--bg-surface); border: 1px solid var(--border-medium); box-shadow: var(--shadow-lg);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4);">
+              <span class="badge badge-emerald">Exchange Available</span>
+              <span style="font-size: 0.75rem; color: var(--text-tertiary);">0.8 km from campus</span>
             </div>
-          </div>
-          <div class="comm-meta">
-            <span>👥 420 Students</span>
-            <span>📚 340 Books Swapped</span>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="alert('Community joined! You will now receive alerts for new CSE book listings.')">Join Community</button>
-        </div>
-
-        <div class="community-card">
-          <div class="comm-header">
-            <div class="comm-icon">📖</div>
-            <div>
-              <span class="badge badge-indigo" style="margin-bottom: 4px;">Literature & Novels</span>
-              <h3 class="comm-title">Ludhiana Student Readers Circle</h3>
-              <p class="comm-tagline">Non-fiction, self-growth, novels, and classics passed hand-to-hand.</p>
-            </div>
-          </div>
-          <div class="comm-meta">
-            <span>👥 285 Students</span>
-            <span>📚 195 Books Swapped</span>
-          </div>
-          <button class="btn btn-outline btn-sm" onclick="alert('Community joined!')">Join Community</button>
-        </div>
-
-        <div class="community-card">
-          <div class="comm-header">
-            <div class="comm-icon">🎯</div>
-            <div>
-              <span class="badge badge-amber" style="margin-bottom: 4px;">Exam Prep</span>
-              <h3 class="comm-title">GATE & Competitive Exam Aspirants</h3>
-              <p class="comm-tagline">Previous Year Question banks, Made Easy notes, and aptitude reference materials.</p>
-            </div>
-          </div>
-          <div class="comm-meta">
-            <span>👥 512 Students</span>
-            <span>📚 480 Books Swapped</span>
-          </div>
-          <button class="btn btn-outline btn-sm" onclick="alert('Community joined!')">Join Community</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         VIEW: PROFILE / MY LIBRARY
-         ==================================================================== -->
-    <section id="view-profile" class="app-view">
-      <div class="section-header" style="margin-top: var(--space-6);">
-        <div class="section-title-wrap">
-          <h2>Student Profile & Library</h2>
-          <p>Manage your listed textbooks, saved wishlist, and personal green impact</p>
-        </div>
-      </div>
-
-      <!-- Student Profile Card -->
-      <div class="card" style="margin-bottom: var(--space-6);">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
-          <div style="display: flex; align-items: center; gap: var(--space-4);">
-            <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 2.25rem;">
-              👨‍🎓
-            </div>
-            <div>
-              <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary);">Amanpreet Singh</h3>
-              <p style="font-size: 0.875rem; color: var(--text-secondary);">GNDEC Ludhiana &bull; 3rd Year B.Tech Computer Science</p>
-              <div style="display: flex; align-items: center; gap: var(--space-2); margin-top: 4px;">
-                <span class="badge badge-emerald">Trust Score: ⭐ 4.9 (14 Reviews)</span>
-                <span class="badge badge-indigo">Verified Student</span>
+            <div style="display: flex; gap: var(--space-4); align-items: center;">
+              <div style="width: 70px; height: 90px; border-radius: var(--radius-sm); background: linear-gradient(135deg, #1E3A8A, #3B82F6); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                📖
+              </div>
+              <div>
+                <h3 style="font-size: 1rem; font-weight: 700;">Introduction to Algorithms</h3>
+                <p style="font-size: 0.78rem; color: var(--text-secondary);">CLRS &bull; 4th Edition</p>
+                <p style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 4px;">Shared by Amanpreet S. (GNDEC)</p>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Quick Search & Category Bar -->
+      <div style="margin-top: var(--space-8); margin-bottom: var(--space-10);">
+        <div class="search-box-wrap" style="margin-bottom: var(--space-4);">
+          <input type="text" id="home-search-input" class="form-input search-input" placeholder="Search textbooks by title, author, course code (e.g. CS302), or subject...">
+          <button id="home-search-btn" class="btn btn-primary search-btn">Search</button>
+        </div>
+
+        <div class="category-pills" id="home-category-pills">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Recently Added Section -->
+      <section style="margin-bottom: var(--space-12);">
+        <div class="section-header">
           <div>
-            <button class="btn btn-outline btn-sm" onclick="alert('Edit Profile modal scheduled for Phase 2!')">Edit Profile</button>
+            <h2 class="section-title">Recently Listed Textbooks</h2>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-1);">
+              Freshly listed by students in your nearby campus community
+            </p>
           </div>
+          <a href="#/discover" class="btn btn-ghost btn-sm">View All Listings →</a>
         </div>
 
-        <div class="impact-banner" style="margin-top: var(--space-6); margin-bottom: 0;">
-          <div class="impact-item">
-            <span class="impact-num">6</span>
-            <span class="impact-label">Books Listed</span>
-          </div>
-          <div class="impact-item">
-            <span class="impact-num">8</span>
-            <span class="impact-label">Books Given Life</span>
-          </div>
-          <div class="impact-item">
-            <span class="impact-num">3</span>
-            <span class="impact-label">Saved Wishlist</span>
-          </div>
-          <div class="impact-item">
-            <span class="impact-num">₹3,450</span>
-            <span class="impact-label">Personal Savings</span>
-          </div>
+        <div id="home-books-grid" class="book-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+    </section>
+
+    <!-- ==================================================================
+         VIEW: DISCOVER
+         ================================================================== -->
+    <section id="view-discover" class="app-view">
+      <div class="section-header" style="margin-bottom: var(--space-6);">
+        <div>
+          <h1 class="section-title">Discover Textbooks</h1>
+          <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-1);">
+            Filter by course, subject, listing type, price, or distance
+          </p>
         </div>
       </div>
 
-      <!-- Wishlist / My Books Section -->
-      <div class="section-header">
-        <div class="section-title-wrap">
-          <h3 style="font-size: 1.125rem; font-weight: 700;">Saved Books (Wishlist)</h3>
+      <!-- Search & Filters Toolbar -->
+      <div class="card" style="padding: var(--space-4); margin-bottom: var(--space-6);">
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+          <input type="text" id="discover-search-input" class="form-input" placeholder="Search title, author, ISBN..." style="flex: 2; min-width: 200px;">
+          
+          <select id="discover-type-filter" class="form-input" style="flex: 1; min-width: 140px;">
+            <option value="all">All Types (Sell/Swap/Free/Lend)</option>
+            <option value="sell">For Sale</option>
+            <option value="exchange">Exchange</option>
+            <option value="donate">Free Donation</option>
+            <option value="lend">Lending</option>
+          </select>
+
+          <select id="discover-sort-filter" class="form-input" style="flex: 1; min-width: 140px;">
+            <option value="newest">Newest First</option>
+            <option value="nearest">Nearest (Distance)</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+          </select>
         </div>
       </div>
-      <div id="wishlist-books-grid" class="book-grid">
-        <!-- Injected via JS -->
+
+      <div id="discover-books-grid" class="book-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         VIEW: COMMUNITIES
+         ================================================================== -->
+    <section id="view-communities" class="app-view">
+      <div class="section-header" style="margin-bottom: var(--space-6);">
+        <div>
+          <h1 class="section-title">Student Communities</h1>
+          <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-1);">
+            Join campus book exchange circles and subject study groups
+          </p>
+        </div>
+      </div>
+
+      <div id="communities-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-4);">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         VIEW: PROFILE / MY LIBRARY
+         ================================================================== -->
+    <section id="view-profile" class="app-view">
+      <div id="profile-container">
+        <!-- Dynamic rendering via JS (Auth User vs Guest View) -->
       </div>
     </section>
 
@@ -397,8 +227,8 @@
     <div class="modal-box">
       <div class="modal-header">
         <div class="tabs-nav" style="width: 100%;">
-          <button id="auth-tab-login" class="tab-btn active" data-auth-tab="login">Student Login</button>
-          <button id="auth-tab-signup" class="tab-btn" data-auth-tab="signup">Create Account</button>
+          <button id="auth-tab-login" class="tab-btn active">Student Login</button>
+          <button id="auth-tab-signup" class="tab-btn">Create Account</button>
         </div>
         <button class="modal-close-btn" data-modal-close aria-label="Close Modal">&times;</button>
       </div>
@@ -414,7 +244,10 @@
             <label class="form-label" for="login-password">Password</label>
             <input type="password" id="login-password" class="form-input" placeholder="••••••••" required>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-2);">Log In to BookLoop</button>
+          <div style="text-align: right; margin-bottom: var(--space-3);">
+            <a href="#" id="forgot-password-link" style="font-size: 0.78rem; color: var(--color-primary-light);">Forgot Password?</a>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Log In to BookLoop</button>
         </form>
 
         <!-- Sign-Up Form (Hidden initially) -->
@@ -439,14 +272,90 @@
           </div>
           <div class="form-group">
             <label class="form-label" for="signup-password">Create Password</label>
-            <input type="password" id="signup-password" class="form-input" placeholder="At least 8 characters" required>
+            <input type="password" id="signup-password" class="form-input" placeholder="At least 6 characters" required>
           </div>
           <button type="submit" class="btn btn-secondary" style="width: 100%; margin-top: var(--space-2);">Join BookLoop Community</button>
+        </form>
+
+        <!-- Password Reset Form (Hidden initially) -->
+        <form id="reset-form" style="display: none;">
+          <div style="font-size: 0.875rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-2);">
+            Reset Student Password
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: var(--space-4);">
+            Enter your student email address to request a password reset token.
+          </p>
+          <div class="form-group">
+            <label class="form-label" for="reset-email">Student Email</label>
+            <input type="email" id="reset-email" class="form-input" placeholder="student@college.edu">
+          </div>
+          
+          <div id="reset-token-wrap" style="display: none;">
+            <div class="form-group">
+              <label class="form-label" for="reset-token-input">Reset Token</label>
+              <input type="text" id="reset-token-input" class="form-input" placeholder="Enter token">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reset-new-password">New Password</label>
+              <input type="password" id="reset-new-password" class="form-input" placeholder="New password">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-2);">Submit Reset Request</button>
+          <div style="text-align: center; margin-top: var(--space-3);">
+            <a href="#" id="back-to-login-link" style="font-size: 0.78rem; color: var(--text-secondary);">← Back to Login</a>
+          </div>
         </form>
       </div>
 
       <div class="modal-footer" style="justify-content: center; font-size: 0.8125rem; color: var(--text-secondary);">
-        <span>🔒 Secure verification designed for verified students</span>
+        <span>🔒 Secure session authentication powered by FastAPI & JWT</span>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ====================================================================
+       MODAL: Edit Profile (<dialog>)
+       ==================================================================== -->
+  <dialog id="edit-profile-modal" class="app-modal" style="max-width: 520px;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 style="font-size: 1rem; font-weight: 700;">Edit Student Profile</h3>
+        <button class="modal-close-btn" data-modal-close aria-label="Close Modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="edit-profile-form">
+          <div class="form-group">
+            <label class="form-label" for="edit-name">Full Name</label>
+            <input type="text" id="edit-name" class="form-input" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="edit-college">University / College</label>
+              <input type="text" id="edit-college" class="form-input">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="edit-course">Course / Degree</label>
+              <input type="text" id="edit-course" class="form-input">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="edit-year">Year of Study</label>
+              <input type="text" id="edit-year" class="form-input" placeholder="e.g. 3rd Year">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="edit-location">Campus / Location</label>
+              <input type="text" id="edit-location" class="form-input" placeholder="e.g. Ludhiana">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edit-bio">Bio / About Yourself</label>
+            <textarea id="edit-bio" class="form-input" rows="3" placeholder="Tell other students about your reading interest or subjects..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-2);">Save Profile Updates</button>
+        </form>
       </div>
     </div>
   </dialog>
@@ -515,9 +424,7 @@
     <span id="floating-status-text">Backend: Connecting...</span>
   </div>
 
-  <!-- ====================================================================
-       Mobile Bottom Navigation Bar
-       ==================================================================== -->
+  <!-- Mobile Bottom Navigation Bar -->
   <nav class="mobile-bottom-nav">
     <a href="#/home" class="mobile-nav-item active" data-nav-route="home">
       <span>🏠</span>
@@ -545,7 +452,7 @@
     <div class="app-container">
       <p><strong>BookLoop</strong> &mdash; Giving Books a Second Chance &bull; B.Tech Final-Year Project</p>
       <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-2);">
-        Phase 1: Premium UI Foundation &bull; Responsive Vanilla HTML5 + Modern CSS + ES6+ JavaScript
+        Phase 2: Authentication & Profile &bull; Responsive Vanilla HTML5 + Modern CSS + ES6+ JavaScript
       </p>
     </div>
   </footer>
