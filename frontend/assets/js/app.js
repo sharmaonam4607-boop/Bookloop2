@@ -7,6 +7,7 @@ import { CONFIG }                     from './config.js';
 import { api }                        from './api.js';
 import { auth }                       from './auth.js';
 import { ThemeManager }               from './theme.js';
+import { ToastManager }               from './components/toast.js';
 import { Router }                     from './router.js';
 import { ModalController }            from './components/modal.js';
 import { createBookCard, createSkeletonCard } from './components/book-card.js';
@@ -355,6 +356,7 @@ class HealthPoller {
 
 async function main() {
   const theme = new ThemeManager();
+  const toast = new ToastManager();  // Exposes window.toast globally
   const modal = new ModalController();
   const headerAuth = new HeaderAuthController(modal);
 
