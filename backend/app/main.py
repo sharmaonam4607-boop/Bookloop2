@@ -57,8 +57,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register API v1 Routers
-app.include_router(health_router)
+# Register API v1 Routers (health route prefixed with /api/v1 so /api/v1/health matches health.py)
+app.include_router(health_router, prefix=settings.API_V1_STR)
 app.include_router(auth_router)
 app.include_router(profile_router)
 
