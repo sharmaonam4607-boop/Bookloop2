@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookLoop — Giving Books a Second Chance</title>
+  
+  <!-- Modern Stylesheets -->
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/reset.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  
+  <!-- Favicon / SVG Icon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
+</head>
+<body>
+
+  <!-- Sticky Modern Header -->
+  <header class="app-header">
+    <div class="app-container">
+      <div class="nav-container">
+        <div class="brand-group">
+          <div class="brand-logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <div class="brand-info">
+            <span class="brand-title">BookLoop</span>
+            <span class="brand-tagline">Giving Books a Second Chance</span>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <div id="nav-status-pill" class="system-status-pill">
+            <span id="nav-status-pulse" class="pulse-indicator pulse-amber"></span>
+            <span id="nav-status-text">Checking Backend...</span>
+          </div>
+          
+          <a href="http://127.0.0.1:8000/api/v1/docs" target="_blank" class="btn btn-outline btn-sm" title="Open Interactive API Docs">
+            <span>Swagger Docs</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+
+          <button id="theme-toggle-btn" class="btn btn-outline btn-icon" aria-label="Toggle Dark/Light Mode">
+            🌙
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="app-container">
+    
+    <!-- Hero / Intro Banner -->
+    <section class="hero-section">
+      <div class="hero-badge">
+        <span class="badge badge-emerald">Phase 0: Foundation Complete</span>
+        <span class="badge badge-indigo">B.Tech Final-Year Project</span>
+      </div>
+      <h1 class="hero-title">Giving Books a Second Chance</h1>
+      <p class="hero-subtitle">
+        BookLoop is an independent student book-sharing platform designed for buying, selling, exchanging, donating, and lending textbooks.
+      </p>
+    </section>
+
+    <!-- Phase 0 Live Health Dashboard Grid -->
+    <div class="dashboard-grid">
+      
+      <!-- Card 1: FastAPI Backend Monitor -->
+      <div class="card card-glass card-interactive">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+              <line x1="6" y1="6" x2="6.01" y2="6"></line>
+              <line x1="6" y1="18" x2="6.01" y2="18"></line>
+            </svg>
+            FastAPI Backend Service
+          </div>
+          <span id="server-status-val" class="badge badge-amber">Checking...</span>
+        </div>
+
+        <div class="monitor-row">
+          <span class="monitor-label">Target Endpoint</span>
+          <span class="monitor-val">GET /api/v1/health</span>
+        </div>
+        <div class="monitor-row">
+          <span class="monitor-label">Roundtrip Latency</span>
+          <span id="server-latency-val" class="monitor-val">—</span>
+        </div>
+        <div class="monitor-row">
+          <span class="monitor-label">API Version</span>
+          <span id="server-version-val" class="monitor-val">—</span>
+        </div>
+        <div class="monitor-row">
+          <span class="monitor-label">Environment</span>
+          <span id="server-env-val" class="monitor-val">—</span>
+        </div>
+
+        <div style="display: flex; gap: var(--space-3); margin-top: var(--space-5);">
+          <button id="ping-btn" class="btn btn-primary btn-sm">
+            <span>⚡ Ping Backend Now</span>
+          </button>
+          <button id="test-root-btn" class="btn btn-outline btn-sm">
+            <span>Root Status</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 2: PostgreSQL Engine Status -->
+      <div class="card card-glass card-interactive">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-green);">
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
+            PostgreSQL Database (SQLAlchemy)
+          </div>
+          <span id="db-status-pill" class="badge badge-amber">Validating...</span>
+        </div>
+
+        <div class="monitor-row">
+          <span class="monitor-label">Database Engine</span>
+          <span id="db-target-engine" class="monitor-val">PostgreSQL</span>
+        </div>
+        <div class="monitor-row">
+          <span class="monitor-label">Connection URL (.env)</span>
+          <span id="db-target-url" class="monitor-val" style="font-size: 0.75rem;">postgresql://...</span>
+        </div>
+        <div class="monitor-row">
+          <span class="monitor-label">Connection Status</span>
+          <span id="db-status-msg" class="monitor-val" style="font-size: 0.8125rem;">Checking connection...</span>
+        </div>
+
+        <div id="db-error-block" style="display: none; margin-top: var(--space-4); padding: var(--space-3); background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm); font-size: 0.8125rem;">
+          <div style="font-weight: 700; color: var(--color-danger); margin-bottom: var(--space-1);">Connection Diagnostic:</div>
+          <div id="db-error-text" style="color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.75rem;"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Diagnostic JSON Section -->
+    <div class="card" style="margin-bottom: var(--space-10);">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          Backend Response Payload (Live Data)
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-3);">
+          <span id="last-checked-text" style="font-size: 0.75rem; color: var(--text-muted);">Last ping: —</span>
+          <button id="copy-diag-btn" class="btn btn-outline btn-sm">Copy JSON</button>
+        </div>
+      </div>
+      <pre id="json-diag-box" class="code-box">Connecting to backend service...</pre>
+    </div>
+
+    <!-- Phase Roadmap Matrix (Modular Architecture) -->
+    <section class="roadmap-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Phased Development Matrix</h2>
+          <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-1);">
+            BookLoop features are built in strict modular phases as specified in the project prompt.
+          </p>
+        </div>
+        <span class="badge badge-emerald">Phase 0 Active</span>
+      </div>
+
+      <div class="phase-grid">
+        
+        <div class="phase-card active-phase">
+          <div class="phase-top">
+            <span class="phase-num">Phase 0</span>
+            <span class="badge badge-emerald">Active</span>
+          </div>
+          <div class="phase-name">Foundation & API</div>
+          <div class="phase-desc">FastAPI setup, PostgreSQL SQLAlchemy configuration, CORS, and modern HTML5/CSS3/ES6 design system.</div>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-top">
+            <span class="phase-num">Phase 1</span>
+            <span class="badge badge-outline">Queued</span>
+          </div>
+          <div class="phase-name">Premium UI Foundation</div>
+          <div class="phase-desc">Splash, onboarding, auth UI, main navigation, home UI, reusable components, and theme states.</div>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-top">
+            <span class="phase-num">Phase 2</span>
+            <span class="badge badge-outline">Queued</span>
+          </div>
+          <div class="phase-name">Authentication & Profile</div>
+          <div class="phase-desc">Registration, login, logout, session persistence, user profiles, student credentials, and stats.</div>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-top">
+            <span class="phase-num">Phase 3</span>
+            <span class="badge badge-outline">Queued</span>
+          </div>
+          <div class="phase-name">Book System & Discovery</div>
+          <div class="phase-desc">Book database, categories, search, multi-faceted filtering, sorting, and book details.</div>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-top">
+            <span class="phase-num">Phase 4</span>
+            <span class="badge badge-outline">Queued</span>
+          </div>
+          <div class="phase-name">Sell, Exchange & Lend</div>
+          <div class="phase-desc">Multi-step book listing flow, condition grading, photo uploads, terms, and lifecycle management.</div>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-top">
+            <span class="phase-num">Phase 5</span>
+            <span class="badge badge-outline">Queued</span>
+          </div>
+          <div class="phase-name">Wishlist & Requests</div>
+          <div class="phase-desc">Saved books, availability alerts, book exchange requests, and My Library lifecycle tracking.</div>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-top">
+            <span class="phase-num">Phase 6</span>
+            <span class="badge badge-outline">Queued</span>
+          </div>
+          <div class="phase-name">Chat & Notifications</div>
+          <div class="phase-desc">Modular student chat, book-linked conversations, unread badges, and notifications center.</div>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-top">
+            <span class="phase-num">Phase 7</span>
+            <span class="badge badge-outline">Queued</span>
+          </div>
+          <div class="phase-name">Student Communities</div>
+          <div class="phase-desc">Campus groups, shared book circles, community discussions, and feed interactions.</div>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-top">
+            <span class="phase-num">Phase 8</span>
+            <span class="badge badge-outline">Queued</span>
+          </div>
+          <div class="phase-name">Maps & Safe Points</div>
+          <div class="phase-desc">Geographic discovery, distance calculation, book markers, and safe campus meeting points.</div>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-top">
+            <span class="phase-num">Phase 9</span>
+            <span class="badge badge-outline">Queued</span>
+          </div>
+          <div class="phase-name">Trust, Reviews & Impact</div>
+          <div class="phase-desc">Student trust scores, peer reviews, reuse statistics, and personal sustainability impact.</div>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-top">
+            <span class="phase-num">Phase 10</span>
+            <span class="badge badge-outline">Queued</span>
+          </div>
+          <div class="phase-name">Admin Operations</div>
+          <div class="phase-desc">Content moderation, user management, reports handling, and platform analytics.</div>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-top">
+            <span class="phase-num">Phase 11–12</span>
+            <span class="badge badge-outline">Queued</span>
+          </div>
+          <div class="phase-name">Testing & Final Polish</div>
+          <div class="phase-desc">End-to-end testing, responsive polish, accessibility audits, and final project demo preparation.</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Clean Modern Footer -->
+  <footer class="app-footer">
+    <div class="app-container">
+      <p><strong>BookLoop</strong> — Giving Books a Second Chance &bull; B.Tech Final-Year Project</p>
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-1);">
+        Phase 0: Foundation &bull; FastAPI + SQLAlchemy + PostgreSQL + Modern Component-Driven Web Architecture
+      </p>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Main ES6 Modules -->
+  <script type="module" src="assets/js/app.js"></script>
+
+</body>
+</html>
