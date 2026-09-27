@@ -71,8 +71,12 @@ python run.py
 * Health check endpoint: **http://127.0.0.1:8000/api/v1/health**
 
 ### 2. Frontend Setup
-Open `frontend/index.html` directly in your browser (e.g., Microsoft Edge or Chrome), or serve with any static web server:
-```powershell
-python -m http.server 3000 --directory frontend
-```
-Navigate to **http://localhost:3000** to see the live system status, theme toggles, and backend latency metrics.
+
+The BookLoop frontend is served through the FastAPI application.
+
+The application is available at:
+
+**http://localhost:8000/app/#/home**
+
+Open this URL in your browser to access the BookLoop application, including the home page, book discovery, communities, chats, library, theme controls, and other features.
+
