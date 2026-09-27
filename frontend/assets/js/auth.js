@@ -8,7 +8,7 @@ export class AuthManager {
   static USER_KEY  = 'bookloop_user_session';
 
   constructor() {
-    this._token = localStorage.getItem(AuthManager.TOKEN_KEY) || null;
+    this._token = localStorage.getItem(AuthManager.TOKEN_KEY) || sessionStorage.getItem(AuthManager.TOKEN_KEY) || null;
     this._user  = this._loadUser();
     this._listeners = [];
   }
@@ -29,12 +29,18 @@ export class AuthManager {
     return this._user?.profile || null;
   }
 
+  clearSession() {
+    this.logout();
+  }
+
   /** Store session details upon successful login or registration */
-  setSession(token, user) {
+  setSession(token, user, persist = true) {
     this._token = token;
     this._user  = user;
-    localStorage.setItem(AuthManager.TOKEN_KEY, token);
-    localStorage.setItem(AuthManager.USER_KEY, JSON.stringify(user));
+    this._clearStoredSession();
+    const storage = persist ? localStorage : sessionStorage;
+    storage.setItem(AuthManager.TOKEN_KEY, token);
+    storage.setItem(AuthManager.USER_KEY, JSON.stringify(user));
     this._notify();
   }
 
@@ -53,6 +59,8 @@ export class AuthManager {
     this._user  = null;
     localStorage.removeItem(AuthManager.TOKEN_KEY);
     localStorage.removeItem(AuthManager.USER_KEY);
+    sessionStorage.removeItem(AuthManager.TOKEN_KEY);
+    sessionStorage.removeItem(AuthManager.USER_KEY);
     this._notify();
   }
 
@@ -67,11 +75,18 @@ export class AuthManager {
 
   _loadUser() {
     try {
-      const raw = localStorage.getItem(AuthManager.USER_KEY);
+      const raw = localStorage.getItem(AuthManager.USER_KEY) || sessionStorage.getItem(AuthManager.USER_KEY);
       return raw ? JSON.parse(raw) : null;
     } catch {
       return null;
     }
+  }
+
+  _clearStoredSession() {
+    localStorage.removeItem(AuthManager.TOKEN_KEY);
+    localStorage.removeItem(AuthManager.USER_KEY);
+    sessionStorage.removeItem(AuthManager.TOKEN_KEY);
+    sessionStorage.removeItem(AuthManager.USER_KEY);
   }
 }
 

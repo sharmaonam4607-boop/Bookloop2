@@ -71,3 +71,4 @@ class ProfileUpdate(BaseModel):
     location: Optional[str] = None
     bio: Optional[str] = None
     avatar_emoji: Optional[str] = None
+    avatar_url: Optional[str] = None

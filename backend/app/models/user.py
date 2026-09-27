@@ -28,6 +28,7 @@ class User(Base):
     updated_at = Column(DateTime, default=utc_now, onupdate=utc_now, nullable=False)
 
     profile = relationship("UserProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    book_listings = relationship("BookListing", back_populates="seller")
 
 
 class UserProfile(Base):

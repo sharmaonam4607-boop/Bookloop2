@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookLoop Admin</title>
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/reset.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body class="admin-body">
+  <main class="admin-shell">
+    <header class="admin-topbar">
+      <a class="admin-brand" href="/app/" aria-label="Back to BookLoop">
+        <span class="admin-brand-mark">B</span>
+        <span><strong>BookLoop</strong><small>Administration</small></span>
+      </a>
+      <div class="admin-account">
+        <span id="admin-identity" class="admin-identity">Admin access</span>
+        <button id="admin-logout" class="admin-button admin-button-quiet" type="button" hidden>Sign out</button>
+      </div>
+    </header>
+
+    <section id="admin-login-panel" class="admin-login-panel" aria-labelledby="admin-login-title">
+      <p class="admin-eyebrow">Restricted workspace</p>
+      <h1 id="admin-login-title">Admin sign in</h1>
+      <p class="admin-muted">Use an existing BookLoop account enabled in the backend <code>ADMIN_EMAILS</code> allowlist.</p>
+      <form id="admin-login-form">
+        <label>Email<input name="email" type="email" autocomplete="username" required></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+        <button class="admin-button admin-button-primary" type="submit">Sign in</button>
+      </form>
+      <p id="admin-login-error" class="admin-error" role="alert" hidden></p>
+    </section>
+
+    <section id="admin-console" hidden>
+      <div class="admin-page-heading">
+        <div><p class="admin-eyebrow">Operations</p><h1>Platform overview</h1><p class="admin-muted">Moderation tools and metrics from stored BookLoop activity.</p></div>
+        <button id="admin-refresh" class="admin-button admin-button-quiet" type="button" title="Refresh current view">↻ Refresh</button>
+      </div>
+      <nav class="admin-tabs" aria-label="Administration sections">
+        <button type="button" class="admin-tab active" data-admin-tab="analytics">Overview</button>
+        <button type="button" class="admin-tab" data-admin-tab="users">Users</button>
+        <button type="button" class="admin-tab" data-admin-tab="listings">Listings</button>
+        <button type="button" class="admin-tab" data-admin-tab="communities">Communities</button>
+        <button type="button" class="admin-tab" data-admin-tab="reports">Reports</button>
+        <button type="button" class="admin-tab" data-admin-tab="reviews">Reviews</button>
+      </nav>
+      <div id="admin-content" class="admin-content" aria-live="polite"><p class="admin-muted">Loading administration data…</p></div>
+    </section>
+    <div id="admin-toast" class="admin-toast" role="status" hidden></div>
+  </main>
+  <script type="module" src="assets/js/admin.js?v=1"></script>
+</body>
+</html>

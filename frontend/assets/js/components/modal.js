@@ -3,7 +3,7 @@
  * Manages native <dialog> elements — Auth modal, Edit Profile modal, and Book details preview.
  */
 
-import { api }  from '../api.js';
+import { api }  from '../api.js?v=5';
 import { auth } from '../auth.js';
 
 export class ModalController {
@@ -88,6 +88,7 @@ export class ModalController {
   async _handleLoginSubmit() {
     const email = document.getElementById('login-email')?.value?.trim();
     const pass  = document.getElementById('login-password')?.value;
+    const remember = document.getElementById('remember-session')?.checked ?? true;
 
     if (!email || !pass) {
       window.toast?.show('Please enter both email and password.', 'warning');
@@ -98,7 +99,7 @@ export class ModalController {
     const res = await api.login(email, pass);
 
     if (res.ok && res.data) {
-      auth.setSession(res.data.access_token, res.data.user);
+      auth.setSession(res.data.access_token, res.data.user, remember);
       window.toast?.show(`Welcome back, ${res.data.user.profile?.full_name || 'Student'}! 🎉`, 'success');
       this.closeAuth();
     } else {
@@ -206,6 +207,7 @@ export class ModalController {
       const courseEl  = document.getElementById('edit-course');
       const yearEl    = document.getElementById('edit-year');
       const locEl     = document.getElementById('edit-location');
+      const avatarUrlEl = document.getElementById('edit-avatar-url');
       const bioEl     = document.getElementById('edit-bio');
 
       if (nameEl)    nameEl.value    = profile.full_name || '';
@@ -213,6 +215,7 @@ export class ModalController {
       if (courseEl)  courseEl.value  = profile.course || '';
       if (yearEl)    yearEl.value    = profile.year || '';
       if (locEl)     locEl.value     = profile.location || '';
+      if (avatarUrlEl) avatarUrlEl.value = profile.avatar_url || '';
       if (bioEl)     bioEl.value     = profile.bio || '';
     }
     this._editProfileDialog.showModal();
@@ -228,6 +231,7 @@ export class ModalController {
     const course  = document.getElementById('edit-course')?.value?.trim();
     const year    = document.getElementById('edit-year')?.value?.trim();
     const loc     = document.getElementById('edit-location')?.value?.trim();
+    const avatarUrl = document.getElementById('edit-avatar-url')?.value?.trim();
     const bio     = document.getElementById('edit-bio')?.value?.trim();
 
     window.toast?.show('Updating profile...', 'info', 1500);
@@ -237,6 +241,7 @@ export class ModalController {
       course: course,
       year: year,
       location: loc,
+      avatar_url: avatarUrl,
       bio: bio
     });
 
@@ -294,16 +299,45 @@ export class ModalController {
           <div style="font-size:0.75rem;color:var(--text-tertiary);">${escapeHtml(book.seller.college)} · ${escapeHtml(book.seller.year)}</div>
         </div>
         <div style="text-align:right;">
-          <div style="color:var(--color-warning);font-weight:700;font-size:0.8125rem;">★ ${book.seller.trustScore.toFixed(1)}</div>
+          <div style="color:var(--color-warning);font-weight:700;font-size:0.8125rem;">${book.seller.trustScore == null ? 'No reviews yet' : `★ ${book.seller.trustScore.toFixed(1)}`}</div>
           <div style="font-size:0.75rem;color:var(--text-muted);">${book.seller.reviewsCount} reviews</div>
         </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);margin-top:var(--space-4);">
-        <button class="btn btn-primary btn-sm" onclick="window.toast.show('Request feature enabled in Phase 5!', 'info')">Send Request</button>
-        <button class="btn btn-outline btn-sm" onclick="window.toast.show('Chat feature enabled in Phase 6!', 'info')">💬 Start Chat</button>
+      <div style="margin-top:var(--space-4);">
+        <label class="form-group"><span class="form-label">Message to the owner (optional)</span><textarea class="form-input" rows="2" data-request-message maxlength="1000" placeholder="Introduce yourself or suggest a campus handoff."></textarea></label>
+        <div style="display:flex;gap:var(--space-2);">
+          <button class="btn btn-primary btn-sm" data-send-book-request>${book.listingType === 'lend' ? 'Request to borrow' : book.listingType === 'exchange' ? 'Request exchange' : book.listingType === 'donate' ? 'Request this book' : 'Request to buy'}</button>
+          <button class="btn btn-outline btn-sm" data-start-book-chat>💬 Start Chat</button>
+        </div>
       </div>
     `;
+
+    this._bookContent.querySelector('[data-send-book-request]')?.addEventListener('click', async event => {
+      if (!auth.isAuthenticated) {
+        this.closeBook();
+        this.openAuth('login');
+        window.toast?.show('Log in to send a book request.', 'info');
+        return;
+      }
+      const button = event.currentTarget;
+      button.disabled = true;
+      const message = this._bookContent.querySelector('[data-request-message]')?.value?.trim() || null;
+      const response = await api.createBookRequest(book.id, message);
+      button.disabled = false;
+      if (response.ok) {
+        window.toast?.show('Request sent to the book owner.', 'success');
+        this.closeBook();
+        window.dispatchEvent(new CustomEvent('requestsChanged'));
+        window.dispatchEvent(new CustomEvent('notificationsChanged'));
+      } else {
+        window.toast?.show(response.error || 'Could not send your request.', 'error');
+      }
+    });
+    this._bookContent.querySelector('[data-start-book-chat]')?.addEventListener('click', () => {
+      this.closeBook();
+      window.bookloopChat?.openForBook(book.id);
+    });
 
     this._bookDialog.showModal();
   }

@@ -23,6 +23,8 @@ class Settings(BaseSettings):
 
     # Full PostgreSQL connection URL
     DATABASE_URL: str | None = None
+    GOOGLE_MAPS_API_KEY: str | None = None
+    ADMIN_EMAILS: str = ""
 
     # CORS Configuration
     BACKEND_CORS_ORIGINS: List[str] = [

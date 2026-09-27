@@ -11,6 +11,13 @@ from app.database.session import engine
 from app.routers.health import router as health_router
 from app.routers.auth import router as auth_router
 from app.routers.profile import router as profile_router
+from app.routers.books import router as books_router
+from app.routers.phase5 import router as phase5_router
+from app.routers.messaging import router as messaging_router
+from app.routers.communities import router as communities_router
+from app.routers.maps import router as maps_router
+from app.routers.phase9 import router as phase9_router
+from app.routers.admin import router as admin_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -61,6 +68,13 @@ app.add_middleware(
 app.include_router(health_router, prefix=settings.API_V1_STR)
 app.include_router(auth_router)
 app.include_router(profile_router)
+app.include_router(books_router)
+app.include_router(phase5_router)
+app.include_router(messaging_router)
+app.include_router(communities_router)
+app.include_router(maps_router)
+app.include_router(phase9_router)
+app.include_router(admin_router)
 
 # Mount Frontend UI at /app for browser access
 frontend_dir = Path(__file__).resolve().parent.parent.parent / "frontend"

@@ -101,7 +101,13 @@ def password_reset_request(req: PasswordResetRequest, db: Session = Depends(get_
 def password_reset_confirm(confirm: PasswordResetConfirm, db: Session = Depends(get_db)):
     """Reset student password using reset token."""
     user = db.query(User).filter(User.email == confirm.email.lower()).first()
-    if not user or not user.reset_token or user.reset_token != confirm.reset_token:
+    if (
+        not user
+        or not user.reset_token
+        or user.reset_token != confirm.reset_token
+        or not user.reset_token_expires_at
+        or user.reset_token_expires_at < datetime.datetime.utcnow()
+    ):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid email or password reset token"

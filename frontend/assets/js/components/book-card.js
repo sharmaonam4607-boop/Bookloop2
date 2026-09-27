@@ -4,6 +4,9 @@
 
 export function renderBookCard(book) {
   const isWishlisted = book.isWishlisted;
+  const sellerTrust = book.seller.trustScore == null
+    ? 'No reviews yet'
+    : `★ ${book.seller.trustScore.toFixed(1)} <span class="reviews-count">(${book.seller.reviewsCount})</span>`;
 
   // Format Price / Tag
   let priceBadgeHtml = '';
@@ -86,7 +89,7 @@ export function renderBookCard(book) {
             <span class="seller-avatar">${book.seller.avatar || '👨‍🎓'}</span>
             <div class="seller-text">
               <span class="seller-name">${book.seller.name}</span>
-              <span class="seller-trust">⭐ ${book.seller.trustScore.toFixed(1)} <span class="reviews-count">(${book.seller.reviewsCount})</span></span>
+              <span class="seller-trust">${sellerTrust}</span>
             </div>
           </div>
 

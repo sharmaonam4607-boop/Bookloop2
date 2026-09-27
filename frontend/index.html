@@ -23,6 +23,26 @@
     <div class="splash-subtitle">Giving Books a Second Chance</div>
   </div>
 
+  <dialog id="onboarding-modal" class="app-modal onboarding-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="badge badge-emerald">Phase 1 Preview</span>
+        <button class="modal-close-btn" data-onboarding-close aria-label="Close onboarding">&times;</button>
+      </div>
+      <div class="modal-body onboarding-content">
+        <div class="onboarding-icon">📚</div>
+        <h2>Welcome to BookLoop</h2>
+        <p>Explore demo campus listings, discover books by course, and preview the student sharing experience.</p>
+        <div class="onboarding-steps">
+          <span><strong>1</strong> Discover</span>
+          <span><strong>2</strong> Compare</span>
+          <span><strong>3</strong> Give books a second chance</span>
+        </div>
+        <button class="btn btn-primary" data-onboarding-close>Start exploring</button>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Sticky Modern Top Navigation -->
   <header class="app-header">
     <div class="app-container">
@@ -46,7 +66,9 @@
         <nav class="desktop-nav" aria-label="Main Navigation">
           <a href="#/home" class="nav-link active" data-nav-route="home">Home</a>
           <a href="#/discover" class="nav-link" data-nav-route="discover">Discover</a>
+          <a href="#/nearby" class="nav-link" data-nav-route="nearby">Nearby</a>
           <a href="#/communities" class="nav-link" data-nav-route="communities">Communities</a>
+          <a href="#/chats" class="nav-link" data-nav-route="chats">Chats</a>
           <a href="#/profile" class="nav-link" data-nav-route="profile">My Library</a>
         </nav>
 
@@ -55,6 +77,9 @@
           <!-- Theme Toggle -->
           <button id="theme-toggle-btn" class="btn btn-outline btn-icon" aria-label="Toggle Dark/Light Mode" title="Switch Theme">
             🌙
+          </button>
+          <button id="open-notifications-btn" class="btn btn-outline btn-icon notification-trigger" aria-label="Open notifications" title="Notifications">
+            <span aria-hidden="true">♢</span><span id="notification-count" class="notification-count" hidden>0</span>
           </button>
 
           <!-- Auth Actions -->
@@ -65,9 +90,10 @@
 
           <!-- User Profile Avatar Pill -->
           <a href="#/profile" class="user-avatar-pill" title="View Profile" style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 9999px; background: var(--bg-surface-subtle); border: 1px solid var(--border-subtle); font-size: 0.8125rem; font-weight: 600;">
-            <span>👨‍🎓</span>
-            <span class="desktop-only" style="font-size: 0.75rem;">Amanpreet</span>
+            <span id="nav-user-avatar">👨‍🎓</span>
+            <span id="nav-user-name" class="desktop-only" style="font-size: 0.75rem;">Student</span>
           </a>
+          <button id="nav-logout-btn" class="btn btn-ghost btn-sm" style="display: none;">Log Out</button>
         </div>
 
       </div>
@@ -120,20 +146,20 @@
       <!-- Campus Impact Micro-Banner -->
       <div class="impact-banner">
         <div class="impact-item">
-          <span class="impact-num">1,280+</span>
-          <span class="impact-label">Books Recirculated</span>
+          <span class="impact-num" id="global-books-second-chance">—</span>
+          <span class="impact-label">Books Given a Second Chance</span>
         </div>
         <div class="impact-item">
-          <span class="impact-num">₹4.8L+</span>
-          <span class="impact-label">Student Savings</span>
+          <span class="impact-num" id="global-completed-handoffs">—</span>
+          <span class="impact-label">Completed Handoffs</span>
         </div>
         <div class="impact-item">
-          <span class="impact-num">18</span>
-          <span class="impact-label">Campus Circles</span>
+          <span class="impact-num" id="global-students-connected">—</span>
+          <span class="impact-label">Students Connected</span>
         </div>
         <div class="impact-item">
-          <span class="impact-num">100%</span>
-          <span class="impact-label">Peer-to-Peer Trust</span>
+          <span class="impact-num" id="global-community-books">—</span>
+          <span class="impact-label">Books Shared in Communities</span>
         </div>
       </div>
 
@@ -147,7 +173,7 @@
         <div class="section-header">
           <div class="section-title-wrap">
             <h2>Recent Campus Listings</h2>
-            <p>Fresh textbooks listed by nearby students</p>
+            <p>Listings loaded from the BookLoop database</p>
           </div>
           <a href="#/discover" class="btn btn-outline btn-sm">View All in Discover →</a>
         </div>
@@ -263,6 +289,25 @@
     </section>
 
     <!-- ====================================================================
+         VIEW: NEARBY
+         ==================================================================== -->
+    <section id="view-nearby" class="app-view">
+      <div class="section-header" style="margin-top: var(--space-6);">
+        <div class="section-title-wrap"><h2>Nearby Books & Communities</h2><p>Find shared books at public campus meeting points and discover nearby student groups.</p></div>
+      </div>
+      <section class="nearby-origin-panel" aria-label="Choose an approximate campus point">
+        <form id="nearby-origin-form" class="nearby-origin-form">
+          <label class="form-group"><span class="form-label">Approximate campus latitude</span><input id="nearby-latitude" class="form-input" type="number" min="-90" max="90" step="any" placeholder="30.90" required></label>
+          <label class="form-group"><span class="form-label">Approximate campus longitude</span><input id="nearby-longitude" class="form-input" type="number" min="-180" max="180" step="any" placeholder="75.85" required></label>
+          <button type="submit" class="btn btn-primary btn-sm">Set campus point</button>
+        </form>
+        <button id="nearby-use-location" type="button" class="btn btn-outline btn-sm">Use my current location</button>
+        <p id="nearby-origin-status" class="text-secondary" role="status">Current location needs your browser’s permission. GPS accuracy depends on your device; location is used only in this browser and is never published.</p>
+      </section>
+      <div id="nearby-view-content" aria-live="polite"><p class="text-secondary">Loading nearby places...</p></div>
+    </section>
+
+    <!-- ====================================================================
          VIEW: COMMUNITIES
          ==================================================================== -->
     <section id="view-communities" class="app-view">
@@ -274,55 +319,32 @@
         <button id="create-comm-btn" class="btn btn-primary btn-sm">+ Create Student Circle</button>
       </div>
 
-      <div class="community-grid">
-        <div class="community-card">
-          <div class="comm-header">
-            <div class="comm-icon">💻</div>
-            <div>
-              <span class="badge badge-emerald" style="margin-bottom: 4px;">Most Active</span>
-              <h3 class="comm-title">B.Tech CSE Textbook Exchange</h3>
-              <p class="comm-tagline">Algorithms, OS, DBMS, Compiler, and AI textbook exchanges across semesters.</p>
-            </div>
-          </div>
-          <div class="comm-meta">
-            <span>👥 420 Students</span>
-            <span>📚 340 Books Swapped</span>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="alert('Community joined! You will now receive alerts for new CSE book listings.')">Join Community</button>
-        </div>
-
-        <div class="community-card">
-          <div class="comm-header">
-            <div class="comm-icon">📖</div>
-            <div>
-              <span class="badge badge-indigo" style="margin-bottom: 4px;">Literature & Novels</span>
-              <h3 class="comm-title">Ludhiana Student Readers Circle</h3>
-              <p class="comm-tagline">Non-fiction, self-growth, novels, and classics passed hand-to-hand.</p>
-            </div>
-          </div>
-          <div class="comm-meta">
-            <span>👥 285 Students</span>
-            <span>📚 195 Books Swapped</span>
-          </div>
-          <button class="btn btn-outline btn-sm" onclick="alert('Community joined!')">Join Community</button>
-        </div>
-
-        <div class="community-card">
-          <div class="comm-header">
-            <div class="comm-icon">🎯</div>
-            <div>
-              <span class="badge badge-amber" style="margin-bottom: 4px;">Exam Prep</span>
-              <h3 class="comm-title">GATE & Competitive Exam Aspirants</h3>
-              <p class="comm-tagline">Previous Year Question banks, Made Easy notes, and aptitude reference materials.</p>
-            </div>
-          </div>
-          <div class="comm-meta">
-            <span>👥 512 Students</span>
-            <span>📚 480 Books Swapped</span>
-          </div>
-          <button class="btn btn-outline btn-sm" onclick="alert('Community joined!')">Join Community</button>
-        </div>
+      <div class="community-discovery-tools">
+        <label class="sr-only" for="community-search">Search communities</label>
+        <input id="community-search" class="form-input" type="search" placeholder="Search communities by name or topic">
+        <label class="sr-only" for="community-category-filter">Filter community category</label>
+        <select id="community-category-filter" class="form-select">
+          <option value="all">All categories</option>
+          <option>Computer Science</option>
+          <option>Engineering</option>
+          <option>Literature</option>
+          <option>Exam Preparation</option>
+          <option>Other</option>
+        </select>
       </div>
+      <div id="communities-grid" class="community-grid" aria-live="polite">
+        <p class="text-secondary">Loading communities...</p>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW: CHATS
+         ==================================================================== -->
+    <section id="view-chats" class="app-view">
+      <div class="section-header" style="margin-top: var(--space-6);">
+        <div class="section-title-wrap"><h2>Chats</h2><p>Private conversations connected to your books and requests</p></div>
+      </div>
+      <div id="chat-view-content"></div>
     </section>
 
     <!-- ====================================================================
@@ -332,63 +354,113 @@
       <div class="section-header" style="margin-top: var(--space-6);">
         <div class="section-title-wrap">
           <h2>Student Profile & Library</h2>
-          <p>Manage your listed textbooks, saved wishlist, and personal green impact</p>
+          <p>Manage your listings, saved books, requests, and book lifecycle</p>
         </div>
       </div>
 
-      <!-- Student Profile Card -->
-      <div class="card" style="margin-bottom: var(--space-6);">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
-          <div style="display: flex; align-items: center; gap: var(--space-4);">
-            <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 2.25rem;">
-              👨‍🎓
-            </div>
-            <div>
-              <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary);">Amanpreet Singh</h3>
-              <p style="font-size: 0.875rem; color: var(--text-secondary);">GNDEC Ludhiana &bull; 3rd Year B.Tech Computer Science</p>
-              <div style="display: flex; align-items: center; gap: var(--space-2); margin-top: 4px;">
-                <span class="badge badge-emerald">Trust Score: ⭐ 4.9 (14 Reviews)</span>
-                <span class="badge badge-indigo">Verified Student</span>
-              </div>
-            </div>
-          </div>
-          <div>
-            <button class="btn btn-outline btn-sm" onclick="alert('Edit Profile modal scheduled for Phase 2!')">Edit Profile</button>
-          </div>
-        </div>
+      <div id="profile-container"></div>
 
-        <div class="impact-banner" style="margin-top: var(--space-6); margin-bottom: 0;">
-          <div class="impact-item">
-            <span class="impact-num">6</span>
-            <span class="impact-label">Books Listed</span>
-          </div>
-          <div class="impact-item">
-            <span class="impact-num">8</span>
-            <span class="impact-label">Books Given Life</span>
-          </div>
-          <div class="impact-item">
-            <span class="impact-num">3</span>
-            <span class="impact-label">Saved Wishlist</span>
-          </div>
-          <div class="impact-item">
-            <span class="impact-num">₹3,450</span>
-            <span class="impact-label">Personal Savings</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Wishlist / My Books Section -->
-      <div class="section-header">
-        <div class="section-title-wrap">
-          <h3 style="font-size: 1.125rem; font-weight: 700;">Saved Books (Wishlist)</h3>
-        </div>
-      </div>
-      <div id="wishlist-books-grid" class="book-grid">
-        <!-- Injected via JS -->
-      </div>
     </section>
 
   </main>
+
+  <dialog id="community-create-modal" class="app-modal">
+    <div class="modal-box">
+      <div class="modal-header"><div><h2 class="card-title">Create a community</h2><p class="text-secondary">Start a student space around a course or reading interest.</p></div><button type="button" class="modal-close-btn" data-community-close aria-label="Close">&times;</button></div>
+      <form id="community-create-form" class="modal-body">
+        <div class="form-group"><label class="form-label" for="community-create-name">Community name</label><input id="community-create-name" name="name" class="form-input" minlength="3" maxlength="120" required></div>
+        <div class="form-group"><label class="form-label" for="community-create-category">Category</label><select id="community-create-category" name="category" class="form-select" required><option value="">Choose category</option><option>Computer Science</option><option>Engineering</option><option>Literature</option><option>Exam Preparation</option><option>Other</option></select></div>
+        <div class="form-group"><label class="form-label" for="community-create-description">Description</label><textarea id="community-create-description" name="description" class="form-input" rows="4" minlength="10" maxlength="2000" required></textarea></div>
+        <div class="form-group"><label class="form-label" for="community-create-location">Approximate campus location (optional)</label><input id="community-create-location" name="location_name" class="form-input" maxlength="180" placeholder="Student centre or campus name"></div>
+        <div class="form-row"><div class="form-group"><label class="form-label" for="community-create-latitude">Latitude</label><input id="community-create-latitude" name="latitude" class="form-input" type="number" min="-90" max="90" step="any"></div><div class="form-group"><label class="form-label" for="community-create-longitude">Longitude</label><input id="community-create-longitude" name="longitude" class="form-input" type="number" min="-180" max="180" step="any"></div></div>
+        <button type="submit" class="btn btn-primary">Create community</button>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="community-report-modal" class="app-modal">
+    <div class="modal-box">
+      <div class="modal-header"><div><h2 class="card-title">Report community content</h2><p class="text-secondary">Reports are saved for moderator review.</p></div><button type="button" class="modal-close-btn" data-report-close aria-label="Close">&times;</button></div>
+      <form id="community-report-form" class="modal-body">
+        <input id="community-report-target-type" name="target_type" type="hidden" value="post">
+        <input id="community-report-target-id" name="target_id" type="hidden">
+        <div class="form-group"><label class="form-label" for="community-report-reason">Reason</label><textarea id="community-report-reason" name="reason" class="form-input" rows="4" minlength="5" maxlength="1000" required></textarea></div>
+        <button type="submit" class="btn btn-primary">Send report</button>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- ====================================================================
+       MODAL: Create or Edit Book Listing
+       ==================================================================== -->
+  <dialog id="listing-modal" class="app-modal" style="max-width: 720px;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <span class="badge badge-emerald">Book listing</span>
+          <h2 class="card-title" style="margin-top: var(--space-2);">Give a book its next chapter</h2>
+          <p id="listing-progress" class="text-secondary">Step 1 of 4</p>
+        </div>
+        <button class="modal-close-btn" data-listing-close aria-label="Close listing form">&times;</button>
+      </div>
+      <form id="listing-form" class="modal-body">
+        <section data-listing-step>
+          <h3 class="card-title">Book information</h3>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="listing-title">Title</label><input id="listing-title" class="form-input" minlength="2" maxlength="255" required></div>
+            <div class="form-group"><label class="form-label" for="listing-author">Author</label><input id="listing-author" class="form-input" minlength="2" maxlength="255" required></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="listing-isbn">ISBN</label><input id="listing-isbn" class="form-input" maxlength="32"></div>
+            <div class="form-group"><label class="form-label" for="listing-edition">Edition</label><input id="listing-edition" class="form-input" maxlength="150"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="listing-course">Course</label><input id="listing-course" class="form-input" maxlength="150"></div>
+            <div class="form-group"><label class="form-label" for="listing-course-code">Course code</label><input id="listing-course-code" class="form-input" maxlength="50"></div>
+          </div>
+          <div class="form-group"><label class="form-label" for="listing-category">Category</label><input id="listing-category" class="form-input" minlength="2" maxlength="80" placeholder="Computer Science" required></div>
+        </section>
+
+        <section data-listing-step hidden>
+          <h3 class="card-title">Condition and sharing type</h3>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="listing-condition">Condition</label><select id="listing-condition" class="form-select" required><option value="">Choose condition</option><option value="like_new">Like new</option><option value="good">Good</option><option value="worn">Worn / usable</option></select></div>
+            <div class="form-group"><label class="form-label" for="listing-type-input">Listing type</label><select id="listing-type-input" class="form-select" required><option value="">Choose how to share</option><option value="sell">Sell</option><option value="exchange">Exchange</option><option value="donate">Donate</option><option value="lend">Lend</option></select></div>
+          </div>
+          <div id="listing-terms-step">
+            <div id="listing-price-group" class="form-row" hidden>
+              <div class="form-group"><label class="form-label" for="listing-price">Price or lending rate</label><input id="listing-price" type="number" class="form-input" min="0" step="0.01"></div>
+              <div class="form-group"><label class="form-label" for="listing-price-unit">Rate unit</label><select id="listing-price-unit" class="form-select"><option value="">One-time price</option><option value="/week">Per week</option><option value="/month">Per month</option><option value="/semester">Per semester</option></select></div>
+            </div>
+            <div id="listing-exchange-group" class="form-group" hidden><label class="form-label" for="listing-exchange-wish">What would you exchange for?</label><input id="listing-exchange-wish" class="form-input" maxlength="255" placeholder="e.g. Engineering Mathematics, 2nd edition"></div>
+          </div>
+          <div class="form-group"><label class="form-label" for="listing-safe-meeting-point">Safe public meeting point (optional)</label><input id="listing-safe-meeting-point" class="form-input" maxlength="180" placeholder="Campus library entrance"></div>
+          <p class="text-secondary">Never add a home address. Map markers are only published for named public meeting points.</p>
+          <div class="form-row"><div class="form-group"><label class="form-label" for="listing-latitude">Approximate latitude</label><input id="listing-latitude" type="number" class="form-input" min="-90" max="90" step="any"></div><div class="form-group"><label class="form-label" for="listing-longitude">Approximate longitude</label><input id="listing-longitude" type="number" class="form-input" min="-180" max="180" step="any"></div></div>
+        </section>
+
+        <section data-listing-step hidden>
+          <h3 class="card-title">Terms and photos</h3>
+          <div class="form-group"><label class="form-label" for="listing-original-price">Original price (optional)</label><input id="listing-original-price" type="number" class="form-input" min="0" step="0.01"></div>
+          <div class="form-group"><label class="form-label" for="listing-image-urls">Photo URLs (comma-separated, up to 8)</label><input id="listing-image-urls" class="form-input" placeholder="https://..."></div>
+          <div class="form-group"><label class="form-label" for="listing-description">Description</label><textarea id="listing-description" class="form-input" rows="4" placeholder="Share helpful details about the book and handoff terms."></textarea></div>
+        </section>
+
+        <section data-listing-step hidden>
+          <h3 class="card-title">Preview your listing</h3>
+          <div id="listing-preview" class="card" style="padding: var(--space-5);"></div>
+        </section>
+
+        <div class="modal-footer" style="padding: var(--space-4) 0 0;">
+          <button id="listing-back-btn" type="button" class="btn btn-outline btn-sm" hidden>Back</button>
+          <span style="flex: 1;"></span>
+          <button type="button" class="btn btn-ghost btn-sm" data-listing-close>Cancel</button>
+          <button id="listing-next-btn" type="button" class="btn btn-primary btn-sm">Continue</button>
+          <button id="listing-publish-btn" type="submit" class="btn btn-primary btn-sm" hidden>Publish listing</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
 
   <!-- ====================================================================
        MODAL: Student Login & Sign Up (<dialog>)
@@ -414,7 +486,28 @@
             <label class="form-label" for="login-password">Password</label>
             <input type="password" id="login-password" class="form-input" placeholder="••••••••" required>
           </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-3);">
+            <label style="font-size: 0.8125rem; color: var(--text-secondary);"><input type="checkbox" id="remember-session"> Keep me signed in</label>
+            <a href="#" id="forgot-password-link" style="font-size: 0.8125rem; color: var(--primary);">Forgot password?</a>
+          </div>
           <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-2);">Log In to BookLoop</button>
+        </form>
+
+        <form id="reset-form" style="display: none;">
+          <div class="form-group">
+            <label class="form-label" for="reset-email">Student Email Address</label>
+            <input type="email" id="reset-email" class="form-input" placeholder="student@college.edu" required>
+          </div>
+          <div id="reset-token-wrap" class="form-group" style="display: none;">
+            <label class="form-label" for="reset-token-input">Reset Token</label>
+            <input type="text" id="reset-token-input" class="form-input" autocomplete="one-time-code">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reset-new-password">New Password</label>
+            <input type="password" id="reset-new-password" class="form-input" minlength="6">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-2);">Reset Password</button>
+          <button type="button" id="back-to-login-link" class="btn btn-ghost btn-sm" style="width: 100%; margin-top: var(--space-2);">Back to login</button>
         </form>
 
         <!-- Sign-Up Form (Hidden initially) -->
@@ -448,6 +541,32 @@
       <div class="modal-footer" style="justify-content: center; font-size: 0.8125rem; color: var(--text-secondary);">
         <span>🔒 Secure verification designed for verified students</span>
       </div>
+    </div>
+  </dialog>
+
+  <dialog id="edit-profile-modal" class="app-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 class="card-title">Edit Student Profile</h2>
+        <button class="modal-close-btn" data-modal-close aria-label="Close profile editor">&times;</button>
+      </div>
+      <form id="edit-profile-form" class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="edit-name">Full Name</label>
+          <input id="edit-name" class="form-input" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label" for="edit-college">University</label><input id="edit-college" class="form-input"></div>
+          <div class="form-group"><label class="form-label" for="edit-course">Course</label><input id="edit-course" class="form-input"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label" for="edit-year">Year</label><input id="edit-year" class="form-input"></div>
+          <div class="form-group"><label class="form-label" for="edit-location">Location</label><input id="edit-location" class="form-input"></div>
+        </div>
+        <div class="form-group"><label class="form-label" for="edit-avatar-url">Profile Photo URL</label><input id="edit-avatar-url" type="url" class="form-input" placeholder="https://..."></div>
+        <div class="form-group"><label class="form-label" for="edit-bio">Bio</label><textarea id="edit-bio" class="form-input" rows="3"></textarea></div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Save Profile</button>
+      </form>
     </div>
   </dialog>
 
@@ -527,15 +646,31 @@
       <span>🔍</span>
       <span>Discover</span>
     </a>
+    <a href="#/nearby" class="mobile-nav-item" data-nav-route="nearby">
+      <span>📍</span>
+      <span>Nearby</span>
+    </a>
     <a href="#/communities" class="mobile-nav-item" data-nav-route="communities">
       <span>👥</span>
       <span>Circles</span>
+    </a>
+    <a href="#/chats" class="mobile-nav-item" data-nav-route="chats">
+      <span>💬</span>
+      <span>Chats</span>
     </a>
     <a href="#/profile" class="mobile-nav-item" data-nav-route="profile">
       <span>📚</span>
       <span>Library</span>
     </a>
   </nav>
+
+  <dialog id="notifications-modal" class="app-modal notification-dialog">
+    <div class="modal-box">
+      <div class="modal-header"><div><h2 class="card-title">Notifications</h2><p class="text-secondary">Requests and messages for your books</p></div><button type="button" class="modal-close-btn" data-notifications-close aria-label="Close notifications">&times;</button></div>
+      <div id="notifications-list" class="modal-body notification-list"><p class="text-secondary">Loading notifications...</p></div>
+      <div class="modal-footer"><button id="mark-all-notifications-read" type="button" class="btn btn-outline btn-sm">Mark all as read</button><button type="button" class="btn btn-ghost btn-sm" data-notifications-close>Close</button></div>
+    </div>
+  </dialog>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
@@ -545,13 +680,13 @@
     <div class="app-container">
       <p><strong>BookLoop</strong> &mdash; Giving Books a Second Chance &bull; B.Tech Final-Year Project</p>
       <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-2);">
-        Phase 1: Premium UI Foundation &bull; Responsive Vanilla HTML5 + Modern CSS + ES6+ JavaScript
+        Phase 9: Trust, Reviews & Impact &bull; Record-based ratings and lifecycle metrics &bull; Responsive HTML5 + Modern CSS + ES6+ JavaScript
       </p>
     </div>
   </footer>
 
   <!-- Main Application Script -->
-  <script type="module" src="assets/js/app.js"></script>
+  <script type="module" src="assets/js/app.js?v=17"></script>
 
 </body>
 </html>

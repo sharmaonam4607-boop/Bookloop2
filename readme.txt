@@ -66,7 +66,7 @@ Changing or removing one feature must NOT unnecessarily break the rest of the ap
 
 Use:
 
-- Feature-based Flutter architecture
+- Feature-based frontend architecture using HTML, CSS, and JavaScript
 - Separate backend routers
 - Separate backend services
 - Repository pattern
@@ -124,23 +124,22 @@ Frontend
 
 Use:
 
-- Flutter
-- Dart
-- Material 3
-- Responsive Flutter layouts
-- Custom reusable widgets
-- Flutter animations
+- HTML5
+- Modern CSS with centralized design tokens
+- JavaScript ES modules
+- Responsive layouts
+- Reusable components
+- CSS and JavaScript animations
 - Modern typography
-- Google Fonts where appropriate
 - Custom theme system
 - Dark mode
 - Light mode
 - Bottom navigation for mobile
-- Navigation rail/sidebar for larger screens where appropriate
+- Responsive navigation for larger screens where appropriate
 
 The frontend should feel like a professional modern application.
 
-DO NOT build the main frontend using plain HTML/CSS/JavaScript.
+The main frontend is built with plain HTML/CSS/JavaScript and must remain modular.
 
 ---
 
@@ -1046,7 +1045,7 @@ PHASE 0 — FOUNDATION
 
 Create only:
 
-- Flutter project
+- HTML/CSS/JavaScript frontend project
 - FastAPI project
 - PostgreSQL configuration
 - Environment configuration
@@ -1057,13 +1056,13 @@ Create only:
 - API foundation
 - Database connection
 - Health-check endpoint
-- Basic Flutter ↔ FastAPI connection
+- Basic HTML/CSS/JavaScript ↔ FastAPI connection
 
 Do NOT build feature screens yet.
 
 At the end:
 
-- Flutter runs
+- Frontend runs
 - FastAPI runs
 - PostgreSQL connects
 - Frontend communicates with backend
@@ -1370,17 +1369,30 @@ Create the project approximately like this:
 Bookloop 2/
 │
 ├── frontend/
-│   └── bookloop_flutter/
-│       ├── lib/
-│       │   ├── core/
-│       │   │   ├── config/
-│       │   │   ├── theme/
-│       │   │   ├── routing/
-│       │   │   ├── constants/
-│       │   │   ├── errors/
-│       │   │   └── utils/
-│       │   │
-│       │   ├── shared/
-│       │   │   ├── widgets/
-│       │   │   ├── models/
-│       │   │   └──
+│   ├── index.html
+│   └── assets/
+│       ├── css/
+│       │   ├── variables.css
+│       │   ├── reset.css
+│       │   ├── components.css
+│       │   └── style.css
+│       └── js/
+│           ├── config.js
+│           ├── api.js
+│           ├── auth.js
+│           ├── router.js
+│           ├── theme.js
+│           ├── app.js
+│           ├── components/
+│           └── data/
+│
+├── backend/
+│   ├── run.py
+│   ├── requirements.txt
+│   └── app/
+│       ├── api/
+│       ├── core/
+│       ├── database/
+│       ├── models/
+│       ├── routers/
+│       └── schemas/

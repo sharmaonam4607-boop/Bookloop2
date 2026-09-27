@@ -4,10 +4,10 @@
 export const CONFIG = {
   APP_NAME: "BookLoop",
   TAGLINE: "Giving Books a Second Chance",
-  CURRENT_PHASE: "Phase 2 — Authentication & Profile",
+  CURRENT_PHASE: "Phase 9 — Trust, Reviews & Impact",
   
-  // FastAPI Backend Configuration — auto detect origin
-  API_BASE_URL: (typeof window !== 'undefined' && window.location.protocol !== 'file:') ? window.location.origin : "http://127.0.0.1:8000",
+  // FastAPI runs separately from the static frontend server.
+  API_BASE_URL: "http://127.0.0.1:8000",
   API_V1_PREFIX: "/api/v1",
   
   // Endpoints
