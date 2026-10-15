@@ -1,4 +1,7 @@
-/* BookLoop Design System — Modern CSS Variables & Design Tokens */
+/* BookLoop Design System — Phase 12 Premium Polish */
+/* Modern CSS Custom Properties & Design Tokens */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 :root {
   /* Brand Palette */
@@ -47,6 +50,17 @@
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, monospace;
 
+  /* Font Sizes — Fluid Typographic Scale */
+  --text-xs: 0.6875rem;     /* 11px */
+  --text-sm: 0.8125rem;     /* 13px */
+  --text-base: 0.9375rem;   /* 15px */
+  --text-md: 1rem;          /* 16px */
+  --text-lg: 1.125rem;      /* 18px */
+  --text-xl: 1.25rem;       /* 20px */
+  --text-2xl: 1.5rem;       /* 24px */
+  --text-3xl: 1.875rem;     /* 30px */
+  --text-4xl: clamp(2.1rem, 5vw, 3.5rem);
+
   /* Spacing Scale */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -58,6 +72,8 @@
   --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
 
   /* Border Radii */
   --radius-xs: 4px;
@@ -65,21 +81,35 @@
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
+  --radius-2xl: 32px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.25);
-  --shadow-cover: 0 8px 16px -4px rgba(0, 0, 0, 0.15), 0 2px 6px -1px rgba(0, 0, 0, 0.08);
+  /* Shadows — Refined for depth perception */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.06);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.2), 0 0 60px rgba(79, 70, 229, 0.1);
+  --shadow-cover: 0 8px 16px -4px rgba(0, 0, 0, 0.12), 0 2px 6px -1px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 20px 40px -8px rgba(79, 70, 229, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.06);
 
-  /* Transitions */
+  /* Focus Ring — Accessibility */
+  --focus-ring: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--primary);
+  --focus-ring-offset: 0 0 0 3px var(--primary), 0 0 0 5px rgba(79, 70, 229, 0.3);
+
+  /* Transitions — Polished easing */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-bounce: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* Gradient Presets */
+  --gradient-brand: linear-gradient(135deg, var(--primary) 0%, #818CF8 50%, var(--accent-green) 100%);
+  --gradient-hero: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(16, 185, 129, 0.08) 50%, rgba(14, 165, 233, 0.06) 100%);
+  --gradient-card: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-surface-subtle) 100%);
 
   /* Light Theme Palette (Default) */
   --bg-app: #F8FAFC;
@@ -133,12 +163,21 @@
   --condition-good-bg: rgba(59, 130, 246, 0.2);
   --condition-worn-bg: rgba(139, 92, 246, 0.2);
 
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.35);
-  --shadow-cover: 0 8px 20px -4px rgba(0, 0, 0, 0.6);
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.3), 0 0 60px rgba(99, 102, 241, 0.15);
+  --shadow-cover: 0 8px 20px -4px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 20px 40px -8px rgba(99, 102, 241, 0.2), 0 8px 16px -4px rgba(0, 0, 0, 0.3);
+
+  --focus-ring: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--border-focus);
+  --focus-ring-offset: 0 0 0 3px var(--border-focus), 0 0 0 5px rgba(129, 140, 248, 0.3);
+
+  --gradient-hero: linear-gradient(135deg, rgba(79, 70, 229, 0.12) 0%, rgba(16, 185, 129, 0.1) 50%, rgba(14, 165, 233, 0.08) 100%);
+  --gradient-card: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-surface-elevated) 100%);
 
   --shimmer-base: #1F2937;
   --shimmer-highlight: #374151;

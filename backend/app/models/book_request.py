@@ -5,6 +5,8 @@ from sqlalchemy import Column, DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import relationship
 
 from app.database.base import Base
+from app.models.book import BookListing
+from app.models.user import User
 
 
 class BookRequest(Base):

@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: bookloop-app
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --app-dir backend --proxy-headers
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bookloop-postgres
+          property: connectionString
+      - key: ADMIN_EMAILS
+        value: admin@bookloop.com
+      - key: ADMIN_PASSWORD
+        value: Admin@123456
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: PYTHONPATH
+        value: backend
+
+databases:
+  - name: bookloop-postgres
+    databaseName: bookloop
+    user: bookloop_user
+    plan: free
+    region: oregon

@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BookLoop — A modern, community-driven student book-sharing platform for buying, selling, exchanging, donating, and lending textbooks. Built for campus communities.">
   <title>BookLoop — Giving Books a Second Chance</title>
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   
   <!-- Modern Stylesheets -->
   <link rel="stylesheet" href="assets/css/variables.css">
@@ -26,7 +31,7 @@
   <dialog id="onboarding-modal" class="app-modal onboarding-modal">
     <div class="modal-box">
       <div class="modal-header">
-        <span class="badge badge-emerald">Phase 1 Preview</span>
+        <span class="badge badge-emerald">Campus Community</span>
         <button class="modal-close-btn" data-onboarding-close aria-label="Close onboarding">&times;</button>
       </div>
       <div class="modal-body onboarding-content">
@@ -78,22 +83,27 @@
           <button id="theme-toggle-btn" class="btn btn-outline btn-icon" aria-label="Toggle Dark/Light Mode" title="Switch Theme">
             🌙
           </button>
+          <a href="admin.html" class="btn btn-outline btn-sm" title="Open admin panel">Admin</a>
           <button id="open-notifications-btn" class="btn btn-outline btn-icon notification-trigger" aria-label="Open notifications" title="Notifications">
             <span aria-hidden="true">♢</span><span id="notification-count" class="notification-count" hidden>0</span>
           </button>
 
           <!-- Auth Actions -->
-          <button id="open-login-btn" class="btn btn-ghost btn-sm">Log In</button>
+          <div id="nav-guest-actions" style="display: flex; align-items: center; gap: 8px;">
+            <button id="open-login-btn" class="btn btn-ghost btn-sm">Log In</button>
+          </div>
           <button id="open-signup-btn" class="btn btn-primary btn-sm">
             <span>+ List a Book</span>
           </button>
 
-          <!-- User Profile Avatar Pill -->
-          <a href="#/profile" class="user-avatar-pill" title="View Profile" style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 9999px; background: var(--bg-surface-subtle); border: 1px solid var(--border-subtle); font-size: 0.8125rem; font-weight: 600;">
-            <span id="nav-user-avatar">👨‍🎓</span>
-            <span id="nav-user-name" class="desktop-only" style="font-size: 0.75rem;">Student</span>
-          </a>
-          <button id="nav-logout-btn" class="btn btn-ghost btn-sm" style="display: none;">Log Out</button>
+          <!-- User Profile Avatar Pill & Actions -->
+          <div id="nav-user-actions" style="display: none; align-items: center; gap: 8px;">
+            <a href="#/profile" class="user-avatar-pill" title="View Profile" style="display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 9999px; background: var(--bg-surface-subtle); border: 1px solid var(--border-subtle); font-size: 0.8125rem; font-weight: 600;">
+              <span id="nav-user-avatar">👨‍🎓</span>
+              <span id="nav-user-name" class="desktop-only" style="font-size: 0.75rem;">Student</span>
+            </a>
+            <button id="nav-logout-btn" class="btn btn-ghost btn-sm" style="display: none;">Log Out</button>
+          </div>
         </div>
 
       </div>
@@ -680,13 +690,14 @@
     <div class="app-container">
       <p><strong>BookLoop</strong> &mdash; Giving Books a Second Chance &bull; B.Tech Final-Year Project</p>
       <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-2);">
-        Phase 9: Trust, Reviews & Impact &bull; Record-based ratings and lifecycle metrics &bull; Responsive HTML5 + Modern CSS + ES6+ JavaScript
+        Phase 12: Final Premium Polish &bull; Presentation Edition &bull;
+        <a href="admin.html" style="color: inherit; text-decoration: underline; margin-left: var(--space-1);" title="Administrator Console">Admin Portal</a>
       </p>
     </div>
   </footer>
 
   <!-- Main Application Script -->
-  <script type="module" src="assets/js/app.js?v=17"></script>
+  <script type="module" src="assets/js/app.js?v=18"></script>
 
 </body>
 </html>

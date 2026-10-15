@@ -7,14 +7,17 @@ from app.core.config import settings
 
 logger = logging.getLogger("bookloop.database")
 
-# Explicit PostgreSQL engine configuration
-# Pool pre-ping tests connections before giving them to sessions
+# Database engine configuration
+# Pre-ping tests connections before giving them to sessions
+_is_sqlite = settings.sync_database_url.startswith("sqlite")
+_connect_args = {"check_same_thread": False} if _is_sqlite else {"connect_timeout": 5}
+_pool_kwargs = {} if _is_sqlite else {"pool_size": 10, "max_overflow": 20}
+
 engine = create_engine(
     settings.sync_database_url,
     pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20,
-    connect_args={"connect_timeout": 5}
+    connect_args=_connect_args,
+    **_pool_kwargs
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

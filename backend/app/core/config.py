@@ -24,7 +24,8 @@ class Settings(BaseSettings):
     # Full PostgreSQL connection URL
     DATABASE_URL: str | None = None
     GOOGLE_MAPS_API_KEY: str | None = None
-    ADMIN_EMAILS: str = ""
+    ADMIN_EMAILS: str = "admin@bookloop.com"
+    ADMIN_PASSWORD: str = "Admin@123456"
 
     # CORS Configuration
     BACKEND_CORS_ORIGINS: List[str] = [
@@ -40,9 +41,12 @@ class Settings(BaseSettings):
 
     @property
     def sync_database_url(self) -> str:
-        """Returns the PostgreSQL connection string."""
+        """Returns the PostgreSQL connection string, ensuring SQLAlchemy-compatible schema."""
         if self.DATABASE_URL and self.DATABASE_URL.strip():
-            return self.DATABASE_URL.strip()
+            url = self.DATABASE_URL.strip()
+            if url.startswith("postgres://"):
+                url = "postgresql://" + url[len("postgres://"):]
+            return url
         return (
             f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
             f"{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"

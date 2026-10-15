@@ -1,7 +1,7 @@
-/* BookLoop Reusable Component System — Phase 1 */
+/* BookLoop Reusable Component System — Phase 12 Premium Polish */
 
 /* ==========================================================================
-   Buttons
+   Buttons — Enhanced with ripple effect and premium feel
    ========================================================================== */
 .btn {
   display: inline-flex;
@@ -9,7 +9,7 @@
   justify-content: center;
   gap: var(--space-2);
   padding: 0.625rem 1.25rem;
-  font-size: 0.9375rem;
+  font-size: var(--text-base);
   font-weight: 600;
   border-radius: var(--radius-md);
   border: 1px solid transparent;
@@ -17,32 +17,55 @@
   white-space: nowrap;
   user-select: none;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  letter-spacing: -0.01em;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10.01%);
+  transform: scale(10);
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.8s;
+  pointer-events: none;
+}
+
+.btn:active::after {
+  transform: scale(0);
+  opacity: 1;
+  transition: 0s;
 }
 
 .btn:active {
-  transform: translateY(1px);
+  transform: translateY(1px) scale(0.98);
 }
 
 .btn-primary {
-  background-color: var(--primary);
+  background: linear-gradient(135deg, var(--primary) 0%, #6366F1 100%);
   color: #FFFFFF;
-  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25), 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-hover);
-  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.35);
+  background: linear-gradient(135deg, var(--primary-hover) 0%, #5558E8 100%);
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.35), 0 2px 4px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background-color: var(--accent-green);
+  background: linear-gradient(135deg, var(--accent-green) 0%, #34D399 100%);
   color: #FFFFFF;
-  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25), 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .btn-secondary:hover {
-  background-color: var(--accent-green-hover);
-  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.35);
+  background: linear-gradient(135deg, var(--accent-green-hover) 0%, #10B981 100%);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35), 0 2px 4px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
 }
 
 .btn-outline {
@@ -53,7 +76,9 @@
 
 .btn-outline:hover {
   background-color: var(--bg-surface-subtle);
-  border-color: var(--text-muted);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
 }
 
 .btn-ghost {
@@ -66,9 +91,20 @@
   color: var(--text-primary);
 }
 
+.btn-danger {
+  background: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+}
+
+.btn-danger:hover {
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
+  transform: translateY(-1px);
+}
+
 .btn-sm {
-  padding: 0.375rem 0.75rem;
-  font-size: 0.8125rem;
+  padding: 0.375rem 0.875rem;
+  font-size: var(--text-sm);
   border-radius: var(--radius-sm);
 }
 
@@ -85,18 +121,25 @@
   border-radius: var(--radius-md);
 }
 
+.btn:disabled, .btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* ==========================================================================
-   Badges, Tags & Chips
+   Badges, Tags & Chips — Enhanced
    ========================================================================== */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
   padding: 0.25rem 0.625rem;
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   border-radius: var(--radius-full);
   letter-spacing: 0.03em;
+  line-height: 1.3;
 }
 
 .badge-indigo {
@@ -125,30 +168,35 @@
 }
 
 /* ==========================================================================
-   Book Cards (Modern High Polish)
+   Book Cards (Premium Polished — Phase 12)
    ========================================================================== */
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--space-6);
 }
 
 .book-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+  transition: transform var(--transition-spring), box-shadow var(--transition-normal), border-color var(--transition-normal);
   position: relative;
+  cursor: pointer;
 }
 
 .book-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-xl);
-  border-color: var(--border-medium);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(79, 70, 229, 0.2);
+}
+
+.book-card:active {
+  transform: translateY(-2px);
 }
 
 /* Book Cover Styling */
@@ -161,6 +209,16 @@
   justify-content: space-between;
   color: #FFFFFF;
   overflow: hidden;
+}
+
+/* Subtle grain texture overlay for book covers */
+.book-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.15) 100%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .cover-top-bar {
@@ -176,11 +234,16 @@
   gap: var(--space-1);
   padding: 0.25rem 0.625rem;
   border-radius: var(--radius-full);
-  font-size: 0.8125rem;
+  font-size: var(--text-sm);
   font-weight: 700;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: transform var(--transition-fast);
+}
+
+.book-card:hover .book-badge {
+  transform: scale(1.05);
 }
 
 .badge-sell {
@@ -191,7 +254,7 @@
 .badge-sell .price-orig {
   text-decoration: line-through;
   opacity: 0.6;
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
 }
 
 .badge-exchange {
@@ -210,7 +273,7 @@
 }
 
 .condition-chip {
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   font-weight: 700;
   padding: 0.2rem 0.5rem;
   border-radius: var(--radius-sm);
@@ -235,7 +298,7 @@
 
 .cover-visual {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   height: 100%;
   align-items: flex-end;
@@ -257,7 +320,7 @@
 }
 
 .cover-sub {
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   opacity: 0.85;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -266,7 +329,7 @@
 }
 
 .cover-title {
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 800;
   line-height: 1.25;
   margin-top: 2px;
@@ -292,33 +355,48 @@
   bottom: var(--space-3);
   right: var(--space-3);
   z-index: 3;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-spring);
+  font-size: 0.875rem;
 }
 
 .wishlist-btn:hover {
-  transform: scale(1.1);
-  background: rgba(15, 23, 42, 0.9);
+  transform: scale(1.15);
+  background: rgba(15, 23, 42, 0.85);
 }
 
 .wishlist-btn.active {
   color: var(--accent-rose);
   background: #FFFFFF;
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.3);
+}
+
+/* Wishlist animation */
+@keyframes wishlistPop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.3); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1.1); }
+}
+
+.wishlist-btn.just-added {
+  animation: wishlistPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* Book Card Body */
 .book-card-body {
-  padding: var(--space-4);
+  padding: var(--space-4) var(--space-5);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -332,7 +410,7 @@
 }
 
 .course-tag {
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   font-weight: 700;
   background: var(--bg-surface-subtle);
   padding: 0.2rem 0.5rem;
@@ -345,10 +423,13 @@
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 3px;
 }
 
 .book-card-title {
-  font-size: 1rem;
+  font-size: var(--text-md);
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 2px;
@@ -356,10 +437,11 @@
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  letter-spacing: -0.01em;
 }
 
 .book-card-author {
-  font-size: 0.8125rem;
+  font-size: var(--text-sm);
   color: var(--text-secondary);
   margin-bottom: var(--space-4);
   display: -webkit-box;
@@ -394,13 +476,13 @@
 }
 
 .seller-name {
-  font-size: 0.8125rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .seller-trust {
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   color: var(--color-warning);
 }
@@ -411,30 +493,41 @@
 }
 
 /* ==========================================================================
-   Loading Skeletons (Smooth Shimmer Effect)
+   Loading Skeletons (Premium Shimmer Effect)
    ========================================================================== */
 .skeleton {
-  background: linear-gradient(90deg, var(--shimmer-base) 25%, var(--shimmer-highlight) 50%, var(--shimmer-base) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.6s infinite;
+  background: linear-gradient(90deg, var(--shimmer-base) 25%, var(--shimmer-highlight) 37%, var(--shimmer-base) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
   border-radius: var(--radius-sm);
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
 .skeleton-cover {
   height: 230px;
-  border-top-left-radius: var(--radius-lg);
-  border-top-right-radius: var(--radius-lg);
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
 .skeleton-line {
   height: 16px;
+}
+
+.skeleton-line-sm {
+  height: 12px;
+  width: 60%;
+}
+
+.skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 /* ==========================================================================
@@ -452,31 +545,31 @@ dialog.app-modal {
 }
 
 dialog.app-modal::backdrop {
-  background: rgba(11, 15, 25, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  animation: fadeIn 0.2s ease-out;
+  background: rgba(11, 15, 25, 0.65);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  animation: backdropIn 0.3s ease-out;
 }
 
 dialog.app-modal .modal-box {
   background: var(--bg-surface);
   border: 1px solid var(--border-medium);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-2xl);
   overflow: hidden;
-  animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: modalSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
 }
 
-@keyframes fadeIn {
+@keyframes backdropIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.94); }
-  to { opacity: 1; transform: scale(1); }
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .modal-header {
@@ -488,26 +581,29 @@ dialog.app-modal .modal-box {
 }
 
 .modal-title {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 800;
   color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 .modal-close-btn {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   color: var(--text-muted);
   transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
 
 .modal-close-btn:hover {
   background: var(--bg-surface-subtle);
   color: var(--text-primary);
+  transform: rotate(90deg);
 }
 
 .modal-body {
@@ -527,7 +623,7 @@ dialog.app-modal .modal-box {
 }
 
 /* ==========================================================================
-   Tabs
+   Tabs — Refined
    ========================================================================== */
 .tabs-nav {
   display: flex;
@@ -546,6 +642,11 @@ dialog.app-modal .modal-box {
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
   text-align: center;
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
 }
 
 .tab-btn.active {
@@ -555,7 +656,7 @@ dialog.app-modal .modal-box {
 }
 
 /* ==========================================================================
-   Form Controls
+   Form Controls — Enhanced
    ========================================================================== */
 .form-group {
   margin-bottom: var(--space-4);
@@ -563,27 +664,38 @@ dialog.app-modal .modal-box {
 
 .form-label {
   display: block;
-  font-size: 0.8125rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: var(--space-1);
+  letter-spacing: 0.01em;
 }
 
 .form-input, .form-select {
   width: 100%;
   padding: 0.625rem 0.875rem;
   background: var(--bg-surface);
-  border: 1px solid var(--border-medium);
+  border: 1.5px solid var(--border-medium);
   border-radius: var(--radius-md);
   color: var(--text-primary);
-  font-size: 0.9375rem;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  font-size: var(--text-base);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+
+.form-input:hover, .form-select:hover {
+  border-color: var(--text-muted);
 }
 
 .form-input:focus, .form-select:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-light);
+  background: var(--bg-surface);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
 }
 
 .form-row {
@@ -593,34 +705,147 @@ dialog.app-modal .modal-box {
 }
 
 /* ==========================================================================
-   Empty States
+   Empty States — Premium
    ========================================================================== */
 .empty-state {
   text-align: center;
-  padding: var(--space-12) var(--space-4);
-  background: var(--bg-surface);
+  padding: var(--space-16) var(--space-4);
+  background: var(--gradient-hero);
   border: 1px dashed var(--border-medium);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-2xl);
   margin: var(--space-6) 0;
 }
 
 .empty-icon {
-  font-size: 3rem;
-  margin-bottom: var(--space-3);
+  font-size: 3.5rem;
+  margin-bottom: var(--space-4);
+  animation: emptyFloat 3s ease-in-out infinite;
+}
+
+@keyframes emptyFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
 .empty-title {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: var(--space-2);
+  letter-spacing: -0.02em;
 }
 
 .empty-desc {
-  font-size: 0.9375rem;
+  font-size: var(--text-base);
   color: var(--text-secondary);
   max-width: 420px;
   margin: 0 auto var(--space-5);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Toast Notifications — Polished
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  top: var(--space-5);
+  right: var(--space-5);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  padding: var(--space-3) var(--space-5);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  animation: toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 380px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.toast.toast-success { border-left: 3px solid var(--color-success); }
+.toast.toast-error   { border-left: 3px solid var(--color-danger); }
+.toast.toast-warning { border-left: 3px solid var(--color-warning); }
+.toast.toast-info    { border-left: 3px solid var(--color-info); }
+
+@keyframes toastSlideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.toast.toast-exit {
+  animation: toastSlideOut 0.3s ease-in forwards;
+}
+
+@keyframes toastSlideOut {
+  to { transform: translateX(120%); opacity: 0; }
+}
+
+/* ==========================================================================
+   Stat Tiles — Enhanced for Admin/Profile
+   ========================================================================== */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-4);
+}
+
+.stat-tile {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  transition: all var(--transition-normal);
+}
+
+.stat-tile:hover {
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.stat-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================================================
+   Code Box — For developer diagnostics
+   ========================================================================== */
+.code-box {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 /* ==========================================================================
@@ -644,6 +869,8 @@ dialog.app-modal .modal-box {
   color: var(--text-secondary);
   cursor: pointer;
   transition: all var(--transition-fast);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .floating-dev-badge:hover {
@@ -659,6 +886,60 @@ dialog.app-modal .modal-box {
   border-radius: 50%;
 }
 
-.pulse-green { background-color: var(--accent-green); }
-.pulse-amber { background-color: var(--color-warning); }
-.pulse-red { background-color: var(--color-danger); }
+.pulse-indicator::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  opacity: 0;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+.pulse-green { background-color: var(--accent-green); color: var(--accent-green); }
+.pulse-amber { background-color: var(--color-warning); color: var(--color-warning); }
+.pulse-red { background-color: var(--color-danger); color: var(--color-danger); }
+
+/* ==========================================================================
+   Utility Helpers
+   ========================================================================== */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-success { color: var(--color-success); }
+.text-danger { color: var(--color-danger); }
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+.card-title {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* Smooth content reveal animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}

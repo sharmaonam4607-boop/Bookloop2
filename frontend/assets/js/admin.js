@@ -1,4 +1,7 @@
-const API_ROOT = 'http://127.0.0.1:8000/api/v1/admin';
+const API_BASE = (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
+  ? ''
+  : ((window.location.port === '8000' || window.location.pathname.startsWith('/app')) ? '' : 'http://127.0.0.1:8000');
+const API_ROOT = `${API_BASE}/api/v1/admin`;
 const TOKEN_KEY = 'bookloop_admin_token';
 const loginPanel = document.getElementById('admin-login-panel');
 const consolePanel = document.getElementById('admin-console');
@@ -54,6 +57,7 @@ function setSignedIn(admin) {
   consolePanel.hidden = false;
   document.getElementById('admin-logout').hidden = false;
   identity.textContent = admin.name ? `${admin.name} · ${admin.email}` : admin.email;
+  document.querySelectorAll('[data-admin-tab]').forEach(button => { button.disabled = false; });
 }
 
 function signOut(showMessage = true) {
@@ -62,6 +66,7 @@ function signOut(showMessage = true) {
   consolePanel.hidden = true;
   document.getElementById('admin-logout').hidden = true;
   identity.textContent = 'Admin access';
+  document.querySelectorAll('[data-admin-tab]').forEach(button => { button.disabled = true; });
   if (showMessage) showToast('Signed out.');
 }
 
@@ -247,10 +252,4 @@ document.getElementById('admin-login-form').addEventListener('submit', async eve
 });
 
 document.querySelectorAll('[data-admin-tab]').forEach(button => { button.disabled = true; });
-restoreSession().then(() => {
-  if (sessionStorage.getItem(TOKEN_KEY)) document.querySelectorAll('[data-admin-tab]').forEach(button => { button.disabled = false; });
-});
-
-document.getElementById('admin-login-form').addEventListener('submit', () => {
-  setTimeout(() => document.querySelectorAll('[data-admin-tab]').forEach(button => { button.disabled = false; }), 0);
-});
+restoreSession();

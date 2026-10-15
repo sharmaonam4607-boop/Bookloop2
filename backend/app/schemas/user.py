@@ -1,6 +1,6 @@
 # BookLoop Pydantic Schemas for User Authentication & Profile
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from typing import Optional
 from datetime import datetime
 
@@ -44,8 +44,7 @@ class ProfileResponse(BaseModel):
     books_donated: int = 0
     books_exchanged: int = 0
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class UserResponse(BaseModel):
     id: str
@@ -55,8 +54,7 @@ class UserResponse(BaseModel):
     created_at: datetime
     profile: Optional[ProfileResponse] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class TokenResponse(BaseModel):
     access_token: str

@@ -5,6 +5,8 @@ from sqlalchemy import Boolean, CheckConstraint, Column, DateTime, ForeignKey, I
 from sqlalchemy.orm import relationship
 
 from app.database.base import Base
+from app.models.user import User
+from app.models.book_request import BookRequest
 
 
 class Review(Base):

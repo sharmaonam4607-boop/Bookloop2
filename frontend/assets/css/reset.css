@@ -1,4 +1,4 @@
-/* Modern CSS Reset & Baseline */
+/* Modern CSS Reset & Baseline — Phase 12 Premium Polish */
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -13,11 +13,15 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
+  color-scheme: light dark;
+  hanging-punctuation: first last;
 }
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--bg-app);
   color: var(--text-primary);
   display: flex;
@@ -47,14 +51,52 @@ a {
   text-decoration: none;
 }
 
+/* Improved focus styles for accessibility */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+/* Remove default focus outline and use custom only for keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-surface-subtle);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -64,4 +106,33 @@ a {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-medium) transparent;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(79, 70, 229, 0.2);
+  color: var(--text-primary);
+}
+
+/* Utility: Desktop only helper */
+.desktop-only {
+  display: none;
+}
+@media (min-width: 769px) {
+  .desktop-only { display: initial; }
+}
+
+/* Utility: Hidden text */
+[hidden] { display: none !important; }
+
+/* Print styles */
+@media print {
+  .app-header, .mobile-bottom-nav, .floating-dev-badge, .toast-container { display: none !important; }
+  body { background: #fff; color: #000; }
 }

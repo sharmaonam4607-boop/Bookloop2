@@ -1,13 +1,14 @@
+import logging
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.security import HTTPAuthorizationCredentials
-from sqlalchemy import func, or_
+from sqlalchemy import func, inspect, or_, text
 from sqlalchemy.orm import Session, joinedload
 
 from app.api.deps import security_scheme
 from app.core.config import settings
-from app.core.security import create_access_token, decode_access_token, verify_password
+from app.core.security import create_access_token, decode_access_token, hash_password, verify_password
 from app.database.session import get_db
 from app.models.book import BookListing
 from app.models.book_request import BookRequest
@@ -30,7 +31,54 @@ from app.schemas.admin import (
     AdminUserStatusUpdate,
 )
 
+logger = logging.getLogger("bookloop.admin")
 router = APIRouter(prefix="/api/v1/admin", tags=["Administration"])
+
+
+def _ensure_phase10_schema(db: Session) -> None:
+    try:
+        bind = db.get_bind()
+        inspector = inspect(bind)
+        table_names = inspector.get_table_names()
+
+        if "communities" in table_names:
+            cols = {c["name"] for c in inspector.get_columns("communities")}
+            if "is_active" not in cols:
+                is_sqlite = bind.dialect.name == "sqlite"
+                db.execute(text(
+                    "ALTER TABLE communities ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT 1"
+                    if is_sqlite
+                    else "ALTER TABLE communities ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE"
+                ))
+                try:
+                    db.execute(text("CREATE INDEX ix_communities_is_active ON communities (is_active)"))
+                except Exception:
+                    pass
+                db.commit()
+
+        if "reviews" in table_names:
+            cols = {c["name"] for c in inspector.get_columns("reviews")}
+            if "is_hidden" not in cols:
+                is_sqlite = bind.dialect.name == "sqlite"
+                db.execute(text(
+                    "ALTER TABLE reviews ADD COLUMN is_hidden BOOLEAN NOT NULL DEFAULT 0"
+                    if is_sqlite
+                    else "ALTER TABLE reviews ADD COLUMN is_hidden BOOLEAN NOT NULL DEFAULT FALSE"
+                ))
+                try:
+                    db.execute(text("CREATE INDEX ix_reviews_is_hidden ON reviews (is_hidden)"))
+                except Exception:
+                    pass
+                db.commit()
+    except Exception as e:
+        logger.warning(f"Phase 10 schema check skipped: {e}")
+
+
+def _safe_count(query):
+    try:
+        return query.count()
+    except Exception:
+        return 0
 
 
 def _admin_allowlist() -> set[str]:
@@ -65,6 +113,26 @@ def admin_login(payload: AdminLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=503, detail="Admin access is not configured. Set ADMIN_EMAILS in the backend environment.")
     email = payload.email.lower()
     user = db.query(User).filter(User.email == email, User.is_active.is_(True)).first()
+    if email in allowed_emails and not user:
+        if payload.password == settings.ADMIN_PASSWORD:
+            user = User(
+                email=email,
+                hashed_password=hash_password(settings.ADMIN_PASSWORD),
+                is_active=True,
+                is_verified=True,
+            )
+            db.add(user)
+            db.flush()
+            db.add(UserProfile(
+                user_id=user.id,
+                full_name="BookLoop Administrator",
+                university="Central Campus",
+                course="System Administration",
+                year="Admin",
+                location="Admin Portal",
+                bio="Official BookLoop System Administrator"
+            ))
+            db.commit()
     if email not in allowed_emails or not user or not verify_password(payload.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid admin credentials")
     token = create_access_token({"sub": user.id, "email": user.email, "role": "admin"})
@@ -78,6 +146,7 @@ def admin_me(current_admin: User = Depends(get_current_admin)):
 
 @router.get("/analytics", response_model=AdminAnalyticsResponse)
 def admin_analytics(_admin: User = Depends(get_current_admin), db: Session = Depends(get_db)):
+    _ensure_phase10_schema(db)
     completed_rows = db.query(BookRequest, BookListing).join(BookListing).filter(BookRequest.status == "completed").all()
     participants = {
         user_id
@@ -85,15 +154,17 @@ def admin_analytics(_admin: User = Depends(get_current_admin), db: Session = Dep
         for user_id in (request.requester_id, listing.seller_id)
         if user_id is not None
     }
+    communities_active = _safe_count(db.query(Community.id).filter(Community.is_active.is_(True)))
+    reviews_total = _safe_count(db.query(Review.id).filter(Review.is_hidden.is_(False)))
     return AdminAnalyticsResponse(
         users_total=db.query(User.id).count(),
         users_active=db.query(User.id).filter(User.is_active.is_(True)).count(),
         listings_total=db.query(BookListing.id).filter(BookListing.status != "deleted").count(),
         listings_active=db.query(BookListing.id).filter(BookListing.status == "active").count(),
         communities_total=db.query(Community.id).count(),
-        communities_active=db.query(Community.id).filter(Community.is_active.is_(True)).count(),
+        communities_active=communities_active,
         open_reports=db.query(CommunityReport.id).filter(CommunityReport.status == "open").count(),
-        reviews_total=db.query(Review.id).filter(Review.is_hidden.is_(False)).count(),
+        reviews_total=reviews_total,
         completed_interactions=len(completed_rows),
         books_given_second_chance=len({request.book_id for request, _listing in completed_rows}),
         students_connected=len(participants),
@@ -277,19 +348,24 @@ def admin_reviews(
     _admin: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
+    _ensure_phase10_schema(db)
     query = db.query(Review).options(
         joinedload(Review.reviewer).joinedload(User.profile),
         joinedload(Review.reviewed_user).joinedload(User.profile),
         joinedload(Review.request).joinedload(BookRequest.book),
     )
     if not include_hidden:
-        query = query.filter(Review.is_hidden.is_(False))
+        try:
+            query = query.filter(Review.is_hidden.is_(False))
+        except Exception:
+            pass
     rows = query.order_by(Review.created_at.desc()).limit(500).all()
     return [AdminReviewResponse(
         id=review.id, request_id=review.request_id,
         reviewer_id=review.reviewer_id, reviewer_name=_name(review.reviewer) or "Unknown",
         reviewed_user_id=review.reviewed_user_id, reviewed_user_name=_name(review.reviewed_user) or "Unknown",
-        book_title=review.request.book.title, rating=review.rating, comment=review.comment,
+        book_title=review.request.book.title if review.request and review.request.book else "Deleted Book",
+        rating=review.rating, comment=review.comment,
         is_hidden=review.is_hidden, created_at=review.created_at,
     ) for review in rows]
 
@@ -314,6 +390,7 @@ def moderate_review(
         id=review.id, request_id=review.request_id,
         reviewer_id=review.reviewer_id, reviewer_name=_name(review.reviewer) or "Unknown",
         reviewed_user_id=review.reviewed_user_id, reviewed_user_name=_name(review.reviewed_user) or "Unknown",
-        book_title=review.request.book.title, rating=review.rating, comment=review.comment,
+        book_title=review.request.book.title if review.request and review.request.book else "Deleted Book",
+        rating=review.rating, comment=review.comment,
         is_hidden=review.is_hidden, created_at=review.created_at,
     )

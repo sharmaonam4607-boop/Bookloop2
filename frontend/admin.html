@@ -11,7 +11,7 @@
 <body class="admin-body">
   <main class="admin-shell">
     <header class="admin-topbar">
-      <a class="admin-brand" href="/app/" aria-label="Back to BookLoop">
+      <a class="admin-brand" href="index.html" aria-label="Back to BookLoop">
         <span class="admin-brand-mark">B</span>
         <span><strong>BookLoop</strong><small>Administration</small></span>
       </a>
@@ -23,12 +23,12 @@
 
     <section id="admin-login-panel" class="admin-login-panel" aria-labelledby="admin-login-title">
       <p class="admin-eyebrow">Restricted workspace</p>
-      <h1 id="admin-login-title">Admin sign in</h1>
-      <p class="admin-muted">Use an existing BookLoop account enabled in the backend <code>ADMIN_EMAILS</code> allowlist.</p>
+      <h1 id="admin-login-title">Admin Access</h1>
+      <p class="admin-muted">Sign in with a BookLoop account approved for administrator access.</p>
       <form id="admin-login-form">
         <label>Email<input name="email" type="email" autocomplete="username" required></label>
         <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
-        <button class="admin-button admin-button-primary" type="submit">Sign in</button>
+        <button class="admin-button admin-button-primary" type="submit">Sign In</button>
       </form>
       <p id="admin-login-error" class="admin-error" role="alert" hidden></p>
     </section>
@@ -50,6 +50,6 @@
     </section>
     <div id="admin-toast" class="admin-toast" role="status" hidden></div>
   </main>
-  <script type="module" src="assets/js/admin.js?v=1"></script>
+  <script type="module" src="assets/js/admin.js?v=2"></script>
 </body>
 </html>

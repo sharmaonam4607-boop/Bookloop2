@@ -88,7 +88,7 @@ def password_reset_request(req: PasswordResetRequest, db: Session = Depends(get_
     
     reset_token = str(uuid.uuid4())[:8].upper()
     user.reset_token = reset_token
-    user.reset_token_expires_at = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    user.reset_token_expires_at = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
     db.commit()
 
     return {
@@ -101,12 +101,20 @@ def password_reset_request(req: PasswordResetRequest, db: Session = Depends(get_
 def password_reset_confirm(confirm: PasswordResetConfirm, db: Session = Depends(get_db)):
     """Reset student password using reset token."""
     user = db.query(User).filter(User.email == confirm.email.lower()).first()
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+    token_expired = False
+    if user and user.reset_token_expires_at:
+        expiry = user.reset_token_expires_at
+        if expiry.tzinfo is None:
+            expiry = expiry.replace(tzinfo=datetime.timezone.utc)
+        token_expired = expiry < now_utc
+
     if (
         not user
         or not user.reset_token
         or user.reset_token != confirm.reset_token
         or not user.reset_token_expires_at
-        or user.reset_token_expires_at < datetime.datetime.utcnow()
+        or token_expired
     ):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
