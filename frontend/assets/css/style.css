@@ -7,7 +7,7 @@
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: var(--bg-app);
+  background: var(--bg-gradient, linear-gradient(135deg, #EBD3C2 0%, #F5E6D9 50%, #DDECE4 100%));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -131,15 +131,17 @@
   padding: 0 var(--space-5);
 }
 
+/* ==========================================================================
+   App Container & Header Navigation (Reference Style)
+   ========================================================================== */
 .app-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: var(--bg-glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-app, #FAF8F5);
+  border-bottom: 1px solid var(--border-subtle, #E8E2D8);
   transition: all var(--transition-normal);
+  box-shadow: 0 1px 3px rgba(27, 67, 50, 0.04);
 }
 
 .nav-container {
@@ -153,7 +155,7 @@
 .brand-group {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 10px;
   cursor: pointer;
   user-select: none;
   text-decoration: none;
@@ -165,16 +167,13 @@
 }
 
 .brand-logo-icon {
-  width: 42px;
-  height: 42px;
-  background: var(--gradient-brand);
-  border-radius: var(--radius-lg);
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  color: #1B4332;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #FFFFFF;
-  font-size: 1.35rem;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.28);
   flex-shrink: 0;
 }
 
@@ -184,19 +183,18 @@
 }
 
 .brand-title {
-  font-size: var(--text-xl);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  background: linear-gradient(135deg, var(--text-primary) 30%, var(--primary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 1.2;
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #1B4332;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
 }
 
 .brand-tagline {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-  font-weight: 600;
+  font-size: 0.7rem;
+  color: #52665A;
+  font-weight: 500;
   letter-spacing: 0.02em;
 }
 
@@ -204,16 +202,17 @@
 .desktop-nav {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: 0.75rem;
 }
 
 .nav-link {
   display: inline-flex;
   align-items: center;
-  padding: 0.5rem 0.875rem;
+  gap: 4px;
+  padding: 0.5rem 1rem;
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--text-secondary);
+  color: #4A584F;
   border-radius: var(--radius-md);
   text-decoration: none;
   transition: all var(--transition-fast);
@@ -221,14 +220,32 @@
 }
 
 .nav-link:hover {
-  color: var(--text-primary);
-  background: var(--bg-surface-subtle);
+  color: #1B4332;
+  background: rgba(27, 67, 50, 0.05);
 }
 
 .nav-link.active {
-  color: var(--primary);
-  background: var(--primary-light);
+  color: #1B4332;
+  background: transparent;
   font-weight: 700;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 2.5px;
+  background: #1B4332;
+  border-radius: var(--radius-full);
+}
+
+.nav-chevron {
+  font-size: 0.7rem;
+  color: #7D8C83;
+  margin-left: 1px;
 }
 
 /* Nav Actions */
@@ -238,114 +255,215 @@
   gap: var(--space-3);
 }
 
+.user-avatar-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px 3px 4px;
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.user-avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #1B4332;
+  color: #FFFFFF;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.04em;
+}
+
 /* ==========================================================================
-   Hero Section
+   Hero Section (Reference Design)
    ========================================================================== */
 .hero-section {
-  padding: var(--space-12) 0 var(--space-10);
-  text-align: center;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
   position: relative;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, rgba(14, 26, 19, 0.62) 0%, rgba(14, 26, 19, 0.74) 100%),
+              url('../images/hero-library.jpg') center center / cover no-repeat;
+  min-height: 480px;
+  padding: 76px 20px 64px;
+  text-align: center;
+  color: #FFFFFF;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
 }
 
-.hero-section::before {
-  content: '';
-  position: absolute;
-  top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  height: 320px;
-  background: radial-gradient(circle, rgba(79, 70, 229, 0.09) 0%, rgba(16, 185, 129, 0.06) 50%, transparent 75%);
-  pointer-events: none;
-  z-index: -1;
-  filter: blur(40px);
+.hero-content-wrapper {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
 }
 
-.hero-pill-badge {
+.hero-overline {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: 0.4rem 1.1rem;
-  background: var(--primary-light);
-  border: 1px solid rgba(79, 70, 229, 0.22);
-  border-radius: var(--radius-full);
-  font-size: var(--text-xs);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.hero-line {
+  display: inline-block;
+  width: 48px;
+  height: 1.5px;
+  background: rgba(149, 213, 178, 0.6);
+}
+
+.hero-overline-text {
+  font-size: 0.8125rem;
   font-weight: 700;
-  color: var(--primary);
-  margin-bottom: var(--space-5);
-  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.08);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.22em;
+  color: #D8F3DC;
   text-transform: uppercase;
 }
 
 .hero-title {
-  font-size: clamp(2.2rem, 5.2vw, 3.6rem);
-  font-weight: 800;
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+  font-weight: 700;
   line-height: 1.15;
-  letter-spacing: -0.035em;
-  color: var(--text-primary);
-  max-width: 880px;
-  margin: 0 auto var(--space-4);
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
-.hero-title span {
-  background: var(--gradient-brand);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.hero-title .mint-text {
+  color: #95D5B2;
+  font-style: normal;
+  text-shadow: 0 0 24px rgba(149, 213, 178, 0.4);
 }
 
 .hero-desc {
-  font-size: var(--text-lg);
-  color: var(--text-secondary);
-  max-width: 660px;
-  margin: 0 auto var(--space-6);
+  font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(1rem, 2vw, 1.1875rem);
+  color: #F0FDF4;
+  max-width: 680px;
+  margin: 0 auto 32px;
   line-height: 1.6;
   font-weight: 400;
+  opacity: 0.95;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Hero Search Box */
 .hero-search-wrapper {
+  width: 100%;
   max-width: 720px;
-  margin: 0 auto var(--space-6);
-  position: relative;
+  margin-bottom: 28px;
 }
 
 .hero-search-box {
   display: flex;
   align-items: center;
-  background: var(--bg-surface);
-  border: 2px solid var(--border-medium);
-  border-radius: var(--radius-2xl);
-  padding: 6px 8px 6px 18px;
-  box-shadow: var(--shadow-lg);
+  background: #FFFFFF;
+  border-radius: 9999px;
+  padding: 6px 6px 6px 20px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: all var(--transition-fast);
 }
 
 .hero-search-box:focus-within {
-  border-color: var(--primary);
-  box-shadow: var(--shadow-glow), var(--shadow-xl);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35), 0 0 0 2px #74C69D;
 }
 
-.search-input-field {
+.hero-search-icon {
+  color: #6B7280;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+.hero-search-box .search-input-field {
   flex: 1;
   border: none;
   background: transparent;
-  color: var(--text-primary);
-  font-size: var(--text-base);
-  padding: 0.6rem 0.5rem;
-  font-family: inherit;
-}
-
-.search-input-field:focus {
+  color: #1F2937;
+  font-size: 0.9375rem;
+  padding: 10px 4px;
   outline: none;
 }
 
-.search-input-field::placeholder {
-  color: var(--text-muted);
+.hero-search-box .search-input-field::placeholder {
+  color: #6B7280;
 }
 
-/* Quick Filter Pills Under Hero */
+.hero-search-btn {
+  background: #1B4332;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 9999px;
+  padding: 11px 28px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(27, 67, 50, 0.35);
+}
+
+.hero-search-btn:hover {
+  background: #2D6A4F;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(27, 67, 50, 0.45);
+}
+
+/* Category Filter Pills */
+.hero-category-pills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero-cat-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(18, 32, 24, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 9999px;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.hero-cat-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #95D5B2;
+  color: #95D5B2;
+  transform: translateY(-2px);
+}
+
+.hero-cat-btn svg {
+  opacity: 0.9;
+}
+
+/* Compatibility filter pills */
 .hero-filter-pills {
   display: flex;
   align-items: center;
@@ -379,9 +497,151 @@
   background: var(--primary);
   color: #FFFFFF;
   border-color: var(--primary);
-  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.35);
+  box-shadow: 0 4px 10px rgba(27, 67, 50, 0.35);
   font-weight: 700;
 }
+
+/* ==========================================================================
+   How BookLoop Works Section (Reference Design)
+   ========================================================================== */
+.how-bookloop-works-section {
+  padding: 56px 0 44px;
+  text-align: center;
+  background: transparent;
+}
+
+.how-it-works-divider {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 8px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1.5px;
+  background: #A7D7BC;
+  opacity: 0.85;
+}
+
+.how-it-works-title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.3rem);
+  font-weight: 700;
+  color: #1B4332;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.how-it-works-subtitle {
+  font-size: 0.9375rem;
+  color: #52665A;
+  font-weight: 500;
+  margin-bottom: 44px;
+}
+
+.how-it-works-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.how-step-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 290px;
+  flex: 1;
+  min-width: 220px;
+}
+
+.step-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #D8F3DC;
+  color: #1B4332;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 14px rgba(27, 67, 50, 0.08);
+  transition: transform var(--transition-normal);
+}
+
+.how-step-card:hover .step-icon-wrapper {
+  transform: translateY(-3px) scale(1.05);
+  background: #C7EED0;
+}
+
+.step-header-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.step-number-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1B4332;
+  color: #FFFFFF;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1B4332;
+  margin: 0;
+}
+
+.step-desc {
+  font-size: 0.84375rem;
+  color: #52665A;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.step-arrow-divider {
+  color: #74C69D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.section-view-all-link {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1B4332;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.section-view-all-link:hover {
+  color: #2D6A4F;
+  transform: translateX(3px);
+}
+
 
 /* ==========================================================================
    Campus Impact Banner
@@ -1009,17 +1269,72 @@
 }
 
 /* ==========================================================================
-   Footer
+   Footer — Narrow, Clean & Focused
    ========================================================================== */
 .app-footer {
-  margin-top: var(--space-16);
+  margin-top: var(--space-8);
   border-top: 1px solid var(--border-subtle);
-  padding: var(--space-10) 0;
   background: var(--bg-surface);
-  text-align: center;
-  font-size: var(--text-sm);
+  padding: var(--space-3) 0;
   color: var(--text-secondary);
+  font-size: var(--text-xs);
 }
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.footer-copyright {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.footer-contact {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.footer-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--text-xs);
+  transition: color var(--transition-fast);
+}
+
+.footer-contact-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.footer-contact-link svg {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.footer-divider {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+@media (max-width: 640px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-2);
+  }
+}
+
 
 /* ==========================================================================
    Chat Layout & Threads
@@ -1613,4 +1928,335 @@
   .nearby-result { grid-template-columns: 42px minmax(0, 1fr); }
   .nearby-result-actions { grid-column: 2; flex-wrap: wrap; }
   .nearby-results-toolbar { align-items: flex-start; flex-direction: column; }
+}
+
+
+/* ==========================================================================
+   Comprehensive Mobile & Tablet Responsive Audit Fixes
+   ========================================================================== */
+
+/* Tablet header compacting (769px - 900px) */
+@media (max-width: 900px) and (min-width: 769px) {
+  .brand-tagline {
+    display: none;
+  }
+  .desktop-nav {
+    gap: 0.35rem;
+  }
+  .nav-link {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8125rem;
+  }
+  .nav-actions {
+    gap: var(--space-2);
+  }
+}
+
+/* Mobile & Small Tablet (max-width: 768px) */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+  .mobile-bottom-nav {
+    display: flex;
+  }
+  body {
+    padding-bottom: 4.8rem;
+  }
+  .nav-container {
+    height: 3.85rem;
+    gap: 8px;
+  }
+  .brand-group {
+    gap: 8px;
+  }
+  .brand-logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+  .brand-logo-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .brand-title {
+    font-size: 1.25rem;
+  }
+  .brand-tagline {
+    display: none;
+  }
+  .nav-actions {
+    gap: 4px;
+  }
+  .nav-actions .btn {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.78rem;
+    min-height: 32px;
+  }
+  .user-avatar-pill {
+    padding: 2px 4px;
+  }
+  .user-avatar-circle {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  /* How BookLoop Works Stacked */
+  .how-bookloop-works-section {
+    padding: 36px 0 28px;
+  }
+  .how-it-works-divider {
+    gap: 12px;
+  }
+  .divider-line {
+    width: 24px;
+    flex: 0 0 24px;
+  }
+  .how-it-works-title {
+    font-size: 1.45rem;
+  }
+  .how-it-works-subtitle {
+    font-size: 0.84rem;
+    margin-bottom: 24px;
+  }
+  .how-it-works-steps {
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  .how-step-card {
+    max-width: 100%;
+    width: 100%;
+  }
+  .step-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+  }
+  .step-arrow-divider {
+    transform: rotate(90deg);
+    margin: 0;
+    height: 24px;
+  }
+  .step-arrow-divider svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Discover Filters Bar */
+  .discover-filter-bar {
+    padding: var(--space-3);
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+  .filter-left, .filter-right {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+  .discover-filter-bar select,
+  .discover-filter-bar input,
+  .discover-filter-bar button {
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  #filter-category-select {
+    grid-column: 1 / -1;
+  }
+  #reset-filters-btn {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Mobile Screens (max-width: 640px) */
+@media (max-width: 640px) {
+  /* Hero section adjustments */
+  .hero-section {
+    padding: 44px 16px 36px;
+    min-height: auto;
+  }
+  .hero-overline {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .hero-line {
+    width: 20px;
+  }
+  .hero-overline-text {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+  }
+  .hero-title {
+    font-size: clamp(1.75rem, 6.8vw, 2.5rem);
+    margin-bottom: 12px;
+    letter-spacing: -0.015em;
+  }
+  .hero-desc {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+  .hero-search-wrapper {
+    margin-bottom: 16px;
+    width: 100%;
+  }
+  .hero-search-box {
+    padding: 3px 3px 3px 14px;
+  }
+  .hero-search-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+  }
+  .hero-search-btn {
+    padding: 8px 18px;
+    font-size: 0.8125rem;
+  }
+  .search-input-field {
+    font-size: 0.8125rem;
+    padding: 8px 4px;
+  }
+
+  /* Impact banner */
+  .impact-banner {
+    grid-template-columns: repeat(2, 1fr);
+    padding: var(--space-4) var(--space-3);
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+    border-radius: var(--radius-lg);
+  }
+  .impact-num {
+    font-size: 1.4rem;
+  }
+  .impact-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.03em;
+  }
+
+  /* Nearby geospatial */
+  .nearby-origin-panel {
+    grid-template-columns: 1fr;
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+  .nearby-origin-form {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    width: 100%;
+  }
+  .nearby-origin-form button {
+    width: 100%;
+  }
+  .nearby-result {
+    grid-template-columns: 38px 1fr;
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+  .nearby-result-actions {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-content: stretch;
+  }
+  .nearby-result-actions button,
+  .nearby-result-actions a {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+  .nearby-map-canvas {
+    height: min(50vh, 380px);
+    min-height: 280px;
+  }
+
+  /* Communities */
+  .community-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  .community-card {
+    padding: var(--space-4);
+  }
+  .community-discovery-tools {
+    flex-direction: column;
+    width: 100%;
+    gap: var(--space-2);
+  }
+  .community-discovery-tools .form-select,
+  .community-discovery-tools .form-input {
+    width: 100% !important;
+  }
+  .community-card-meta {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  /* Section header */
+  .section-header {
+    margin-bottom: var(--space-4);
+    align-items: center;
+  }
+  .section-title-wrap h2 {
+    font-size: 1.35rem;
+  }
+}
+
+/* Small Mobile Screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .app-container {
+    padding: 0 14px;
+  }
+  .filter-left, .filter-right {
+    grid-template-columns: 1fr;
+  }
+  .book-card-body {
+    padding: var(--space-3);
+  }
+  .book-card-footer {
+    padding-top: var(--space-2);
+  }
+  .seller-info {
+    min-width: 0;
+    flex: 1;
+  }
+  .seller-text {
+    min-width: 0;
+    overflow: hidden;
+  }
+  .seller-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    font-size: 0.78rem;
+  }
+  .seller-trust {
+    font-size: 0.7rem;
+  }
+  .view-book-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+  }
+}
+
+/* Extra Small Screens (max-width: 360px - e.g. 320px) */
+@media (max-width: 360px) {
+  .app-container {
+    padding: 0 10px;
+  }
+  .impact-banner {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+  .nav-actions .btn {
+    padding: 0.3rem 0.45rem;
+    font-size: 0.72rem;
+  }
+  .brand-title {
+    font-size: 1.15rem;
+  }
 }

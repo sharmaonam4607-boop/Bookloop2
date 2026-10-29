@@ -159,6 +159,27 @@ def _impact_counts(db: Session, user_id: str | None = None):
         for participant_id in (request.requester_id, book.seller_id)
         if participant_id is not None
     }
+
+    # Also account for terminal listings marked directly by sellers outside requests
+    standalone_query = db.query(BookListing).filter(
+        BookListing.status.in_(["donated", "exchanged", "lent", "sold"]),
+        ~BookListing.id.in_(unique_books) if unique_books else True,
+    )
+    if user_id:
+        standalone_query = standalone_query.filter(BookListing.seller_id == user_id)
+    for b in standalone_query.all():
+        unique_books.add(b.id)
+        if b.status == "donated" or b.listing_type == "donate":
+            donated += 1
+        elif b.status == "exchanged" or b.listing_type == "exchange":
+            exchanged += 1
+        elif b.status == "lent" or b.listing_type == "lend":
+            lent += 1
+        elif b.status == "sold" or b.listing_type == "sell":
+            sold += 1
+        if b.seller_id:
+            connected_students.add(b.seller_id)
+
     return rows, unique_books, sold, donated, exchanged, lent, connected_students
 
 
@@ -166,7 +187,7 @@ def _impact_counts(db: Session, user_id: str | None = None):
 def global_impact(db: Session = Depends(get_db)):
     rows, unique_books, sold, donated, exchanged, lent, connected = _impact_counts(db)
     return ImpactSummary(
-        completed_interactions=len(rows),
+        completed_interactions=len(rows) + (len(unique_books) - len(rows) if len(unique_books) > len(rows) else 0),
         books_given_second_chance=len(unique_books),
         books_sold=sold,
         books_donated=donated,
@@ -185,8 +206,14 @@ def personal_impact(current_user: User = Depends(get_current_user), db: Session 
     rows, unique_books, sold, donated, exchanged, lent, connected = _impact_counts(db, current_user.id)
     memberships = db.query(CommunityMembership.community_id).filter_by(user_id=current_user.id).all()
     community_ids = [row[0] for row in memberships]
+    completed_req_ids = {request.book_id for request, _ in rows}
+    standalone_passed = db.query(BookListing).filter(
+        BookListing.seller_id == current_user.id,
+        BookListing.status.in_(["donated", "exchanged", "lent", "sold"]),
+        ~BookListing.id.in_(completed_req_ids) if completed_req_ids else True,
+    ).count()
     return PersonalImpact(
-        completed_interactions=len(rows),
+        completed_interactions=len(rows) + standalone_passed,
         books_given_second_chance=len(unique_books),
         books_sold=sold,
         books_donated=donated,
@@ -197,7 +224,7 @@ def personal_impact(current_user: User = Depends(get_current_user), db: Session 
         community_memberships=len(community_ids),
         community_books_shared=db.query(CommunityBook.id).filter(CommunityBook.community_id.in_(community_ids)).count() if community_ids else 0,
         community_posts=db.query(CommunityPost.id).filter(CommunityPost.author_id == current_user.id).count(),
-        books_passed_on=len({request.book_id for request, book in rows if book.seller_id == current_user.id}),
+        books_passed_on=len({request.book_id for request, book in rows if book.seller_id == current_user.id}) + standalone_passed,
         books_received=len({request.book_id for request, _book in rows if request.requester_id == current_user.id}),
         communities_joined=len(community_ids),
         posts_created=db.query(CommunityPost.id).filter(CommunityPost.author_id == current_user.id).count(),

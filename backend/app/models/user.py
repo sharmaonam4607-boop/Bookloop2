@@ -41,6 +41,7 @@ class UserProfile(Base):
     university = Column(String(150), nullable=True)
     course = Column(String(100), nullable=True)
     year = Column(String(50), nullable=True)
+    city = Column(String(100), nullable=True, index=True)
     location = Column(String(150), nullable=True)
     bio = Column(Text, nullable=True)
     avatar_emoji = Column(String(20), default="👨‍🎓")
@@ -51,6 +52,7 @@ class UserProfile(Base):
     books_sold = Column(Integer, default=0)
     books_donated = Column(Integer, default=0)
     books_exchanged = Column(Integer, default=0)
+    books_lent = Column(Integer, default=0)
 
     created_at = Column(DateTime, default=utc_now, nullable=False)
     updated_at = Column(DateTime, default=utc_now, onupdate=utc_now, nullable=False)

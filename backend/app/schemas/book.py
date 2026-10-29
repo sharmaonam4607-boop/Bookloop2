@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class BookSeller(BaseModel):
     id: Optional[str] = None
     name: str
+    city: Optional[str] = None
     university: Optional[str] = None
     course: Optional[str] = None
     year: Optional[str] = None
@@ -38,6 +39,7 @@ class BookResponse(BaseModel):
     image_urls: list[str] = Field(default_factory=list)
     cover_gradient: Optional[str] = None
     distance_km: Optional[float] = None
+    listing_city: Optional[str] = None
     safe_meeting_point: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None

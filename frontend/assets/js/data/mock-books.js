@@ -30,7 +30,6 @@ export const MOCK_BOOKS = [
     price: 0,
     originalPrice: 1899,
     exchangeWish: "Looking for Database System Concepts (Korth) or Operating Systems",
-    distanceKm: 0.8,
     seller: {
       name: "Amanpreet Singh",
       college: "GNDEC Engineering College",
@@ -62,7 +61,6 @@ export const MOCK_BOOKS = [
     price: 480,
     originalPrice: 1250,
     exchangeWish: null,
-    distanceKm: 1.4,
     seller: {
       name: "Simran Kaur",
       college: "PCTE Campus 2",
@@ -95,7 +93,6 @@ export const MOCK_BOOKS = [
     priceUnit: "/ month",
     originalPrice: 1100,
     exchangeWish: null,
-    distanceKm: 2.1,
     seller: {
       name: "Rohit Verma",
       college: "Punjab Agricultural University",
@@ -127,7 +124,6 @@ export const MOCK_BOOKS = [
     price: 0,
     originalPrice: 850,
     exchangeWish: null,
-    distanceKm: 0.5,
     seller: {
       name: "Karan Sharma",
       college: "GNDEC Ludhiana",
@@ -159,7 +155,6 @@ export const MOCK_BOOKS = [
     price: 1100,
     originalPrice: 2800,
     exchangeWish: null,
-    distanceKm: 3.2,
     seller: {
       name: "Dr. Priya Mehta",
       college: "DMC Medical College",
@@ -191,7 +186,6 @@ export const MOCK_BOOKS = [
     price: 290,
     originalPrice: 750,
     exchangeWish: null,
-    distanceKm: 1.8,
     seller: {
       name: "Vikram Malhotra",
       college: "PCTE Group of Institutes",
@@ -223,7 +217,6 @@ export const MOCK_BOOKS = [
     price: 0,
     originalPrice: 950,
     exchangeWish: null,
-    distanceKm: 2.7,
     seller: {
       name: "Jasleen Kaur",
       college: "Guru Nanak Dev Engineering College",
@@ -255,7 +248,6 @@ export const MOCK_BOOKS = [
     price: 0,
     originalPrice: 895,
     exchangeWish: "Looking for Marketing Management by Philip Kotler",
-    distanceKm: 1.1,
     seller: {
       name: "Navjot Chawla",
       college: "Punjab University Regional Centre",

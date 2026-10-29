@@ -22,11 +22,14 @@ html {
 body {
   min-height: 100vh;
   min-height: 100dvh;
-  background-color: var(--bg-app);
+  background-color: var(--bg-app, #FAF8F5);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
   color: var(--text-primary);
   display: flex;
   flex-direction: column;
-  transition: background-color var(--transition-normal), color var(--transition-normal);
+  transition: background var(--transition-normal), color var(--transition-normal);
   overflow-x: hidden;
 }
 
@@ -135,4 +138,9 @@ a {
 @media print {
   .app-header, .mobile-bottom-nav, .floating-dev-badge, .toast-container { display: none !important; }
   body { background: #fff; color: #000; }
+}
+
+h1, h2, .section-title-wrap h2, .view-title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  color: var(--text-primary);
 }

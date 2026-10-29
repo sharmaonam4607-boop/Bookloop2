@@ -300,8 +300,52 @@ class ApiClient {
     return this.request('/api/v1/maps/config');
   }
 
-  async getMapPoints() {
-    return this.request('/api/v1/maps/points');
+  async getMapPoints(location = null, city = null) {
+    const params = new URLSearchParams();
+    if (city) params.set('city', city);
+    else if (location) params.set('location', location);
+    const suffix = params.toString() ? `?${params.toString()}` : '';
+    return this.request(`/api/v1/maps/points${suffix}`);
+  }
+
+  async uploadBookImage(file) {
+    const url = `${this.baseUrl}/api/v1/books/upload-image`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT);
+
+    const headers = {};
+    if (auth.token) {
+      headers['Authorization'] = `Bearer ${auth.token}`;
+    }
+    if (file && file.type) {
+      headers['Content-Type'] = file.type;
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: file,
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      let data = null;
+      try { data = await response.json(); } catch { data = null; }
+      return {
+        ok: response.ok,
+        status: response.status,
+        data,
+        error: response.ok ? null : this._formatError(data?.detail || `HTTP ${response.status}`)
+      };
+    } catch (err) {
+      clearTimeout(timeoutId);
+      return {
+        ok: false,
+        status: 0,
+        data: null,
+        error: err.name === 'AbortError' ? 'Upload timed out.' : 'Failed to upload image to server.'
+      };
+    }
   }
 
   async getEligibleReviews() {

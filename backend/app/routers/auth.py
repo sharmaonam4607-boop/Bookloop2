@@ -14,6 +14,7 @@ from app.schemas.user import (
 )
 from app.core.security import hash_password, verify_password, create_access_token
 from app.api.deps import get_current_user
+from app.services.statistics import sync_user_profile_stats
 
 router = APIRouter(prefix="/api/v1/auth", tags=["Authentication"])
 
@@ -44,7 +45,8 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
         university=user_in.university,
         course=user_in.course,
         year=user_in.year,
-        location=user_in.location,
+        city=user_in.city or user_in.location,
+        location=user_in.location or user_in.city,
         avatar_emoji="👨‍🎓",
         trust_score=5.0
     )
@@ -75,8 +77,9 @@ def login(login_in: UserLogin, db: Session = Depends(get_db)):
     return TokenResponse(access_token=token, token_type="bearer", user=user)
 
 @router.get("/me", response_model=UserResponse)
-def get_me(current_user: User = Depends(get_current_user)):
+def get_me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """Get profile information for currently authenticated user."""
+    sync_user_profile_stats(db, current_user.id)
     return current_user
 
 @router.post("/password-reset-request")

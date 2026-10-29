@@ -13,8 +13,8 @@ class MapPointResponse(BaseModel):
     point_type: Literal["book", "community"]
     title: str
     subtitle: str
-    latitude: float
-    longitude: float
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
     location_name: str
     book_listing_type: Optional[str] = None
     is_seed_data: bool = False

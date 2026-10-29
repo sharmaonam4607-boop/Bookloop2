@@ -1,64 +1,77 @@
-/* BookLoop Design System — Phase 12 Premium Polish */
-/* Modern CSS Custom Properties & Design Tokens */
+/* BookLoop Design System — Reference Design Theme */
+/* Elegant Book-Focused Typography & Forest Green / Mint / Cream Palette */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Brand Palette */
-  --primary: #4F46E5;
-  --primary-hover: #4338CA;
-  --primary-light: #EEF2FF;
-  --primary-rgb: 79, 70, 229;
+  /* Brand Palette — Forest Green & Mint */
+  --primary: #1B4332;
+  --primary-hover: #2D6A4F;
+  --primary-dark: #081C15;
+  --primary-light: #D8F3DC;
+  --primary-rgb: 27, 67, 50;
 
-  /* Sustainability / Second Chance Green */
-  --accent-green: #10B981;
-  --accent-green-hover: #059669;
-  --accent-green-light: #ECFDF5;
-  --accent-green-rgb: 16, 185, 129;
+  /* Sustainability / Mint Highlights */
+  --accent-mint: #95D5B2;
+  --accent-mint-bright: #74C69D;
+  --accent-green: #2D6A4F;
+  --accent-green-hover: #1B4332;
+  --accent-green-light: #D8F3DC;
+  --accent-green-rgb: 45, 106, 79;
+  --accent-gold: #D4AF37;
 
   /* Secondary Accents */
-  --accent-purple: #8B5CF6;
-  --accent-amber: #F59E0B;
-  --accent-sky: #0EA5E9;
-  --accent-rose: #F43F5E;
+  --accent-purple: #7B2CBF;
+  --accent-amber: #D97706;
+  --accent-sky: #0284C7;
+  --accent-rose: #E11D48;
 
   /* Listing Type Colors */
-  --type-sell: #4F46E5;
-  --type-sell-bg: #EEF2FF;
-  --type-exchange: #0EA5E9;
+  --type-sell: #1B4332;
+  --type-sell-bg: #E8F5E9;
+  --type-exchange: #0369A1;
   --type-exchange-bg: #E0F2FE;
-  --type-donate: #10B981;
-  --type-donate-bg: #ECFDF5;
-  --type-lend: #F59E0B;
+  --type-donate: #2D6A4F;
+  --type-donate-bg: #D8F3DC;
+  --type-lend: #B45309;
   --type-lend-bg: #FEF3C7;
 
   /* Condition Grades */
-  --condition-new: #10B981;
-  --condition-new-bg: #ECFDF5;
-  --condition-good: #3B82F6;
+  --condition-new: #1B4332;
+  --condition-new-bg: #D8F3DC;
+  --condition-good: #0369A1;
   --condition-good-bg: #EFF6FF;
-  --condition-worn: #8B5CF6;
+  --condition-worn: #7B2CBF;
   --condition-worn-bg: #F5F3FF;
 
   /* Status Colors */
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-danger: #EF4444;
-  --color-info: #3B82F6;
+  --color-success: #2D6A4F;
+  --color-warning: #D97706;
+  --color-danger: #DC2626;
+  --color-info: #0284C7;
 
   /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, monospace;
 
   /* Font Sizes — Fluid Typographic Scale */
-  --text-xs: 0.6875rem;     /* 11px */
-  --text-sm: 0.8125rem;     /* 13px */
-  --text-base: 0.9375rem;   /* 15px */
-  --text-md: 1rem;          /* 16px */
-  --text-lg: 1.125rem;      /* 18px */
-  --text-xl: 1.25rem;       /* 20px */
-  --text-2xl: 1.5rem;       /* 24px */
-  --text-3xl: 1.875rem;     /* 30px */
+  --text-xs: 0.75rem;
+  /* 12px */
+  --text-sm: 0.84375rem;
+  /* 13.5px */
+  --text-base: 0.9375rem;
+  /* 15px */
+  --text-md: 1rem;
+  /* 16px */
+  --text-lg: 1.125rem;
+  /* 18px */
+  --text-xl: 1.25rem;
+  /* 20px */
+  --text-2xl: 1.5rem;
+  /* 24px */
+  --text-3xl: 1.875rem;
+  /* 30px */
   --text-4xl: clamp(2.1rem, 5vw, 3.5rem);
 
   /* Spacing Scale */
@@ -84,82 +97,88 @@
   --radius-2xl: 32px;
   --radius-full: 9999px;
 
-  /* Shadows — Refined for depth perception */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.06);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-  --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.2), 0 0 60px rgba(79, 70, 229, 0.1);
-  --shadow-cover: 0 8px 16px -4px rgba(0, 0, 0, 0.12), 0 2px 6px -1px rgba(0, 0, 0, 0.06);
-  --shadow-card-hover: 0 20px 40px -8px rgba(79, 70, 229, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+  /* Shadows — Refined for warm paper & card depth */
+  --shadow-xs: 0 1px 2px 0 rgba(27, 67, 50, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(27, 67, 50, 0.08), 0 1px 2px -1px rgba(27, 67, 50, 0.05);
+  --shadow-md: 0 4px 8px -1px rgba(27, 67, 50, 0.08), 0 2px 4px -2px rgba(27, 67, 50, 0.05);
+  --shadow-lg: 0 10px 20px -3px rgba(27, 67, 50, 0.1), 0 4px 6px -4px rgba(27, 67, 50, 0.05);
+  --shadow-xl: 0 20px 28px -5px rgba(27, 67, 50, 0.12), 0 8px 10px -6px rgba(27, 67, 50, 0.06);
+  --shadow-2xl: 0 25px 50px -12px rgba(27, 67, 50, 0.18);
+  --shadow-glow: 0 0 20px rgba(116, 198, 157, 0.35), 0 0 60px rgba(27, 67, 50, 0.15);
+  --shadow-cover: 0 8px 16px -4px rgba(0, 0, 0, 0.16), 0 2px 6px -1px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 16px 32px -6px rgba(27, 67, 50, 0.14), 0 6px 12px -3px rgba(27, 67, 50, 0.08);
 
-  /* Focus Ring — Accessibility */
+  /* Focus Ring */
   --focus-ring: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--primary);
-  --focus-ring-offset: 0 0 0 3px var(--primary), 0 0 0 5px rgba(79, 70, 229, 0.3);
+  --focus-ring-offset: 0 0 0 3px var(--primary), 0 0 0 5px rgba(27, 67, 50, 0.3);
 
-  /* Transitions — Polished easing */
+  /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  --transition-bounce: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-  /* Gradient Presets */
-  --gradient-brand: linear-gradient(135deg, var(--primary) 0%, #818CF8 50%, var(--accent-green) 100%);
-  --gradient-hero: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(16, 185, 129, 0.08) 50%, rgba(14, 165, 233, 0.06) 100%);
+  /* Gradients */
+  --gradient-brand: linear-gradient(135deg, #1B4332 0%, #2D6A4F 60%, #52B788 100%);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(216, 243, 220, 0.5) 0%, rgba(250, 248, 245, 0.8) 100%);
+  --gradient-hero: linear-gradient(180deg, rgba(14, 26, 19, 0.62) 0%, rgba(14, 26, 19, 0.72) 100%);
   --gradient-card: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-surface-subtle) 100%);
 
-  /* Light Theme Palette (Default) */
-  --bg-app: #F8FAFC;
+  /* Warm Ivory / Cream Background System */
+  --bg-app: #FAF8F5;
+  --bg-gradient: #FAF8F5;
   --bg-surface: #FFFFFF;
   --bg-surface-elevated: #FFFFFF;
-  --bg-surface-subtle: #F1F5F9;
-  --bg-glass: rgba(255, 255, 255, 0.88);
+  --bg-surface-subtle: #F4EFEB;
+  --bg-surface-cream: #FAF6F0;
+  --bg-glass: rgba(250, 248, 245, 0.94);
 
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-muted: #94A3B8;
+  --text-primary: #18221B;
+  --text-secondary: #4A584F;
+  --text-muted: #7E8D84;
   --text-inverse: #FFFFFF;
 
-  --border-subtle: #E2E8F0;
-  --border-medium: #CBD5E1;
-  --border-focus: #4F46E5;
+  --border-subtle: #E8E2D8;
+  --border-medium: #D5CFC5;
+  --border-focus: #1B4332;
 
-  --shimmer-base: #E2E8F0;
-  --shimmer-highlight: #F8FAFC;
+  --shimmer-base: #E8E2D8;
+  --shimmer-highlight: #FAF8F5;
 
-  --code-bg: #1E293B;
-  --code-text: #E2E8F0;
+  --code-bg: #1B4332;
+  --code-text: #D8F3DC;
 }
 
 /* Dark Theme Palette */
 [data-theme="dark"] {
-  --bg-app: #0B0F19;
-  --bg-surface: #111827;
-  --bg-surface-elevated: #1F2937;
-  --bg-surface-subtle: #182234;
-  --bg-glass: rgba(17, 24, 39, 0.88);
+  --bg-app: #0D1612;
+  --bg-gradient: #0D1612;
+  --bg-surface: #14221C;
+  --bg-surface-elevated: #1B2C24;
+  --bg-surface-subtle: #182921;
+  --bg-surface-cream: #14221C;
+  --bg-glass: rgba(20, 34, 28, 0.92);
 
-  --text-primary: #F9FAFB;
-  --text-secondary: #9CA3AF;
-  --text-muted: #6B7280;
-  --text-inverse: #111827;
+  --text-primary: #F0FDF4;
+  --text-secondary: #A7C5B2;
+  --text-muted: #6B8B77;
+  --text-inverse: #0D1612;
 
-  --border-subtle: #1F2937;
-  --border-medium: #374151;
-  --border-focus: #818CF8;
+  --border-subtle: #24392E;
+  --border-medium: #314E3F;
+  --border-focus: #74C69D;
 
-  --primary-light: rgba(79, 70, 229, 0.18);
-  --accent-green-light: rgba(16, 185, 129, 0.18);
+  --primary: #52B788;
+  --primary-hover: #74C69D;
+  --primary-light: rgba(82, 183, 136, 0.18);
+  --accent-green-light: rgba(82, 183, 136, 0.18);
 
-  --type-sell-bg: rgba(79, 70, 229, 0.2);
+  --type-sell-bg: rgba(82, 183, 136, 0.2);
   --type-exchange-bg: rgba(14, 165, 233, 0.2);
-  --type-donate-bg: rgba(16, 185, 129, 0.2);
+  --type-donate-bg: rgba(116, 198, 157, 0.2);
   --type-lend-bg: rgba(245, 158, 11, 0.2);
 
-  --condition-new-bg: rgba(16, 185, 129, 0.2);
+  --condition-new-bg: rgba(82, 183, 136, 0.2);
   --condition-good-bg: rgba(59, 130, 246, 0.2);
   --condition-worn-bg: rgba(139, 92, 246, 0.2);
 
@@ -169,19 +188,19 @@
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.55);
-  --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.3), 0 0 60px rgba(99, 102, 241, 0.15);
+  --shadow-glow: 0 0 25px rgba(116, 198, 157, 0.3), 0 0 60px rgba(82, 183, 136, 0.15);
   --shadow-cover: 0 8px 20px -4px rgba(0, 0, 0, 0.5);
-  --shadow-card-hover: 0 20px 40px -8px rgba(99, 102, 241, 0.2), 0 8px 16px -4px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 20px 40px -8px rgba(82, 183, 136, 0.2), 0 8px 16px -4px rgba(0, 0, 0, 0.3);
 
   --focus-ring: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--border-focus);
-  --focus-ring-offset: 0 0 0 3px var(--border-focus), 0 0 0 5px rgba(129, 140, 248, 0.3);
+  --focus-ring-offset: 0 0 0 3px var(--border-focus), 0 0 0 5px rgba(116, 198, 157, 0.3);
 
-  --gradient-hero: linear-gradient(135deg, rgba(79, 70, 229, 0.12) 0%, rgba(16, 185, 129, 0.1) 50%, rgba(14, 165, 233, 0.08) 100%);
+  --gradient-brand: linear-gradient(135deg, #2D6A4F 0%, #52B788 50%, #95D5B2 100%);
   --gradient-card: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-surface-elevated) 100%);
 
-  --shimmer-base: #1F2937;
-  --shimmer-highlight: #374151;
+  --shimmer-base: #1F2E26;
+  --shimmer-highlight: #2C4237;
 
-  --code-bg: #030712;
-  --code-text: #F3F4F6;
+  --code-bg: #08100C;
+  --code-text: #D8F3DC;
 }

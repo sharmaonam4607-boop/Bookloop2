@@ -7,7 +7,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import inspect, text
 
-from app.core.config import settings
+from app.core.config import settings, UPLOAD_DIR
 from app.database.base import Base
 from app.database.session import engine
 from app.routers.health import router as health_router
@@ -65,6 +65,30 @@ async def lifespan(app: FastAPI):
                     ))
                     try:
                         connection.execute(text("CREATE INDEX ix_reviews_is_hidden ON reviews (is_hidden)"))
+                    except Exception:
+                        pass
+            if "user_profiles" in table_names:
+                prof_cols = {c["name"] for c in inspector.get_columns("user_profiles")}
+                if "books_lent" not in prof_cols:
+                    connection.execute(text(
+                        "ALTER TABLE user_profiles ADD COLUMN books_lent INTEGER NOT NULL DEFAULT 0"
+                    ))
+                if "city" not in prof_cols:
+                    connection.execute(text(
+                        "ALTER TABLE user_profiles ADD COLUMN city VARCHAR(100)"
+                    ))
+                    try:
+                        connection.execute(text("CREATE INDEX ix_user_profiles_city ON user_profiles (city)"))
+                    except Exception:
+                        pass
+            if "book_listings" in table_names:
+                book_cols = {c["name"] for c in inspector.get_columns("book_listings")}
+                if "listing_city" not in book_cols:
+                    connection.execute(text(
+                        "ALTER TABLE book_listings ADD COLUMN listing_city VARCHAR(100)"
+                    ))
+                    try:
+                        connection.execute(text("CREATE INDEX ix_book_listings_listing_city ON book_listings (listing_city)"))
                     except Exception:
                         pass
         logger.info("SQLAlchemy tables initialized successfully.")
@@ -155,6 +179,11 @@ app.include_router(communities_router)
 app.include_router(maps_router)
 app.include_router(phase9_router)
 app.include_router(admin_router)
+
+# Mount Uploaded files at /uploads
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+(UPLOAD_DIR / "books").mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 # Mount Frontend UI at /app for browser access
 frontend_dir = Path(__file__).resolve().parent.parent.parent / "frontend"

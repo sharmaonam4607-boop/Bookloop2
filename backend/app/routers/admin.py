@@ -156,9 +156,40 @@ def admin_analytics(_admin: User = Depends(get_current_admin), db: Session = Dep
     }
     communities_active = _safe_count(db.query(Community.id).filter(Community.is_active.is_(True)))
     reviews_total = _safe_count(db.query(Review.id).filter(Review.is_hidden.is_(False)))
+
+    users_total = db.query(User.id).count()
+    users_active = db.query(User.id).filter(User.is_active.is_(True)).count()
+    users_suspended = db.query(User.id).filter(User.is_active.is_(False)).count()
+
+    # Circulation breakdown by transaction/listing type from completed handoffs
+    circ_donated = 0
+    circ_exchanged = 0
+    circ_lent = 0
+    circ_sold = 0
+    for req, listing in completed_rows:
+        ltype = (listing.listing_type or "").lower() if listing else ""
+        if ltype == "donate":
+            circ_donated += 1
+        elif ltype == "exchange":
+            circ_exchanged += 1
+        elif ltype == "lend":
+            circ_lent += 1
+        elif ltype == "sell":
+            circ_sold += 1
+
+    circ_total = len(completed_rows)
+
+    # Breakdown of active catalog listings by type
+    active_listings = db.query(BookListing.listing_type).filter(BookListing.status == "active").all()
+    list_donated = sum(1 for (lt,) in active_listings if (lt or "").lower() == "donate")
+    list_exchanged = sum(1 for (lt,) in active_listings if (lt or "").lower() == "exchange")
+    list_lent = sum(1 for (lt,) in active_listings if (lt or "").lower() == "lend")
+    list_sold = sum(1 for (lt,) in active_listings if (lt or "").lower() == "sell")
+
     return AdminAnalyticsResponse(
-        users_total=db.query(User.id).count(),
-        users_active=db.query(User.id).filter(User.is_active.is_(True)).count(),
+        users_total=users_total,
+        users_active=users_active,
+        users_suspended=users_suspended,
         listings_total=db.query(BookListing.id).filter(BookListing.status != "deleted").count(),
         listings_active=db.query(BookListing.id).filter(BookListing.status == "active").count(),
         communities_total=db.query(Community.id).count(),
@@ -168,6 +199,15 @@ def admin_analytics(_admin: User = Depends(get_current_admin), db: Session = Dep
         completed_interactions=len(completed_rows),
         books_given_second_chance=len({request.book_id for request, _listing in completed_rows}),
         students_connected=len(participants),
+        circulation_donated=circ_donated,
+        circulation_exchanged=circ_exchanged,
+        circulation_lent=circ_lent,
+        circulation_sold=circ_sold,
+        circulation_total=circ_total,
+        listings_donated=list_donated,
+        listings_exchanged=list_exchanged,
+        listings_lent=list_lent,
+        listings_sold=list_sold,
     )
 
 

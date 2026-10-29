@@ -23,7 +23,10 @@
 .admin-body {
   min-height: 100vh;
   min-height: 100dvh;
-  background: var(--admin-paper);
+  background: var(--bg-gradient, linear-gradient(135deg, #EBD3C2 0%, #F5E6D9 50%, #DDECE4 100%)) fixed;
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
   color: var(--admin-ink);
   font-family: var(--font-family, 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
   -webkit-font-smoothing: antialiased;
@@ -511,4 +514,1223 @@
   .admin-page-heading { align-items: flex-start; flex-direction: column; }
   .admin-login-panel { margin-top: 35px; padding: 24px; }
   .admin-account { gap: 8px; }
+}
+
+
+/* ==========================================================================
+   Admin Analytics Charts — User Status & Book Circulation
+   ========================================================================== */
+.admin-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.admin-chart-card {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-line);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--admin-transition), box-shadow var(--admin-transition);
+}
+
+.admin-chart-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+  border-color: #CBD5E1;
+}
+
+.admin-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--admin-line);
+  padding-bottom: 12px;
+}
+
+.admin-chart-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--admin-ink);
+  letter-spacing: -0.01em;
+}
+
+.admin-chart-subtitle {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--admin-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-chart-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 220px;
+}
+
+.admin-chart-svg {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.admin-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.admin-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.825rem;
+  color: var(--admin-ink);
+}
+
+.admin-legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.admin-legend-label {
+  font-weight: 500;
+}
+
+.admin-legend-value {
+  font-weight: 700;
+  color: var(--admin-muted);
+}
+
+/* Bar Chart Layout */
+.admin-bars-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-bar-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--admin-ink);
+}
+
+.admin-bar-label {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-bar-value {
+  font-weight: 700;
+  color: var(--admin-ink);
+}
+
+.admin-bar-track {
+  width: 100%;
+  height: 14px;
+  background: #F1F5F9;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.admin-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-chart-empty {
+  text-align: center;
+  padding: 30px;
+  color: var(--admin-muted);
+  font-size: 0.88rem;
+}
+
+
+/* ==========================================================================
+   Premium Two-Column Overview & Refined Charts (Light/Dark Pink SaaS Theme)
+   ========================================================================== */
+
+:root {
+  --admin-pink-50: #FDF2F8;
+  --admin-pink-100: #FCE7F3;
+  --admin-pink-200: #FBCFE8;
+  --admin-pink-300: #F9A8D4;
+  --admin-pink-400: #F472B6;
+  --admin-pink-500: #EC4899;
+  --admin-pink-600: #DB2777;
+  --admin-pink-700: #BE185D;
+  --admin-pink-800: #9D174D;
+  --admin-pink-900: #831843;
+
+  /* Primary Accent Tones */
+  --admin-pink-light: #F8BBD0;
+  --admin-pink-dark: #C2185B;
+  --admin-pink-darker: #880E4F;
+  --admin-pink-surface: rgba(248, 187, 208, 0.12);
+}
+
+/* Two-column overview layout: Left metrics, Right charts */
+.admin-overview-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-top: 20px;
+}
+
+@media (max-width: 1080px) {
+  .admin-overview-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-overview-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-overview-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 20px;
+}
+
+/* Refined Metric Cards Grid */
+.admin-metrics-refined {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.admin-metric-card {
+  background: var(--admin-surface);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.02);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+.admin-metric-card:hover {
+  transform: translateY(-2px);
+  border-color: #FBCFE8;
+  box-shadow: 0 6px 16px rgba(194, 24, 91, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.admin-metric-card:hover::before {
+  background: linear-gradient(90deg, #F8BBD0, #C2185B);
+}
+
+.admin-metric-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-metric-icon {
+  font-size: 1.15rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--admin-pink-50);
+  border: 1px solid var(--admin-pink-100);
+}
+
+.admin-metric-label {
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: var(--admin-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 8px;
+}
+
+.admin-metric-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--admin-ink);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-top: 6px;
+}
+
+/* Polished Chart Cards */
+.admin-chart-box {
+  background: var(--admin-surface);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04), 0 10px 25px rgba(15, 23, 42, 0.02);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.admin-chart-box:hover {
+  box-shadow: 0 6px 20px rgba(194, 24, 91, 0.07), 0 2px 8px rgba(15, 23, 42, 0.04);
+  border-color: #F472B6;
+}
+
+.admin-chart-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.admin-chart-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-chart-badge-icon {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #FCE7F3;
+  color: #C2185B;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.admin-chart-heading h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--admin-ink);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.admin-chart-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #FDF2F8;
+  color: #BE185D;
+  border: 1px solid #FBCFE8;
+  letter-spacing: 0.02em;
+}
+
+/* Doughnut Chart Interactive Polish */
+.doughnut-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.doughnut-svg {
+  width: 190px;
+  height: 190px;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+
+.doughnut-segment {
+  fill: none;
+  stroke-width: 24;
+  cursor: pointer;
+  transition: stroke-width 0.25s ease, filter 0.25s ease, opacity 0.2s ease;
+}
+
+.doughnut-segment:hover {
+  stroke-width: 28;
+  filter: drop-shadow(0 4px 8px rgba(194, 24, 91, 0.25));
+  opacity: 0.95;
+}
+
+.doughnut-center-info {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+}
+
+.doughnut-center-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--admin-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.doughnut-center-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--admin-ink);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+.doughnut-legend-pills {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.doughnut-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.doughnut-pill:hover {
+  border-color: #F472B6;
+  background: #FFF;
+  box-shadow: 0 2px 6px rgba(194, 24, 91, 0.08);
+}
+
+.doughnut-pill-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.doughnut-pill-name {
+  font-weight: 600;
+  color: var(--admin-ink);
+}
+
+.doughnut-pill-val {
+  font-weight: 800;
+  color: #C2185B;
+}
+
+/* Polished Vertical / Horizontal Bar Chart */
+.barchart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.barchart-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: background-color 0.18s ease;
+}
+
+.barchart-item:hover {
+  background-color: #FDF2F8;
+}
+
+.barchart-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.825rem;
+}
+
+.barchart-item-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--admin-ink);
+}
+
+.barchart-item-badge {
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.barchart-item-counts {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.barchart-item-num {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--admin-ink);
+}
+
+.barchart-item-pct {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--admin-muted);
+}
+
+.barchart-track {
+  width: 100%;
+  height: 10px;
+  background: #F1F5F9;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.barchart-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.barchart-footer {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #E2E8F0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--admin-muted);
+}
+
+.barchart-footer strong {
+  color: #C2185B;
+  font-weight: 700;
+}
+
+/* Micro-Tooltip styling */
+.admin-tooltip {
+  position: relative;
+}
+
+.admin-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #0F172A;
+  color: #FFF;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 100;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.admin-tooltip:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Banner / Info Card in Admin Left */
+.admin-project-banner {
+  background: linear-gradient(135deg, #FFF1F2 0%, #FCE7F3 100%);
+  border: 1px solid #FBCFE8;
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+
+.admin-project-info h2 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #880E4F;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+
+.admin-project-info p {
+  font-size: 0.78rem;
+  color: #9D174D;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.admin-project-tag {
+  background: #FFF;
+  color: #C2185B;
+  border: 1px solid #F48FB1;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(194, 24, 91, 0.08);
+}
+
+
+/* ==========================================================================
+   BookLoop Premium Admin Dashboard Redesign (Reference: admin_dashboard_977705)
+   ========================================================================== */
+
+/* Top Highlight KPI Cards (like the reference top row: 4 large cards with icons & clean typography) */
+.admin-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+  margin-bottom: 24px;
+}
+
+.admin-kpi-card {
+  border-radius: 16px;
+  padding: 22px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.admin-kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(194, 24, 91, 0.12);
+}
+
+.admin-kpi-card.kpi-pink-dark {
+  background: linear-gradient(135deg, #C2185B 0%, #880E4F 100%);
+  color: #FFFFFF;
+}
+
+.admin-kpi-card.kpi-pink-mid {
+  background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);
+  color: #FFFFFF;
+}
+
+.admin-kpi-card.kpi-pink-light {
+  background: linear-gradient(135deg, #F8BBD0 0%, #F48FB1 100%);
+  color: #880E4F;
+}
+
+.admin-kpi-card.kpi-pink-soft {
+  background: #FFFFFF;
+  border: 1px solid #FBCFE8;
+  color: #880E4F;
+}
+
+.admin-kpi-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-kpi-value {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.admin-kpi-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 6px;
+  opacity: 0.85;
+}
+
+.admin-kpi-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+}
+
+.kpi-pink-soft .admin-kpi-icon {
+  background: #FCE7F3;
+  color: #C2185B;
+}
+
+/* Two-Column Top Visual Dashboard Grid for the Two Main Charts */
+/* ==========================================================================
+   Admin Overview — Summary Metrics & Exactly Two Balanced Main Charts
+   ========================================================================== */
+.admin-overview-charts-grid,
+.admin-main-charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 4px;
+  margin-bottom: 24px;
+  align-items: stretch;
+}
+
+@media (max-width: 980px) {
+  .admin-overview-charts-grid,
+  .admin-main-charts-row {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+.admin-chart-card,
+.admin-premium-chart-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 18px 22px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  min-height: 290px;
+  max-height: 330px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.admin-chart-card:hover,
+.admin-premium-chart-card:hover {
+  border-color: #F48FB1;
+  box-shadow: 0 4px 16px rgba(194, 24, 91, 0.07);
+}
+
+.admin-chart-head,
+.admin-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.admin-chart-title-group h2,
+.admin-card-head-left h2 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.02em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.admin-chart-title-group p,
+.admin-card-head-left p {
+  font-size: 0.75rem;
+  color: #64748B;
+  font-weight: 500;
+  margin: 2px 0 0 0;
+}
+
+.admin-chart-pill,
+.admin-card-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #FDF2F8;
+  color: #C2185B;
+  border: 1px solid #FBCFE8;
+  white-space: nowrap;
+}
+
+.admin-chart-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #FDF2F8;
+  color: #C2185B;
+  border: 1px solid #FBCFE8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.admin-chart-pill-btn:hover {
+  background: #FCE7F3;
+  border-color: #F48FB1;
+  transform: translateY(-1px);
+}
+
+/* User Status Doughnut (Chart 1) */
+.doughnut-layout,
+.large-doughnut-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  gap: 16px;
+  flex: 1;
+  padding: 4px 0;
+}
+
+@media (max-width: 600px) {
+  .doughnut-layout,
+  .large-doughnut-layout {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.doughnut-visual-wrap,
+.doughnut-visual-container {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  max-width: 170px;
+  max-height: 170px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.doughnut-svg,
+.doughnut-large-svg {
+  width: 170px;
+  height: 170px;
+  max-width: 170px;
+  max-height: 170px;
+  display: block;
+}
+
+.doughnut-segment,
+.doughnut-large-seg {
+  fill: none !important;
+  cursor: pointer;
+  transition: stroke-width 0.25s ease, filter 0.25s ease;
+}
+
+.doughnut-segment:hover,
+.doughnut-large-seg:hover {
+  filter: drop-shadow(0 3px 8px rgba(194, 24, 91, 0.25));
+}
+
+.doughnut-legend-list,
+.doughnut-legend-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-width: 130px;
+}
+
+.doughnut-legend-item,
+.doughnut-legend-row {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  transition: all 0.2s ease;
+}
+
+.doughnut-legend-item:hover,
+.doughnut-legend-row:hover {
+  background: #FFFFFF;
+  border-color: #F48FB1;
+  box-shadow: 0 2px 8px rgba(194, 24, 91, 0.06);
+}
+
+.doughnut-legend-head,
+.doughnut-legend-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.doughnut-legend-marker,
+.doughnut-legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.doughnut-legend-stats,
+.doughnut-legend-stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.doughnut-legend-num,
+.doughnut-legend-count {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.doughnut-legend-percentage,
+.doughnut-legend-pct {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #C2185B;
+  background: #FDF2F8;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid #FBCFE8;
+}
+
+/* Book Circulation Bar Chart (Chart 2) */
+.barchart-wrapper,
+.large-barchart-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+}
+
+.barchart-plot-area,
+.barchart-canvas-area {
+  display: flex;
+  align-items: flex-end;
+  height: 165px;
+  position: relative;
+  padding-left: 36px;
+  padding-bottom: 24px;
+  margin-top: 4px;
+}
+
+/* Y-Axis Grid & Labels */
+.barchart-y-axis-labels,
+.barchart-y-axis {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 24px;
+  width: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-right: 5px;
+}
+
+.barchart-y-tick,
+.barchart-y-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #94A3B8;
+  line-height: 1;
+}
+
+.barchart-y-axis-line {
+  position: absolute;
+  left: 36px;
+  top: 0;
+  bottom: 24px;
+  width: 1px;
+  background-color: #CBD5E1;
+  z-index: 2;
+}
+
+.barchart-x-axis-line {
+  position: absolute;
+  left: 36px;
+  right: 0;
+  bottom: 24px;
+  height: 1px;
+  background-color: #CBD5E1;
+  z-index: 2;
+}
+
+.barchart-grid-container,
+.barchart-grid-lines {
+  position: absolute;
+  left: 36px;
+  right: 0;
+  top: 0;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.barchart-grid-dash,
+.barchart-grid-line {
+  width: 100%;
+  height: 1px;
+  background-color: #F1F5F9;
+}
+
+/* Columns container */
+.barchart-bars-container,
+.barchart-columns-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: flex-end;
+  justify-content: space-around;
+  z-index: 3;
+  position: relative;
+}
+
+.barchart-bar-group,
+.barchart-col-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  flex: 1;
+  max-width: 75px;
+  position: relative;
+}
+
+.barchart-val-tag,
+.barchart-bar-value-bubble {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #C2185B;
+  background: #FFFFFF;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid #FBCFE8;
+  box-shadow: 0 1px 4px rgba(194, 24, 91, 0.08);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  transition: transform 0.2s ease;
+}
+
+.barchart-bar-group:hover .barchart-val-tag,
+.barchart-col-group:hover .barchart-bar-value-bubble {
+  transform: translateY(-2px) scale(1.08);
+}
+
+.barchart-bar-rect,
+.barchart-bar-pillar {
+  width: 38px;
+  max-width: 75%;
+  border-radius: 6px 6px 2px 2px;
+  transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.barchart-bar-rect:hover,
+.barchart-bar-pillar:hover {
+  filter: brightness(1.07);
+  transform: scaleX(1.03);
+}
+
+.barchart-x-text,
+.barchart-x-label {
+  position: absolute;
+  bottom: -20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #475569;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.barchart-summary-foot,
+.barchart-bottom-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #F1F5F9;
+  font-size: 0.72rem;
+  color: #64748B;
+}
+
+.barchart-summary-foot strong,
+.barchart-bottom-meta strong {
+  color: #C2185B;
+}
+
+
+/* ==========================================================================
+   Admin Mobile & Tablet Responsive Audit Fixes
+   ========================================================================== */
+@media (max-width: 768px) {
+  .admin-shell {
+    width: calc(100% - 20px) !important;
+    margin: 0 auto;
+  }
+  .admin-topbar {
+    padding: 0 14px;
+    min-height: 58px;
+    border-radius: 0 0 10px 10px;
+  }
+  .admin-brand strong {
+    font-size: 0.95rem;
+  }
+  .admin-brand small {
+    display: none;
+  }
+  .admin-account {
+    gap: 8px;
+  }
+  .admin-account .admin-identity {
+    display: none;
+  }
+  .admin-page-heading {
+    padding: 20px 0 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .admin-page-heading h1 {
+    font-size: 1.45rem;
+  }
+  .admin-tabs {
+    gap: 4px;
+    padding-bottom: 0;
+  }
+  .admin-tab {
+    padding: 0 12px;
+    font-size: 0.8rem;
+    min-height: 38px;
+  }
+  .admin-metrics {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .admin-metric {
+    min-height: auto;
+    padding: 12px 14px;
+  }
+  .admin-metric span {
+    font-size: 0.6875rem;
+  }
+  .admin-metric strong {
+    font-size: 1.35rem;
+    margin-top: 4px;
+  }
+  .admin-charts-grid,
+  .admin-overview-charts-grid,
+  .admin-main-charts-row {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .admin-chart-box,
+  .admin-chart-card {
+    padding: 14px 12px !important;
+    border-radius: 12px !important;
+  }
+  .admin-chart-title {
+    font-size: 0.95rem;
+  }
+  .admin-chart-legend {
+    gap: 10px;
+    font-size: 0.75rem;
+  }
+  .doughnut-layout,
+  .large-doughnut-layout {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: center;
+  }
+  .admin-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-toolbar input,
+  .admin-toolbar select,
+  .admin-toolbar button {
+    width: 100% !important;
+  }
+  .admin-table-wrap {
+    border-radius: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 360px) {
+  .admin-metrics {
+    grid-template-columns: 1fr !important;
+  }
 }

@@ -188,7 +188,7 @@ The database should support:
 - Book images
 - Categories
 - Wishlist
-- Book requests
+- Book requestss
 - Transactions
 - Lending records
 - Exchanges

@@ -8,14 +8,17 @@ from app.database.session import get_db
 from app.models.user import User, UserProfile
 from app.schemas.user import ProfileResponse, ProfileUpdate
 from app.api.deps import get_current_user
+from app.services.statistics import sync_user_profile_stats
 
 router = APIRouter(prefix="/api/v1/profile", tags=["User Profile"])
 
 @router.get("/me", response_model=ProfileResponse)
-def get_my_profile(current_user: User = Depends(get_current_user)):
+def get_my_profile(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve profile details for currently authenticated user."""
     if not current_user.profile:
         raise HTTPException(status_code=404, detail="Profile not found")
+    sync_user_profile_stats(db, current_user.id)
+    db.refresh(current_user.profile)
     return current_user.profile
 
 @router.put("/me", response_model=ProfileResponse)
@@ -46,4 +49,6 @@ def get_public_profile(user_id: str, db: Session = Depends(get_db)):
     profile = db.query(UserProfile).filter(UserProfile.user_id == user_id).first()
     if not profile:
         raise HTTPException(status_code=404, detail="Student profile not found")
+    sync_user_profile_stats(db, user_id)
+    db.refresh(profile)
     return profile

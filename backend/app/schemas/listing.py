@@ -23,6 +23,8 @@ class ListingCreate(BaseModel):
     image_urls: list[str] = Field(default_factory=list, max_length=8)
     cover_gradient: Optional[str] = Field(default=None, max_length=255)
     distance_km: Optional[float] = Field(default=None, ge=0)
+    listing_city: Optional[str] = Field(default=None, max_length=100)
+    listing_city: Optional[str] = Field(default=None, max_length=100)
     safe_meeting_point: Optional[str] = Field(default=None, max_length=180)
     latitude: Optional[float] = Field(default=None, ge=-90, le=90)
     longitude: Optional[float] = Field(default=None, ge=-180, le=180)
@@ -35,8 +37,9 @@ class ListingCreate(BaseModel):
             raise ValueError("A sale listing requires a price")
         if self.listing_type == "lend" and self.price is None:
             raise ValueError("A lending listing requires a rate")
-        if self.listing_type != "sell" and self.listing_type != "lend":
+        if self.listing_type in ["donate", "exchange"]:
             self.price = 0
+            self.price_unit = None
         if (self.latitude is None) != (self.longitude is None):
             raise ValueError("Both approximate coordinates are required")
         if self.latitude is not None and not self.safe_meeting_point:
@@ -66,3 +69,14 @@ class ListingUpdate(BaseModel):
     original_price: Optional[float] = Field(default=None, ge=0)
     exchange_wish: Optional[str] = Field(default=None, max_length=255)
     status: Optional[ListingStatus] = None
+
+    @model_validator(mode="after")
+    def validate_terms(self):
+        if self.listing_type == "sell" and self.price is None:
+            raise ValueError("A sale listing requires a price")
+        if self.listing_type == "lend" and self.price is None:
+            raise ValueError("A lending listing requires a rate")
+        if self.listing_type in ["donate", "exchange"]:
+            self.price = 0
+            self.price_unit = None
+        return self

@@ -98,6 +98,7 @@ class AdminReviewStatusUpdate(BaseModel):
 class AdminAnalyticsResponse(BaseModel):
     users_total: int
     users_active: int
+    users_suspended: int = 0
     listings_total: int
     listings_active: int
     communities_total: int
@@ -107,3 +108,12 @@ class AdminAnalyticsResponse(BaseModel):
     completed_interactions: int
     books_given_second_chance: int
     students_connected: int
+    circulation_donated: int = 0
+    circulation_exchanged: int = 0
+    circulation_lent: int = 0
+    circulation_sold: int = 0
+    circulation_total: int = 0
+    listings_donated: int = 0
+    listings_exchanged: int = 0
+    listings_lent: int = 0
+    listings_sold: int = 0

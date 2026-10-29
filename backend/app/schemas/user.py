@@ -13,6 +13,7 @@ class UserCreate(UserBase):
     university: Optional[str] = "GNDEC Engineering College"
     course: Optional[str] = "B.Tech CSE"
     year: Optional[str] = "3rd Year"
+    city: Optional[str] = "Ludhiana"
     location: Optional[str] = "Ludhiana"
 
 class UserLogin(BaseModel):
@@ -34,6 +35,7 @@ class ProfileResponse(BaseModel):
     university: Optional[str] = None
     course: Optional[str] = None
     year: Optional[str] = None
+    city: Optional[str] = None
     location: Optional[str] = None
     bio: Optional[str] = None
     avatar_emoji: str = "👨‍🎓"
@@ -43,6 +45,7 @@ class ProfileResponse(BaseModel):
     books_sold: int = 0
     books_donated: int = 0
     books_exchanged: int = 0
+    books_lent: int = 0
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -66,6 +69,7 @@ class ProfileUpdate(BaseModel):
     university: Optional[str] = None
     course: Optional[str] = None
     year: Optional[str] = None
+    city: Optional[str] = None
     location: Optional[str] = None
     bio: Optional[str] = None
     avatar_emoji: Optional[str] = None

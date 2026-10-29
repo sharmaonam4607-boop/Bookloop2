@@ -36,6 +36,7 @@ class BookListing(Base):
     image_urls = Column(JSON, nullable=False, default=list)
     cover_gradient = Column(String(255), nullable=True)
     distance_km = Column(Float, nullable=True)
+    listing_city = Column(String(100), nullable=True, index=True)
     safe_meeting_point = Column(String(180), nullable=True)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)

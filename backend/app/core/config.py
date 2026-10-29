@@ -5,6 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Base directory for the project
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+UPLOAD_DIR = BASE_DIR / "uploads"
 ENV_FILE = BASE_DIR.parent / ".env" if (BASE_DIR.parent / ".env").exists() else BASE_DIR / ".env"
 
 

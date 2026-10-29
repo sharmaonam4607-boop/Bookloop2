@@ -129,4 +129,15 @@ def test_admin_allowlist_moderation_and_analytics(client, monkeypatch):
     assert client.get("/api/v1/auth/me", headers=student_headers).status_code == 401
     analytics = client.get("/api/v1/admin/analytics", headers=admin_headers)
     assert analytics.status_code == 200
-    assert analytics.json()["completed_interactions"] == 1
+    data = analytics.json()
+    assert data["completed_interactions"] == 1
+    # Verify new chart metrics
+    assert "users_suspended" in data
+    assert "circulation_donated" in data
+    assert "circulation_exchanged" in data
+    assert "circulation_lent" in data
+    assert "circulation_sold" in data
+    assert "circulation_total" in data
+    assert data["circulation_donated"] == 1
+    assert data["circulation_total"] == 1
+    assert data["users_suspended"] >= 1

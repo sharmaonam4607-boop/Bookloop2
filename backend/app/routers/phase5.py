@@ -8,6 +8,7 @@ from app.models.book_request import BookRequest
 from app.models.user import User
 from app.models.wishlist import WishlistItem
 from app.services.notifications import create_notification
+from app.services.statistics import sync_user_profile_stats
 from app.schemas.phase5 import (
     BookRequestResponse,
     LibraryItemResponse,
@@ -183,6 +184,7 @@ def update_request(request_id: str, payload: RequestStatusUpdate, current_user: 
     request.status = payload.status
     if payload.status == "completed":
         request.book.status = TERMINAL_LISTING_STATUS[request.book.listing_type]
+        sync_user_profile_stats(db, request.book.seller_id)
     notification_user_id = request.requester_id if is_owner else request.book.seller_id
     notification_titles = {
         "accepted": "Book request accepted",

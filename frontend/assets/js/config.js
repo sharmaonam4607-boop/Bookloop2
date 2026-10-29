@@ -15,8 +15,8 @@ function resolveApiBaseUrl() {
 
 export const CONFIG = {
   APP_NAME: "BookLoop",
-  TAGLINE: "Giving Books a Second Chance",
-  CURRENT_PHASE: "Phase 11 — Integration & Testing",
+  TAGLINE: "Give Books a Second Chance",
+  CURRENT_PHASE: "Production Ready",
   
   // FastAPI Backend Configuration — auto-detected for local and production
   API_BASE_URL: resolveApiBaseUrl(),

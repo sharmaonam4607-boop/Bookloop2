@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 560" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient: BookLoop Elegant Pink -->
+    <linearGradient id="bookCoverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C2185B"/>
+      <stop offset="40%" stop-color="#AD1457"/>
+      <stop offset="100%" stop-color="#880E4F"/>
+    </linearGradient>
+
+    <!-- Page / Spine Gradient -->
+    <linearGradient id="spineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(0,0,0,0.3)"/>
+      <stop offset="25%" stop-color="rgba(255,255,255,0.15)"/>
+      <stop offset="50%" stop-color="rgba(0,0,0,0.1)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0.4)"/>
+    </linearGradient>
+
+    <!-- Subtle Inner Glow -->
+    <linearGradient id="softGlow" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#F8BBD0" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#C2185B" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Gold Accent Line -->
+    <linearGradient id="goldLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F8BBD0" stop-opacity="0.2"/>
+      <stop offset="50%" stop-color="#F8BBD0" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#F8BBD0" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Book Cover Base -->
+  <rect width="400" height="560" rx="14" fill="url(#bookCoverGrad)"/>
+  <rect width="400" height="560" rx="14" fill="url(#softGlow)"/>
+
+  <!-- Left Book Spine Ridge -->
+  <rect x="0" y="0" width="34" height="560" rx="14" fill="url(#spineGrad)"/>
+  <line x1="34" y1="0" x2="34" y2="560" stroke="#F8BBD0" stroke-opacity="0.3" stroke-width="1.5"/>
+
+  <!-- Elegant Inner Border -->
+  <rect x="52" y="32" width="316" height="496" rx="8" fill="none" stroke="#F8BBD0" stroke-opacity="0.35" stroke-width="1.5" stroke-dasharray="8 4"/>
+  <rect x="58" y="38" width="304" height="484" rx="6" fill="none" stroke="#F8BBD0" stroke-opacity="0.2" stroke-width="1"/>
+
+  <!-- Corner Ornaments -->
+  <path d="M 66 52 L 52 52 L 52 66" fill="none" stroke="#F8BBD0" stroke-width="2"/>
+  <path d="M 354 52 L 368 52 L 368 66" fill="none" stroke="#F8BBD0" stroke-width="2"/>
+  <path d="M 66 508 L 52 508 L 52 494" fill="none" stroke="#F8BBD0" stroke-width="2"/>
+  <path d="M 354 508 L 368 508 L 368 494" fill="none" stroke="#F8BBD0" stroke-width="2"/>
+
+  <!-- Academic Emblem / Books Illustration -->
+  <g transform="translate(210, 195)">
+    <!-- Decorative Circle Behind Icon -->
+    <circle cx="0" cy="0" r="62" fill="#F8BBD0" fill-opacity="0.12" stroke="#F8BBD0" stroke-opacity="0.35" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="54" fill="#880E4F" fill-opacity="0.4"/>
+    
+    <!-- Open Book Vector Icon -->
+    <path d="M -34 16 Q -18 6, 0 10 Q 18 6, 34 16 L 34 -20 Q 18 -30, 0 -26 Q -18 -30, -34 -20 Z" 
+          fill="#FFF" fill-opacity="0.95" stroke="#F8BBD0" stroke-width="2"/>
+    <!-- Book Center Fold Line -->
+    <line x1="0" y1="-26" x2="0" y2="10" stroke="#C2185B" stroke-width="2"/>
+    <!-- Subtle Bookmark Ribbon -->
+    <path d="M 0 -26 L 0 28 L 6 22 L 12 28 L 12 -25 Z" fill="#F8BBD0"/>
+    <!-- Book Pages Lines -->
+    <line x1="-26" y1="-10" x2="-8" y2="-7" stroke="#C2185B" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="-26" y1="-2" x2="-8" y2="1" stroke="#C2185B" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="8" y1="-7" x2="26" y2="-10" stroke="#C2185B" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="8" y1="1" x2="26" y2="-2" stroke="#C2185B" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Category / Edition Header -->
+  <text x="210" y="96" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" letter-spacing="4" fill="#F8BBD0" fill-opacity="0.9">STUDENT EDITION</text>
+
+  <!-- Decorative Separator -->
+  <line x1="120" y1="114" x2="300" y2="114" stroke="url(#goldLine)" stroke-width="1.5"/>
+
+  <!-- Main Title Area -->
+  <text x="210" y="310" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="800" letter-spacing="-0.5" fill="#FFFFFF">BookLoop</text>
+  <text x="210" y="338" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" letter-spacing="2" fill="#F8BBD0" fill-opacity="0.95">CAMPUS LIBRARY</text>
+
+  <!-- Divider Line -->
+  <line x1="140" y1="365" x2="280" y2="365" stroke="url(#goldLine)" stroke-width="1"/>
+
+  <!-- Subtitle / Tagline -->
+  <text x="210" y="396" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="500" fill="#FCE7F3" fill-opacity="0.85">Giving Books a Second Chance</text>
+  <text x="210" y="416" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="500" fill="#FCE7F3" fill-opacity="0.7">Peer-to-Peer Academic Sharing</text>
+
+  <!-- Bottom Quality Seal / Badge -->
+  <g transform="translate(210, 476)">
+    <rect x="-65" y="-14" width="130" height="28" rx="14" fill="#880E4F" stroke="#F8BBD0" stroke-opacity="0.5" stroke-width="1"/>
+    <text x="0" y="4" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="700" letter-spacing="1.5" fill="#FFFFFF">VERIFIED COPY</text>
+  </g>
+</svg>
+
