@@ -48,7 +48,4 @@ Thumbs.db
 # Scratch and Temporary Tools
 scratch/
 
-# User Uploads
-backend/uploads/books/*
-!backend/uploads/books/.gitkeep
 

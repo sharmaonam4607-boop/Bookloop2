@@ -1,3 +1,20 @@
+
+from app.models.community import (
+    Community,
+    CommunityBook,
+    CommunityComment,
+    CommunityMembership,
+    CommunityPost,
+    CommunityReaction,
+    CommunityReport,
+)
+from app.models.book_request import BookRequest
+from app.models.wishlist import WishlistItem
+from app.models.conversation import Conversation, Message
+from app.models.notification import Notification
+from app.services.statistics import sync_user_profile_stats
+from datetime import datetime
+
 import logging
 from typing import Optional
 
@@ -434,3 +451,335 @@ def moderate_review(
         rating=review.rating, comment=review.comment,
         is_hidden=review.is_hidden, created_at=review.created_at,
     )
+
+@router.post('/restore-production-data')
+def restore_production_data(
+    payload: dict,
+    _admin: User = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    def parse_dt(val):
+        if not val:
+            return None
+        if isinstance(val, str):
+            try:
+                return datetime.fromisoformat(val.replace('Z', '+00:00'))
+            except Exception:
+                return None
+        return val
+
+    # 1. Clean out dummy seed listings and dummy demo users first
+    try:
+        db.query(BookListing).filter(
+            or_(
+                BookListing.is_seed_data == True,
+                BookListing.seller_id.in_(
+                    db.query(User.id).filter(User.email.like('seed.%@bookloop.demo'))
+                )
+            )
+        ).delete(synchronize_session=False)
+
+        db.query(UserProfile).filter(
+            UserProfile.user_id.in_(
+                db.query(User.id).filter(User.email.like('seed.%@bookloop.demo'))
+            )
+        ).delete(synchronize_session=False)
+        db.query(User).filter(User.email.like('seed.%@bookloop.demo')).delete(synchronize_session=False)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        logger.warning(f'Seed cleanup warning: {e}')
+
+    # 2. Users
+    users_data = payload.get('users', [])
+    for u in users_data:
+        existing = db.query(User).filter(User.id == u['id']).first()
+        if not existing and u.get('email'):
+            existing = db.query(User).filter(User.email == u['email'].lower()).first()
+        if existing:
+            if u.get('hashed_password'):
+                existing.hashed_password = u['hashed_password']
+            existing.is_active = u.get('is_active', True)
+            existing.is_verified = u.get('is_verified', True)
+            if u.get('created_at'):
+                existing.created_at = parse_dt(u['created_at']) or existing.created_at
+        else:
+            db.add(User(
+                id=u['id'],
+                email=u['email'].lower(),
+                hashed_password=u['hashed_password'],
+                is_active=u.get('is_active', True),
+                is_verified=u.get('is_verified', True),
+                created_at=parse_dt(u.get('created_at')),
+                updated_at=parse_dt(u.get('updated_at')),
+            ))
+    db.commit()
+
+    # 3. UserProfiles
+    profiles_data = payload.get('user_profiles', [])
+    for p in profiles_data:
+        existing = db.query(UserProfile).filter(UserProfile.user_id == p['user_id']).first()
+        if existing:
+            existing.full_name = p.get('full_name') or existing.full_name
+            existing.university = p.get('university') or existing.university
+            existing.course = p.get('course') or existing.course
+            existing.year = p.get('year') or existing.year
+            existing.location = p.get('location') or existing.location
+            existing.bio = p.get('bio') or existing.bio
+            existing.avatar_emoji = p.get('avatar_emoji') or existing.avatar_emoji
+            existing.avatar_url = p.get('avatar_url') or existing.avatar_url
+            existing.books_listed = p.get('books_listed', 0)
+            existing.books_donated = p.get('books_donated', 0)
+            existing.books_exchanged = p.get('books_exchanged', 0)
+            existing.books_lent = p.get('books_lent', 0)
+            existing.books_sold = p.get('books_sold', 0)
+        else:
+            db.add(UserProfile(
+                id=p.get('id'),
+                user_id=p['user_id'],
+                full_name=p.get('full_name', 'Student'),
+                university=p.get('university', 'Campus'),
+                course=p.get('course', 'General'),
+                year=p.get('year', '1st Year'),
+                location=p.get('location', 'Campus'),
+                bio=p.get('bio'),
+                avatar_emoji=p.get('avatar_emoji'),
+                avatar_url=p.get('avatar_url'),
+                books_listed=p.get('books_listed', 0),
+                books_donated=p.get('books_donated', 0),
+                books_exchanged=p.get('books_exchanged', 0),
+                books_lent=p.get('books_lent', 0),
+                books_sold=p.get('books_sold', 0),
+            ))
+    db.commit()
+
+    # 4. Communities
+    comm_data = payload.get('communities', [])
+    for c in comm_data:
+        existing = db.query(Community).filter(Community.id == c['id']).first()
+        if not existing:
+            db.add(Community(
+                id=c['id'],
+                name=c['name'],
+                description=c.get('description'),
+                category=c.get('category', 'General'),
+                creator_id=c.get('creator_id'),
+                is_active=c.get('is_active', True),
+                created_at=parse_dt(c.get('created_at')),
+                updated_at=parse_dt(c.get('updated_at')),
+            ))
+    db.commit()
+
+    # 5. Community Memberships
+    m_data = payload.get('community_memberships', [])
+    for m in m_data:
+        existing = db.query(CommunityMembership).filter(CommunityMembership.id == m['id']).first()
+        if not existing:
+            db.add(CommunityMembership(
+                id=m['id'],
+                community_id=m['community_id'],
+                user_id=m['user_id'],
+                role=m.get('role', 'member'),
+                status=m.get('status', 'approved'),
+                joined_at=parse_dt(m.get('joined_at')),
+            ))
+    db.commit()
+
+    # 6. Book Listings
+    listings_data = payload.get('book_listings', [])
+    for b in listings_data:
+        existing = db.query(BookListing).filter(BookListing.id == b['id']).first()
+        if existing:
+            existing.seller_id = b.get('seller_id')
+            existing.title = b['title']
+            existing.author = b['author']
+            existing.isbn = b.get('isbn')
+            existing.edition = b.get('edition')
+            existing.course = b.get('course')
+            existing.course_code = b.get('course_code')
+            existing.category = b.get('category', 'Other')
+            existing.condition = b.get('condition', 'good')
+            existing.listing_type = b.get('listing_type', 'sell')
+            existing.status = b.get('status', 'active')
+            existing.price = b.get('price')
+            existing.price_unit = b.get('price_unit')
+            existing.description = b.get('description')
+            existing.image_urls = b.get('image_urls') or []
+            existing.cover_gradient = b.get('cover_gradient')
+            existing.distance_km = b.get('distance_km')
+            existing.listing_city = b.get('listing_city')
+            existing.safe_meeting_point = b.get('safe_meeting_point')
+            existing.latitude = b.get('latitude')
+            existing.longitude = b.get('longitude')
+            existing.original_price = b.get('original_price')
+            existing.exchange_wish = b.get('exchange_wish')
+            existing.is_seed_data = b.get('is_seed_data', False)
+            if b.get('created_at'):
+                existing.created_at = parse_dt(b['created_at']) or existing.created_at
+        else:
+            db.add(BookListing(
+                id=b['id'],
+                seller_id=b.get('seller_id'),
+                title=b['title'],
+                author=b['author'],
+                isbn=b.get('isbn'),
+                edition=b.get('edition'),
+                course=b.get('course'),
+                course_code=b.get('course_code'),
+                category=b.get('category', 'Other'),
+                condition=b.get('condition', 'good'),
+                listing_type=b.get('listing_type', 'sell'),
+                status=b.get('status', 'active'),
+                price=b.get('price'),
+                price_unit=b.get('price_unit'),
+                description=b.get('description'),
+                image_urls=b.get('image_urls') or [],
+                cover_gradient=b.get('cover_gradient'),
+                distance_km=b.get('distance_km'),
+                listing_city=b.get('listing_city'),
+                safe_meeting_point=b.get('safe_meeting_point'),
+                latitude=b.get('latitude'),
+                longitude=b.get('longitude'),
+                original_price=b.get('original_price'),
+                exchange_wish=b.get('exchange_wish'),
+                is_seed_data=b.get('is_seed_data', False),
+                created_at=parse_dt(b.get('created_at')),
+                updated_at=parse_dt(b.get('updated_at')),
+            ))
+    db.commit()
+
+    # 7. Community Books
+    for cb in payload.get('community_books', []):
+        if not db.query(CommunityBook).filter(CommunityBook.id == cb['id']).first():
+            db.add(CommunityBook(
+                id=cb['id'],
+                community_id=cb['community_id'],
+                book_id=cb['book_id'],
+                added_by=cb.get('added_by'),
+                created_at=parse_dt(cb.get('created_at')),
+            ))
+    db.commit()
+
+    # 8. Community Posts
+    for cp in payload.get('community_posts', []):
+        if not db.query(CommunityPost).filter(CommunityPost.id == cp['id']).first():
+            db.add(CommunityPost(
+                id=cp['id'],
+                community_id=cp['community_id'],
+                user_id=cp['user_id'],
+                content=cp['content'],
+                created_at=parse_dt(cp.get('created_at')),
+                updated_at=parse_dt(cp.get('updated_at')),
+            ))
+    db.commit()
+
+    # 9. Book Requests
+    for br in payload.get('book_requests', []):
+        existing = db.query(BookRequest).filter(BookRequest.id == br['id']).first()
+        if not existing:
+            db.add(BookRequest(
+                id=br['id'],
+                requester_id=br['requester_id'],
+                book_id=br['book_id'],
+                status=br.get('status', 'pending'),
+                note=br.get('note'),
+                meetup_location=br.get('meetup_location'),
+                created_at=parse_dt(br.get('created_at')),
+                updated_at=parse_dt(br.get('updated_at')),
+            ))
+    db.commit()
+
+    # 10. Reviews
+    for rev in payload.get('reviews', []):
+        existing = db.query(Review).filter(Review.id == rev['id']).first()
+        if not existing:
+            db.add(Review(
+                id=rev['id'],
+                reviewer_id=rev['reviewer_id'],
+                reviewed_user_id=rev['reviewed_user_id'],
+                request_id=rev.get('request_id'),
+                rating=rev['rating'],
+                comment=rev.get('comment'),
+                is_hidden=rev.get('is_hidden', False),
+                created_at=parse_dt(rev.get('created_at')),
+            ))
+    db.commit()
+
+    # 11. Conversations & Messages
+    for conv in payload.get('conversations', []):
+        if not db.query(Conversation).filter(Conversation.id == conv['id']).first():
+            db.add(Conversation(
+                id=conv['id'],
+                participant_one_id=conv['participant_one_id'],
+                participant_two_id=conv['participant_two_id'],
+                book_id=conv.get('book_id'),
+                created_at=parse_dt(conv.get('created_at')),
+                updated_at=parse_dt(conv.get('updated_at')),
+            ))
+    db.commit()
+
+    for msg in payload.get('messages', []):
+        if not db.query(Message).filter(Message.id == msg['id']).first():
+            db.add(Message(
+                id=msg['id'],
+                conversation_id=msg['conversation_id'],
+                sender_id=msg['sender_id'],
+                body=msg.get('body') or msg.get('content', ''),
+                read_at=parse_dt(msg.get('read_at')),
+                created_at=parse_dt(msg.get('created_at')),
+            ))
+    db.commit()
+
+    # 12. Notifications
+    for notif in payload.get('notifications', []):
+        if not db.query(Notification).filter(Notification.id == notif['id']).first():
+            db.add(Notification(
+                id=notif['id'],
+                user_id=notif['user_id'],
+                notification_type=notif.get('notification_type') or notif.get('type', 'system'),
+                title=notif.get('title', ''),
+                body=notif.get('body') or notif.get('message', ''),
+                conversation_id=notif.get('conversation_id'),
+                message_id=notif.get('message_id'),
+                book_id=notif.get('book_id'),
+                request_id=notif.get('request_id'),
+                read_at=parse_dt(notif.get('read_at')),
+                created_at=parse_dt(notif.get('created_at')),
+            ))
+    db.commit()
+
+    # 13. Wishlist Items
+    for wish in payload.get('wishlist_items', []):
+        if not db.query(WishlistItem).filter(WishlistItem.id == wish['id']).first():
+            db.add(WishlistItem(
+                id=wish['id'],
+                user_id=wish['user_id'],
+                book_id=wish['book_id'],
+                created_at=parse_dt(wish.get('created_at')),
+            ))
+    db.commit()
+
+    # Recalculate stats for all users
+    try:
+        all_user_ids = [u.id for u in db.query(User.id).all()]
+        for uid in all_user_ids:
+            sync_user_profile_stats(db, uid)
+        db.commit()
+    except Exception as e:
+        logger.warning(f'Stats sync warning: {e}')
+
+    return {
+        'status': 'success',
+        'message': 'Genuine production data successfully restored',
+        'counts': {
+            'users': db.query(User).count(),
+            'user_profiles': db.query(UserProfile).count(),
+            'communities': db.query(Community).count(),
+            'book_listings': db.query(BookListing).count(),
+            'book_requests': db.query(BookRequest).count(),
+            'reviews': db.query(Review).count(),
+            'conversations': db.query(Conversation).count(),
+            'messages': db.query(Message).count(),
+            'notifications': db.query(Notification).count(),
+        }
+    }

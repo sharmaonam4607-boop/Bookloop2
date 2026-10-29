@@ -135,7 +135,7 @@ def _bootstrap_initial_data() -> None:
                     logger.info(f"Initialized default administrator account: {admin_email}")
 
             listing_count = db.query(BookListing).count()
-            if listing_count == 0:
+            if listing_count == 0 and settings.ENVIRONMENT.lower() != 'production':
                 try:
                     import seed_books
                     seed_books.seed()
